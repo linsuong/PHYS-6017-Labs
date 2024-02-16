@@ -1,0 +1,35 @@
+things to do:
+
+know: equation of motion is:
+mL^2 d2(theta)/dt^2 + k d(theta)/dt + mgl sin(theta) = FL cos(omega t)
+
+take t = tau (L/g)^(1/2)
+
+things happen when external periodic force frequency, omega is slightly less than natural frequency of the oscillation
+f decreases as amplitude increases m- pendulum resonance with forcing frequency omega.
+omega = (1 - eta)(g/L)^(1/2), eta == small
+
+convert equation of motion into dimensionless form, obtaining
+(k/mL sqrt(gL)), F/mg and eta.
+
+convert 2nd order ode into 2 first order ode, use runge kutta to gain solutions
+
+in the simulation, start from rest (or opposite) and explore what happens as damping increases
+where damping is increased.
+
+things to note:
+- dont get too much data
+- important data only (at the extremes, transition points, etc.)
+
+data to collect:
+the transition point - track a parameter, i.e. amplitude s.t. a clear change can be observed
+
+things to think about:
+- pendulum animation probably? with a time counter at the bottom to accurately reflect what happens.
+        - how to incorporate this into the project? does LaTeX support .gif?
+
+- presentation of data: no tables, use graphs, clear labelling, clear pointing if anything needs to be pointed out
+
+- flow of the report
+
+- INTERPRETATION.
