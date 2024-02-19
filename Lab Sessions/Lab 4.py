@@ -8,26 +8,15 @@ def distance(n, step_size, zero_start = False):
     x = y = 0
     mx = [0] * n
     my = [0] * n
-    
-    if zero_start:
-        mx[0] = 0
-        my[0] = 0
-    
-        for i in range(1, n):
+
+    for i in range(n):
+        if i > 0 or not zero_start:
             angle = 2.0 * math.pi * random.uniform(0, 1)
-            x += step_size * math.cos(angle) 
+            x += step_size * math.cos(angle)
             y += step_size * math.sin(angle)
-            mx[i] = x
-            my[i] = y
-            
-    else:
-        for i in range(n):
-            angle = 2.0 * math.pi * random.uniform(0, 1)
-            x += step_size * math.cos(angle) 
-            y += step_size * math.sin(angle)
-            mx[i] = x
-            my[i] = y
-            
+        mx[i] = x
+        my[i] = y
+
     return mx, my
 
 n = 100
@@ -43,16 +32,10 @@ line, = ax.plot(mx, my, label = "step size of 2")
 line2, = ax.plot(mx2, my2, label = "step size of 1")
 
 def update(frame):
-    x = mx[:frame]
-    y = my[:frame]
+    line.set_data(mx[:frame], my[:frame])
+    line2.set_data(mx2[:frame], my2[:frame])
     
-    x2 = mx2[:frame]
-    y2 = my2[:frame]    
-        
-    line.set_data(x, y)
-    line2.set_data(x2, y2)
-
-    return (line, line2)
+    return line, line2
 
 num_frames = n
 
