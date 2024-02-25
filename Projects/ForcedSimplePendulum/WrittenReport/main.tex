@@ -1,0 +1,77 @@
+\documentclass[12pt]{article}
+
+\usepackage{report}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage[colorlinks=true, linkcolor=black, citecolor=blue, urlcolor=blue]{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}		% Can be removed after putting your text content
+\usepackage{graphicx}
+\usepackage{footnote}
+\usepackage{doi}
+\usepackage{comment}
+\usepackage{multirow}
+\usepackage{gensymb}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{subfig}
+\usepackage[skip=10pt plus1pt, indent=30pt]{parskip}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \includegraphics[width=2.3cm]{crest.jpg}\par
+    \vspace{1cm}
+    {\scshape\Large Department of Physics and Astronomy \par}
+    \vspace{1cm}
+    {\scshape\Large The University of Southampton \par}
+    \vspace{1cm}
+    \vspace{1cm}
+    {\huge\bfseries The Forced Simple Pendulum \par}
+    \vspace{1cm}
+    {\Large Ong Chin Phin (Linus) \par}
+    \vspace{1cm}
+    {\Large Student ID: 33184747 \par}
+    \vfill
+    {\large November 2023 \par}
+\end{titlepage}
+
+%\maketitle
+\newpage
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+\thispagestyle{empty}
+\begin{abstract}
+%write wha tht experiment is about and what are the results 10-15 lines
+Vehicular traffic plays a major part in many daily lives. This project aims to investigate common everyday examples in traffic using simulations in Python, specifically using the Nagel-Schrekenberg (NaSch) Cellular Automata model. The experiment deals with the simulation of traffic flow on multi-lane roads and how various factors: velocity limit, density, road length, driver eccentricity, lane switching rules and obstacles play into traffic congestion. 
+
+The maximum velocities were tested from range of 2 to 12, slowing probability (the probablilty to slow down by velocity 1) was tested from 0.2 to 0.8 and they were carried out on 1, 2, 3 and 4 lane configurations. Fundemental relationship diagrams, time-space plots and average velocity plots were produced for each simulation.
+
+It is shown that in a multi lane configuration, the degrees of freedom increase as the number of lanes increase. At higher values of velocity (>6), there are diminishing returns when it comes to flow rate and density. Conversely, the decrease in driver eccentricity can greatly increase the flow rate, average velocity and the density of the lane where the peak flow rate occurs. 
+
+Vehicles also take a longer time to reach "equlibrium" as the maximum velocity increases due to the larger range of initial velocities. It is also shown that from interference of an obstacle, vehicles reach peak average velocity at the same rate regardless of the slowing probability, but take a longer time to reach peak average velocity as the maximum velocity is increased. 
+
+%results go here
+\end{abstract}
+
+% keywords can be removed
+%\keywords{First keyword \and Second keyword \and More}
+
+\newpage
+\setcounter{page}{1}
+\section{Introduction}
+Lorem Ipsum bla bla bla
+
+
+
+
+
+\end{document}
