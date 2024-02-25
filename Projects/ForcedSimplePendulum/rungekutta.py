@@ -1,9 +1,61 @@
 import numpy as np
-
-
-def rk45(ode_function, x, y, hrange, epsi, *args):
+def rk3(A, bvector, y0, interval, N):
     """
-    Solve an ODE using the Runge-Kutta 45 method with adaptive step size control.
+    Solve the IVP y' = A y + b, y(0) = y0, in the interval,
+    using N steps of RK3.
+
+    Parameters
+    ----------
+    A : matrix
+        Partially defines ODE according to (4)
+    bvector : function name returning vector
+        Completes definition of ODE according to (4)
+    y0 : vector
+        Initial data
+    interval : vector
+        Interval on which solution is required
+    N : int
+        Number of steps
+
+    Returns
+    -------
+    x : array of float
+        Coordinate locations of the approximate solution
+    y : array of float
+        Values of approximate solution at locations x
+    """
+
+    # Add RK3 algorithm implementation here according to Task 1
+
+    # The first output argument x is the locations x_j at which the solution is evaluated;
+    # this should be a real vector of length N + 1 covering the required interval.
+    # The second output argument y should be the numerical solution approximated at the
+    # locations x_j, which will be an array of size n × (N + 1).
+
+    a, b = interval
+
+    h = (b - a)/N
+    x = np.linspace(a, b, N + 1)
+    y = np.zeros((N + 1, len(y0))).T
+    y[:, 0] = y0
+    
+    for j in range(N):
+        x_n = x[j]
+        y_n = y[:, j]
+
+        b1 = bvector(x_n + h)
+
+        y_1 = y_n + h * (A @ y_n + bvector(x_n))
+
+        y_2 = ((3/4) * y_n) + ((1/4) * y_1) + (1/4) * h * (A @ y_1 + b1)
+
+        y[:, j + 1] = (y_n / 3) + ((2 / 3) * y_2) + (2 / 3) * h * (A @ y_2 + b1)
+
+    return h, x, y
+
+def rk45(A, b_vector, y0, hrange, epsi, *args):
+    """
+    Solve the IVP y' = A y + b, y(0) = y0, using the Runge–Kutta–Fehlberg method (RKF 4(5))
 
     Args:
         ode_function (callable): 

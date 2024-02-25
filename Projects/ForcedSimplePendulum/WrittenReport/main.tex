@@ -10,7 +10,7 @@
 \usepackage{amsfonts}       % blackboard math symbols
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
-\usepackage{lipsum}		% Can be removed after putting your text content
+\usepackage{lipsum}		    
 \usepackage{graphicx}
 \usepackage{footnote}
 \usepackage{doi}
@@ -26,7 +26,7 @@
 
 \begin{titlepage}
     \centering
-    \includegraphics[width=2.3cm]{crest.jpg}\par
+    %\includegraphics[width=2.3cm]{crest.jpg}\par
     \vspace{1cm}
     {\scshape\Large Department of Physics and Astronomy \par}
     \vspace{1cm}
@@ -51,13 +51,6 @@
 \thispagestyle{empty}
 \begin{abstract}
 %write wha tht experiment is about and what are the results 10-15 lines
-Vehicular traffic plays a major part in many daily lives. This project aims to investigate common everyday examples in traffic using simulations in Python, specifically using the Nagel-Schrekenberg (NaSch) Cellular Automata model. The experiment deals with the simulation of traffic flow on multi-lane roads and how various factors: velocity limit, density, road length, driver eccentricity, lane switching rules and obstacles play into traffic congestion. 
-
-The maximum velocities were tested from range of 2 to 12, slowing probability (the probablilty to slow down by velocity 1) was tested from 0.2 to 0.8 and they were carried out on 1, 2, 3 and 4 lane configurations. Fundemental relationship diagrams, time-space plots and average velocity plots were produced for each simulation.
-
-It is shown that in a multi lane configuration, the degrees of freedom increase as the number of lanes increase. At higher values of velocity (>6), there are diminishing returns when it comes to flow rate and density. Conversely, the decrease in driver eccentricity can greatly increase the flow rate, average velocity and the density of the lane where the peak flow rate occurs. 
-
-Vehicles also take a longer time to reach "equlibrium" as the maximum velocity increases due to the larger range of initial velocities. It is also shown that from interference of an obstacle, vehicles reach peak average velocity at the same rate regardless of the slowing probability, but take a longer time to reach peak average velocity as the maximum velocity is increased. 
 
 %results go here
 \end{abstract}
@@ -68,10 +61,101 @@ Vehicles also take a longer time to reach "equlibrium" as the maximum velocity i
 \newpage
 \setcounter{page}{1}
 \section{Introduction}
-Lorem Ipsum bla bla bla
+
+The equation of motion for a pendulum of a mass $m$ and length of $L$ is:
+\begin{equation}
+    mL^2 \frac{d^2\theta}{dt^2} + k \frac{d\theta}{dt} + mgL\sin({\theta}) = FL\cos({\Omega}t)
+    \label{oscillation}
+\end{equation}
+
+We measure time relative to the period of free oscillations of small amplitude, so we can introduce:
+\begin{equation}
+    t = \tau\sqrt{\frac{L}{g}}
+    \label{modified time}
+\end{equation}
+
+We introduce:
+\begin{equation}
+    \Omega = (1 - \eta)\sqrt{\frac{g}{L}}
+    \label{modified omega}
+\end{equation}
+
+To investigate the situation where the behavior of the pendulum when the forcing frequency, $\Omega$ is slightly less than the natural frequency, $\frac{g}{L}$.
+
+To convert equation (\ref{oscillation}) into dimensionless form, we recall that: $t = \tau\sqrt{\frac{L}{g}}$ (equation (\ref{modified time})) and by the chain rule, $\frac{d\tau}{dt} = \frac{d\theta}{dt}\frac{dt}{d\tau}$ give the following equations:
+\begin{equation}
+    \begin{split}
+        \frac{d\theta}{dt} = \sqrt{\frac{g}{L}}\frac{d\theta}{d\tau} \\
+        \frac{d^2\theta}{dt^2} = \frac{g}{L}\frac{d^2\theta}{d\tau^2}
+    \end{split}
+    \label{chain rules}
+\end{equation}
+
+Which can be substituted into equation (\ref{oscillation}) after dividing by $mgL$ and substituting equation (\ref*{modified time}) and (\ref{modified omega}).
+\begin{equation}
+    (\frac{L}{g})(\frac{g}{L})\frac{d^2\theta}{d\tau^2} = \frac{k}{mgL}\sqrt{\frac{g}{L}}\frac{d\theta}{d\tau} + \sin(\theta) = \frac{F}{mg}\cos((1 - \eta)\sqrt{\frac{g}{L}}\sqrt{\frac{L}{g}}\tau)
+\end{equation}
+
+The dimensionless form of equation (\ref{oscillation}) is then:
+\begin{equation}
+    \frac{d^2\theta}{d\tau^2} = \alpha\frac{d\theta}{d\tau} + \sin(\theta) = \beta\cos((1 - \eta)\tau)
+    \label{dimensionless}
+\end{equation}
+
+With parameters: 
+\begin{equation}
+    \centering
+    \begin{split}
+        \alpha &= \frac{k}{mL\sqrt{gL}}\\
+        \beta &= \frac{F}{mg}
+    \end{split}
+    \label{parameters}
+\end{equation}
+
+\footnote{
+    Note that:
+    \\
+        \begin{equation}
+            \frac{k}{mgL}\sqrt{\frac{g}{L}} = \frac{k}{mL\sqrt{g}\cdot\sqrt{g}}\sqrt{\frac{g}{L}} = \frac{k}{mL\sqrt{gL}}
+        \end{equation}
+}
+
+To solve the equation, the RK4(5) (Runge–Kutta–Fehlberg) method will be used. I will write my own version of the RK4(5) instead of using \verb|scipy.integrate.RK45| that uses the Dormand-Prince pair of formulas \cite{DormandPrince}. To solve a 2nd order differential equation with any Runge-Kutta method, the ODE in question will have to be expressed as a 1st order ODE. 
+From equation (\ref{dimensionless}) and taking the following substitutions:
+\begin{equation}
+    \begin{split}
+        u' = \theta''
+        \\
+        v' = \theta
+    \end{split}
+\end{equation}
+
+The ODE will be a system of equations of the form $\vec{\bold{Y'}} = A\vec{\bold{Y}} - \vec{\bold{b}}$.
+\begin{gather}
+    \begin{bmatrix}
+        u' \\ 
+        v'
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        \alpha & 0 \\
+        1 & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        u \\ 
+        v
+    \end{bmatrix}
+    -
+    \begin{bmatrix}
+        -\sin(\nu) + \beta\cos((1 - \eta)\tau) \\
+        0
+    \end{bmatrix}
+\end{gather}
 
 
-
-
+%\newpage
+%\section{Bibliography}
+%\bibliographystyle{plain}
+%\bibliography{references}
 
 \end{document}

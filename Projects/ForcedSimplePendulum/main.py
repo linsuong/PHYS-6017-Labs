@@ -1,17 +1,31 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import rk45
+import Projects.ForcedSimplePendulum.rungekutta as rungekutta
 from scipy.integrate import odeint
 
-def oscillation(theta, t, F, m, L, k, g, omega, eta):
+#SOLVING THE MATRIX EQUATION Y' = AY + b
+#parameters:
+def alpha(k, m, g, L):
+    return (k/(m * L * np.sqrt(g * L)))
+
+def beta(F, m, g):
+    return (F/(m * g))
+
+def matrixA(alpha):
+    [[alpha, 0],
+     [1, 0]]
     
+def bvector():
+    [[-np.sin(nu) + beta * np.cos((1 - eta) * tau)],
+     [0]]
+
+#different method, using inbuilt ODEINT    
+def oscillation(theta, t, F, m, L, k, g, omega, eta):
     #parameters:
     alpha = (k/((m * L) * np.sqrt(g * L)))
     beta = F / (m * g)
-    eta = eta
     
-        
-    return
+    return theta[1], - alpha * theta[0] - np.sin(theta) + beta * np.cos((1 - eta) * t)
 
 def equation_of_motion(theta, t, m, k, l, F, L, omega):
     g = 9.81
