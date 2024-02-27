@@ -1,0 +1,12 @@
+/.vscode
+/__pycache__
+
+#ignoring LaTeX stuff
+*.aux
+*.bbl
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.gz
+*.toc
