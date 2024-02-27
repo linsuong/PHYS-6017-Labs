@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1708878610.61349 "c:/Users/linus/Documents/PHYS-6017-Labs/PHYS-6017-Labs-1/Projects/ForcedSimplePendulum/WrittenReport/main.tex" "main.pdf" "main" 1708878612.07181 0
+["pdflatex"] 1708889807.93144 "c:/Users/linus/Documents/PHYS-6017-Labs/PHYS-6017-Labs-1/Projects/ForcedSimplePendulum/WrittenReport/main.tex" "main.pdf" "main" 1708889810.10618 0
   "C:/Users/linus/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1708829197 82705 9cc9f144eacd499bc23a611703921467 ""
   "C:/Users/linus/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ectt1200.pk" 1708822499 24152 1d627d0fea6dcdffed136bae0fb9983f ""
   "C:/Users/linus/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1708822470 10329961 787e181b369c180504b9f8301ae523a5 ""
@@ -139,11 +139,11 @@
   "C:/Users/linus/AppData/Local/Programs/MiKTeX/tex/latex/subfig/subfig.sty" 1121284610 22049 9ef165ca6df8815c92e693146a376c92 ""
   "C:/Users/linus/AppData/Local/Programs/MiKTeX/tex/latex/units/nicefrac.sty" 1469029150 4163 0462ee5ab265cf59dc15a41a3b883101 ""
   "C:/Users/linus/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
-  "c:/Users/linus/Documents/PHYS-6017-Labs/PHYS-6017-Labs-1/Projects/ForcedSimplePendulum/WrittenReport/main.tex" 1708878610 5116 c0f9d858bc31f5651075d581e027c166 ""
-  "main.aux" 1708878611 1060 e3661913de4d46c9d14d32297ef2f99c "pdflatex"
-  "main.out" 1708878611 103 9814c2d956916adb9290eca4e25c967a "pdflatex"
-  "main.tex" 1708878610 5116 c0f9d858bc31f5651075d581e027c166 ""
-  "main.toc" 1708878611 68 422450c2a666dfbf59c2f9003cf3f68d "pdflatex"
+  "c:/Users/linus/Documents/PHYS-6017-Labs/PHYS-6017-Labs-1/Projects/ForcedSimplePendulum/WrittenReport/main.tex" 1708889805 5132 a5c4d77204e0f447261c185a456415f6 ""
+  "main.aux" 1708889809 1060 e3661913de4d46c9d14d32297ef2f99c "pdflatex"
+  "main.out" 1708889809 103 9814c2d956916adb9290eca4e25c967a "pdflatex"
+  "main.tex" 1708889805 5132 a5c4d77204e0f447261c185a456415f6 ""
+  "main.toc" 1708889809 68 422450c2a666dfbf59c2f9003cf3f68d "pdflatex"
   "report.sty" 1708730864 7853 1eff2b28af23ef16dff5a85d048310d8 ""
   (generated)
   "main.aux"
