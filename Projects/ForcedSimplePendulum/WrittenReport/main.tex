@@ -68,6 +68,21 @@ The equation of motion for a pendulum of a mass $m$ and length of $L$ is:
     \label{oscillation}
 \end{equation}
 
+Where:
+\begin{itemize}
+    \item $m$ is the mass of the pendulum bob
+    \item $L$ is the length of the pendulum
+    \item $\theta$ is the angular displacement of the pendulum from vertical
+    \item $\dot{\theta}$ is the angular velocity (rate of change of $\theta$)
+    \item $\ddot{\theta}$ is the angular acceleration
+    \item $k$ is the damping coefficient (dependent on the specific damping mechanism)
+    \item $g$ is acceleration due to gravity
+    \item $F$ is the magnitude of the external force
+    \item $\Omega$ is the frequency of the external force $F$
+    \item $t$ is the time
+\end{itemize}
+
+It is also useful to note that $k\dot{\theta}$ is the damping force.
 We measure time relative to the period of free oscillations of small amplitude, so we can introduce:
 \begin{equation}
     t = \tau\sqrt{\frac{L}{g}}
@@ -93,12 +108,12 @@ To convert equation (\ref{oscillation}) into dimensionless form, we recall that:
 
 Which can be substituted into equation (\ref{oscillation}) after dividing by $mgL$ and substituting equation (\ref*{modified time}) and (\ref{modified omega}).
 \begin{equation}
-    (\frac{L}{g})(\frac{g}{L})\frac{d^2\theta}{d\tau^2} = \frac{k}{mgL}\sqrt{\frac{g}{L}}\frac{d\theta}{d\tau} + \sin(\theta) = \frac{F}{mg}\cos((1 - \eta)\sqrt{\frac{g}{L}}\sqrt{\frac{L}{g}}\tau)
+    (\frac{L}{g})(\frac{g}{L})\frac{d^2\theta}{d\tau^2} + \frac{k}{mgL}\sqrt{\frac{g}{L}}\frac{d\theta}{d\tau} + \sin(\theta) = \frac{F}{mg}\cos((1 - \eta)\sqrt{\frac{g}{L}}\sqrt{\frac{L}{g}}\tau)
 \end{equation}
 
 The dimensionless form of equation (\ref{oscillation}) is then:
 \begin{equation}
-    \frac{d^2\theta}{d\tau^2} = \alpha\frac{d\theta}{d\tau} + \sin(\theta) = \beta\cos((1 - \eta)\tau)
+    \frac{d^2\theta}{d\tau^2} = -\alpha\frac{d\theta}{d\tau} - \sin(\theta) + \beta\cos((1 - \eta)\tau)
     \label{dimensionless}
 \end{equation}
 
@@ -120,37 +135,45 @@ With parameters:
         \end{equation}
 }
 
-To solve the equation, the RK4(5) (Runge–Kutta–Fehlberg) method will be used. I will write my own version of the RK4(5) instead of using \verb|scipy.integrate.RK45| that uses the Dormand-Prince pair of formulas \cite{DormandPrince}. To solve a 2nd order differential equation with any Runge-Kutta method, the ODE in question will have to be expressed as a 1st order ODE. 
-From equation (\ref{dimensionless}) and taking the following substitutions:
+To solve the equation, the RK4(5) (Runge–Kutta–Fehlberg) method will be used. I will be using \verb|scipy.integrate.RK45| that uses the Dormand-Prince pair of formulas \cite{DormandPrince}. To solve a 2nd order differential equation with any Runge-Kutta method, the ODE in question will have to be expressed as a 1st order ODE. 
+From equation (\ref{dimensionless}) and taking the substitution:
 \begin{equation}
-    \begin{split}
-        u' = \theta''
-        \\
-        v' = \theta
-    \end{split}
+    \omega = \frac{d\theta}{d\tau}
 \end{equation}
 
 The ODE will be a system of equations of the form $\vec{\bold{Y'}} = A\vec{\bold{Y}} - \vec{\bold{b}}$.
 \begin{gather}
     \begin{bmatrix}
-        u' \\ 
-        v'
+        \theta' \\ 
+        \omega'
     \end{bmatrix}
     =
     \begin{bmatrix}
-        \alpha & 0 \\
-        1 & 0
+        0 & 1 \\
+        $-\sin(\theta)$ & $-\alpha$
     \end{bmatrix}
     \begin{bmatrix}
-        u \\ 
-        v
+        \theta \\ 
+        \omega
     \end{bmatrix}
     -
     \begin{bmatrix}
-        -\sin(\nu) + \beta\cos((1 - \eta)\tau) \\
-        0
+        0 \\
+        $\beta\cos((1 - \eta)\tau)$        
     \end{bmatrix}
 \end{gather}
+
+\section{Setup}
+The system is set up as follows:
+\begin{itemize}
+    \item The pendulum has a mass $m$ of 1kg
+    \item The length of the string, $L$ is 2 meters
+    \item The damping coefficient $k$ has a value of 
+    \item The factor $\eta$ has a value of 0.01
+    \item $g$ is 9.81$ms^{-1}$
+\end{itemize}
+
+\subsection{Areas of investigation}
 
 
 %\newpage

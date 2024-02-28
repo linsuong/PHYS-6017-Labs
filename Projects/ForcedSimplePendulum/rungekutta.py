@@ -53,7 +53,7 @@ def rk3(A, bvector, y0, interval, N):
 
     return h, x, y
 
-def rk45(A, b_vector, y0, hrange, epsi, *args):
+'''def rk45(A, b_vector, y0, hrange, epsi, *args):
     """
     Solve the IVP y' = A y + b, y(0) = y0, using the Runge–Kutta–Fehlberg method (RKF 4(5))
 
@@ -71,7 +71,7 @@ def rk45(A, b_vector, y0, hrange, epsi, *args):
         *args: 
             Additional parameters needed by the ODE function.
     """
-
+    
     # Coefficients from Hairer, Norsett & Wanner 1993
     B21 = 2.500000000000000e-01
     B31 = 9.375000000000000e-02
@@ -102,6 +102,9 @@ def rk45(A, b_vector, y0, hrange, epsi, *args):
     CH4 = 5.353313840155945e-01
     CH5 = -2.000000000000000e-01
     CH6 = 0.000000000000000e+00
+    
+    def ode_function(t, y):
+        return A @ y + b
 
     if not isinstance(hrange, list) or len(hrange) != 2:
         raise ValueError("hrange must be a list of format [h start, h finish].")
@@ -135,9 +138,69 @@ def rk45(A, b_vector, y0, hrange, epsi, *args):
 
         x = x + h
 
-    return TE_step, x, y, h
+    return TE_step, x, y, h'''
 
+def rk45_solver(A, b, y0, t_span, h, error_allowance):
+    """
+    Solve the ODE Y' = AY + b using the RK45 method.
 
+    Parameters:
+    - A: Square matrix in the ODE.
+    - b: Column vector in the ODE.
+    - y0: Initial condition column vector.
+    - t_span: Tuple (t0, t_end) specifying the time span.
+    - h: Step size.
+
+    Returns:
+    - t_values: Array of time points.
+    - y_values: Array of corresponding solutions.
+    """
+
+    def ode_func(t, y):
+        return A @ y + b
+
+    t0, t_end = t_span
+    t_values = [t0]
+    y_values = [y0]
+
+    while t_values[-1] < t_end:
+        t_current = t_values[-1]
+        y_current = y_values[-1]
+
+        k1 = h * ode_func(t_current, y_current)
+        k2 = h * ode_func(t_current + 0.25 * h, y_current + 0.25 * k1)
+        k3 = h * ode_func(t_current + 3/8 * h, y_current + 3/32 * k1 + 9/32 * k2)
+        k4 = h * ode_func(t_current + 12/13 * h, y_current + 1932/2197 * k1 - 7200/2197 * k2 + 7296/2197 * k3)
+        k5 = h * ode_func(t_current + h, y_current + 439/216 * k1 - 8 * k2 + 3680/513 * k3 - 845/4104 * k4)
+        k6 = h * ode_func(t_current + 0.5 * h, y_current - 8/27 * k1 + 2 * k2 - 3544/2565 * k3 + 1859/4104 * k4 - 11/40 * k5)
+
+        y_new = y_current + 25/216 * k1 + 1408/2565 * k3 + 2197/4104 * k4 - 1/5 * k5
+        error = np.max(np.abs(1/360 * k1 - 128/4275 * k3 - 2197/75240 * k4 + 1/50 * k5 + 2/55 * k6))
+
+        if error < error_allowance:
+            h *= 2              #h = h * 2
+
+        t_values.append(t_current + h)
+        y_values.append(y_new)
+
+        if t_values[-1] + h > t_end:
+            h = t_end - t_values[-1]
+
+    return np.array(t_values), np.array(y_values)
+
+# Example usage:
+# Define A, b, y0, t_span, and h
+# A = np.array([[1, -2], [3, -4]])  # Example 2x2 matrix
+# b = np.array([1, 2])  # Example 2x1 column vector
+# y0 = np.array([0, 0])  # Example initial condition
+# t_span = (0, 5)  # Example time span
+# h = 0.1  # Example step size
+
+# t_values, y_values = rk45_solver(A, b, y0, t_span, h)
+# print("Time values:", t_values)
+# print("Solution values:", y_values)
+
+'''
 # Define a simple ODE function for testing purposes
 def simple_ode(x, y, a=1):
     return (a * y[1], 0)
@@ -149,3 +212,4 @@ TE_step, x, y, h = rk45(simple_ode, x_val, y_0, [0, 10], 0.01)
 
 plt.plot(x, y)
 plt.show()
+'''

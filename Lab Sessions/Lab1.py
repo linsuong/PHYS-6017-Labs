@@ -61,8 +61,8 @@ plt.show()
 fig, ax = plt.subplots()
 x = np.linspace(-np.pi, np.pi, 100)
 
-for i in range 
-plt.plot(x, np.cos(x), color = 'blue', label = 'cos(x)')
+for i in x: 
+    plt.plot(x, np.cos(x), color = 'blue', label = 'cos(x)')
 plt.show()
 
 #Question 2

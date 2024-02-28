@@ -1,5 +1,6 @@
 /.vscode
 /__pycache__
+/Projects/ForcedSimplePendulum/testing
 
 #ignoring LaTeX stuff
 *.aux
