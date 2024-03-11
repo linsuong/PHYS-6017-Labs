@@ -34,7 +34,7 @@ def pendulum_solver(m, L, k, g, F, eta, time_range, initial_angle, initial_ang_v
         return np.array(t_values), np.array(y_values)
     
     #for a pendulum starting from rest:
-    y0 = np.array([initial_angle, initial_ang_vel]) #[intial displacement angle, intial angular velocity]
+    y0 = np.array([initial_angle, initial_ang_vel]) #[initial displacement angle, initial angular velocity]
     alpha = alphas(k, m, g, L)
     beta = betas(F, m, g)
 
@@ -70,7 +70,7 @@ def update(frame):
     set_pi_ticks(axs[0, 0], theta_values)
 
     axs[0, 1].clear()
-    axs[0, 1].set_xlim(-1.2 * L, 1.2 * L)
+    axs[0, 1].set_xlim(0, interval[1])
     axs[0, 1].set_ylim(-1.2 * L, 1.2 * L)
     axs[0, 1].set_aspect('equal', adjustable = 'box')
     axs[0, 1].add_patch(plt.Circle((0, 0), L, color = 'black', fill=False))
@@ -108,7 +108,6 @@ def update(frame):
         
         axs[0, 1].text((L + 0.2) * np.sin(angle_label * np.pi), (L + 0.1) * np.cos(angle_label * np.pi), 
                     angle_label_text, color='black', ha='center', va='center')
-
 
 # Using the RK45 module in scipy.integrate
 k = 1.5 #damping coefficient
@@ -156,7 +155,7 @@ for p in np.linspace(0, 1, 10):
     
     axs2[1, 1].plot(t_values, theta_values[:, 0], label = f'$\\eta$ = {p:.1f}m')
     
-axs2[1, 1].set_title('$\\theta$ against $t$ as coeffecient $\\eta$ increases')
+axs2[1, 1].set_title('$\\theta$ against $t$ as coefficient $\\eta$ increases')
 axs2[1, 1].set_xlabel('time, $t$')
 axs2[1, 1].set_ylabel('$\\theta$')
 axs2[1, 1].legend(loc='upper right')
