@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 1710159018.89876 "main.aux" "main.bbl" "main" 1710159019.52982 2
+["bibtex main"] 1710160067.10224 "main.aux" "main.bbl" "main" 1710160067.69005 2
   "./references.bib" 1709077614 283 9ac0bb9d852bfa57200e798259102bd5 ""
   "C:/Users/linus/AppData/Local/Programs/MiKTeX/bibtex/bst/bibtex/plain.bst" 1291864736 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "main.aux" 1710159018 34 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "main.aux" 1710160067 34 3985256e7290058c681f74d7a3565a19 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1710159010.85193 "c:/Repositories/PHYS-6017-Labs/Projects/ForcedSimplePendulum/WrittenReport/main.tex" "main.pdf" "main" 1710159017.60043 2
+["pdflatex"] 1710160059.50428 "c:/Repositories/PHYS-6017-Labs/Projects/ForcedSimplePendulum/WrittenReport/main.tex" "main.pdf" "main" 1710160065.81609 2
   "C:/Users/linus/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1708829197 82705 9cc9f144eacd499bc23a611703921467 ""
   "C:/Users/linus/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ectt1200.pk" 1708822499 24152 1d627d0fea6dcdffed136bae0fb9983f ""
   "C:/Users/linus/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1708822470 10329961 787e181b369c180504b9f8301ae523a5 ""
@@ -150,11 +150,11 @@
   "C:/Users/linus/AppData/Local/Programs/MiKTeX/tex/latex/subfig/subfig.sty" 1121284610 22049 9ef165ca6df8815c92e693146a376c92 ""
   "C:/Users/linus/AppData/Local/Programs/MiKTeX/tex/latex/units/nicefrac.sty" 1469029150 4163 0462ee5ab265cf59dc15a41a3b883101 ""
   "C:/Users/linus/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
-  "c:/Repositories/PHYS-6017-Labs/Projects/ForcedSimplePendulum/WrittenReport/main.tex" 1710159007 6223 292cf69286be2ee91c373e416100111e ""
-  "main.aux" 1710159018 34 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "main.bbl" 1710159019 0 d41d8cd98f00b204e9800998ecf8427e "bibtex main"
+  "c:/Repositories/PHYS-6017-Labs/Projects/ForcedSimplePendulum/WrittenReport/main.tex" 1710160055 6569 3bd9ebff02620714385561ac9cd7902c ""
+  "main.aux" 1710160067 34 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "main.bbl" 1710160067 0 d41d8cd98f00b204e9800998ecf8427e "bibtex main"
   "main.out" 0 -1 0 "pdflatex"
-  "main.tex" 1710159007 6223 292cf69286be2ee91c373e416100111e ""
+  "main.tex" 1710160055 6569 3bd9ebff02620714385561ac9cd7902c ""
   "main.toc" 0 -1 0 "pdflatex"
   "report.sty" 1709077614 7853 1eff2b28af23ef16dff5a85d048310d8 ""
   (generated)

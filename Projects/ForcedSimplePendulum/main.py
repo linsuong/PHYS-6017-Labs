@@ -1,8 +1,10 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 from matplotlib.animation import FuncAnimation
 from scipy.integrate import RK45
+
+save_loc = "C:\\Repositories\\PHYS-6017-Labs\\Projects\\ForcedSimplePendulum\\Plots"
 
 #SOLVING THE MATRIX EQUATION Y' = AY + b
 def pendulum_solver(m, L, k, g, F, eta, time_range, initial_angle, initial_ang_vel):
@@ -70,7 +72,7 @@ def update(frame):
     set_pi_ticks(axs[0, 0], theta_values)
 
     axs[0, 1].clear()
-    axs[0, 1].set_xlim(0, interval[1])
+    axs[0, 1].set_xlim(-1.2 * L, 1.2 * L)
     axs[0, 1].set_ylim(-1.2 * L, 1.2 * L)
     axs[0, 1].set_aspect('equal', adjustable = 'box')
     axs[0, 1].add_patch(plt.Circle((0, 0), L, color = 'black', fill=False))
@@ -83,6 +85,7 @@ def update(frame):
     axs[0, 1].set_title("Pendulum Visualisation")
 
     axs[1, 0].clear()
+    axs[1, 0].set_xlim(0, interval[1])
     axs[1, 0].plot(t_values, theta_values[:, 1], color='green', label=f'Angular Velocity')
     axs[1, 0].plot(t_values[frame], theta_values[frame, 1], 'ro')  # Red tracer ball
     axs[1, 0].set_xlabel('Time')
@@ -92,9 +95,7 @@ def update(frame):
     set_pi_ticks(axs[1, 0], theta_values)
 
     axs[1, 1].clear()
-    #axs[1, 1].set_xlim(0, 2 * np.pi)
-    #axs[1, 1].set_ylim(-1.5 * L, 1.5 * L)
-    
+    axs[1, 1].set_xlim(0, interval[1])
     axs[1, 1].plot(t_values, (theta_values[:, 0] % (2 * np.pi)), color='black')
     axs[1, 1].plot(t_values[frame], (theta_values[frame, 0] % (2 * np.pi)), color='red', marker='o')
     axs[1, 1].set_title("Normalized Theta")
@@ -110,61 +111,64 @@ def update(frame):
                     angle_label_text, color='black', ha='center', va='center')
 
 # Using the RK45 module in scipy.integrate
-k = 1.5 #damping coefficient
+k = 50 #damping coefficient
 m = 10 #mass of pendulum (kg)
-g = 9.81 #gravitational constant (m * s^-1)
+g = 9.81 #gravitational constant (m * s^-2)
 L = 0.5 #length of string (meters)
-F = 100 #magnitude of external force (N)
+F = 98.1 #magnitude of external force (N, kg * m * s^-2)
 eta = 0.05 #small deviation in forcing frequency, Omega
 interval = [0, 25] #time interval (s)
 
-fig2, axs2 = plt.subplots(2, 2)
-for i in np.linspace(1, 21, 10):
-    t_values, theta_values = pendulum_solver(i, L, k, g, F, eta, interval, np.pi, np.pi)
-
-    axs2[0, 0].plot(t_values, theta_values[:, 0], label= f'm = {i:.1f}kg')
-
-axs2[0, 0].set_title('$\\theta$ against $t$ as mass $m$ increases')
-axs2[0, 0].set_xlabel('time, $t$')
-axs2[0, 0].set_ylabel('$\\theta$')
-axs2[0, 0].legend(loc='upper right')
-
-for j in np.linspace(0, 300, 10):
-    t_values, theta_values = pendulum_solver(m, L, k, g, j, eta, interval, np.pi, np.pi)
-    
-    axs2[0, 1].plot(t_values, theta_values[:, 0], label= f'F = {j:.1f}N')
-    
-axs2[0, 1].set_title('$\\theta$ against $t$ as force $F$ increases')
-axs2[0, 1].set_xlabel('time, $t$')
-axs2[0, 1].set_ylabel('$\\theta$')
-axs2[0, 1].legend(loc='upper right')
-
-
-for l in np.linspace(0.1, 2.1, 10):
-    t_values, theta_values = pendulum_solver(m, l, k, g, F, eta, interval, np.pi, np.pi)
-    
-    axs2[1, 0].plot(t_values, theta_values[:, 0], label=f'L = {l:.1f}m')
-    
-axs2[1, 0].set_title('$\\theta$ against $t$ as length $L$ increases')
-axs2[1, 0].set_xlabel('time, $t$')
-axs2[1, 0].set_ylabel('$\\theta$')
-axs2[1, 0].legend(loc='upper right')
-
-for p in np.linspace(0, 1, 10):
-    t_values, theta_values = pendulum_solver(m, L, p, g, F, eta, interval, np.pi, np.pi)
-    
-    axs2[1, 1].plot(t_values, theta_values[:, 0], label = f'$\\eta$ = {p:.1f}m')
-    
-axs2[1, 1].set_title('$\\theta$ against $t$ as coefficient $\\eta$ increases')
-axs2[1, 1].set_xlabel('time, $t$')
-axs2[1, 1].set_ylabel('$\\theta$')
-axs2[1, 1].legend(loc='upper right')
-
-plt.show()
-
 # Plot the results
 big_plot = False
-Animate = True
+Animate = False
+plot_test = False
+
+t_values, theta_values = pendulum_solver(m, L, k, g, F, eta, interval, np.pi, 0)
+
+if plot_test == True:
+    fig2, axs2 = plt.subplots(2, 2)
+    for i in np.linspace(1, 21, 10):
+        t_values, theta_values = pendulum_solver(i, L, k, g, F, eta, interval, np.pi, 0)
+
+        axs2[0, 0].plot(t_values, theta_values[:, 0], label= f'm = {i:.1f}kg')
+
+    axs2[0, 0].set_title('$\\theta$ against $t$ as mass $m$ increases')
+    axs2[0, 0].set_xlabel('time, $t$')
+    axs2[0, 0].set_ylabel('$\\theta$')
+    axs2[0, 0].legend(loc='upper right')
+
+    for j in np.linspace(0, 300, 10):
+        t_values, theta_values = pendulum_solver(m, L, k, g, j, eta, interval, np.pi, 0)
+        
+        axs2[0, 1].plot(t_values, theta_values[:, 0], label= f'F = {j:.1f}N')
+        
+    axs2[0, 1].set_title('$\\theta$ against $t$ as force $F$ increases')
+    axs2[0, 1].set_xlabel('time, $t$')
+    axs2[0, 1].set_ylabel('$\\theta$')
+    axs2[0, 1].legend(loc='upper right')
+
+    for l in np.linspace(0.1, 2.1, 10):
+        t_values, theta_values = pendulum_solver(m, l, k, g, F, eta, interval, np.pi, 0)
+        
+        axs2[1, 0].plot(t_values, theta_values[:, 0], label=f'L = {l:.1f}m')
+        
+    axs2[1, 0].set_title('$\\theta$ against $t$ as length $L$ increases')
+    axs2[1, 0].set_xlabel('time, $t$')
+    axs2[1, 0].set_ylabel('$\\theta$')
+    axs2[1, 0].legend(loc='upper right')
+
+    for p in np.linspace(0, 1, 10):
+        t_values, theta_values = pendulum_solver(m, L, p, g, F, eta, interval, np.pi, 0)
+        
+        axs2[1, 1].plot(t_values, theta_values[:, 0], label = f'$\\eta$ = {p:.1f}m')
+        
+    axs2[1, 1].set_title('$\\theta$ against $t$ as coefficient $\\eta$ increases')
+    axs2[1, 1].set_xlabel('time, $t$')
+    axs2[1, 1].set_ylabel('$\\theta$')
+    axs2[1, 1].legend(loc='upper right')
+
+    plt.show()
 
 if big_plot == True:
     fig1, axs1 = plt.subplots(2, 2)
@@ -211,3 +215,50 @@ if Animate == True:
     animation = FuncAnimation(fig, update, frames=len(theta_values[:, 0]), interval=5)
 
     plt.show()
+
+#############################################################################################################################    
+    
+##investigating the breakdown of simple harmonic motion F ~ mg.
+F = 98.1 #force in N
+
+fig_damping, ax_damping = plt.subplots(5, 2)
+k_range = np.arange(0, 50, 10)
+
+for p in range(0, 5):  
+    t_values, theta_values = pendulum_solver(m, L, k_range[p], g, F, eta, interval, np.pi, 0)
+    ax_damping[p, 0].plot(t_values, theta_values[:, 0], label = f'$k$ = {k_range[p]:.1f}')
+    ax_damping[p, 1].plot(t_values, theta_values[:, 0] % (2 * np.pi), label = f'$k$ = {k_range[p]:.1f}m')
+    set_pi_ticks(ax_damping[p, 0], data = theta_values)
+    set_pi_ticks(ax_damping[p, 1], data = theta_values % (2 * np.pi))
+    ax_damping[p, 0].legend(loc = 'upper left')
+    ax_damping[p, 1].legend(loc = 'upper right')
+    ax_damping[p, 0].set_xlabel("time $t$")
+    ax_damping[p, 0].set_ylabel("$\\theta$")
+    ax_damping[p, 1].set_xlabel("time $t$")
+    ax_damping[p, 1].set_ylabel("$\\theta$")
+
+fig_damping.suptitle("F ~ mg, as damping coefficient k increases")
+plt.savefig(os.path.join(save_loc, "F~mg as damping coefficient k increases.png"))
+plt.show()
+
+#for the case of F >> mg, finding when SHM no longer persists (with 0 damping force)
+fig_forcing, ax_forcing = plt.subplots(5, 2)
+F_range = np.linspace(0, 100, 5)
+F_range = np.flip(F_range)
+
+for p in range(0, 5):
+    t_values, theta_values = pendulum_solver(m, L, 0, g, F_range[p], eta, interval, np.pi, 0)
+    ax_forcing[p, 0].plot(t_values, theta_values[:, 0], label = f'$k$ = {F_range[p]:.1f} N')
+    ax_forcing[p, 1].plot(t_values, theta_values[:, 0] % (2 * np.pi), label = f'$k$ = {F_range[p]:.1f} N')
+    set_pi_ticks(ax_forcing[p, 0], data = theta_values)
+    set_pi_ticks(ax_forcing[p, 1], data = theta_values % (2 * np.pi))
+    ax_forcing[p, 0].legend(loc = 'upper left')
+    ax_forcing[p, 1].legend(loc = 'upper right')
+    ax_forcing[p, 0].set_xlabel("time $t$")
+    ax_forcing[p, 0].set_ylabel("$\\theta$")
+    ax_forcing[p, 1].set_xlabel("time $t$")
+    ax_forcing[p, 1].set_ylabel("$\\theta$")
+    
+plt.suptitle("F >> mg, with 0 damping coefficient k.")
+
+plt.show()
