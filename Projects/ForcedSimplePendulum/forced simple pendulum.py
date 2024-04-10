@@ -116,38 +116,50 @@ def update(frame):
                     angle_label_text, color='black', ha='center', va='center')
 
 # Using the RK45 module in scipy.integrate
-k = 0.7 #damping coefficient
-m = 10 #mass of pendulum (kg)
-g = 9.81 #gravitational constant (m * s^-2)
-L = 0.7 #length of string (meters)
-F = 100000 #magnitude of external force (N, kg * m * s^-2)
-eta = 0.7 #small deviation in forcing frequency, Omega
-interval = [100, 200] #time interval (s)
 
-t_values, theta_values = pendulum_solver(m, L, k, g, F, eta, interval, 2 * np.pi, 0)
-
-fig_example, ax_example = plt.subplots(1, 2, figsize=(15, 5))
-ax_example[0].plot(t_values, theta_values[:, 0])
-ax_example[0].set_xlabel('time, $t$')
-ax_example[0].set_ylabel('$\\theta$')
-ax_example[0].set_title('Time Domain Plot')
-ax_example[1].plot(theta_values[:, 0], theta_values[:, 1], marker = '>', markevery = 50, linestyle = '--')
-ax_example[1].set_xlabel('$\\theta$')
-ax_example[1].set_ylabel('$\\frac{d\\theta}{dt}$')
-ax_example[1].set_title('Phase Domain Plot')
-
-plt.savefig(os.path.join(save_loc, 'demo_chaos.jpg'))
-plt.show()
 
 # Plot the results
 big_plot = False
 Animate = False
-plot_test = False
+plot_test = True
+demo_plot = False
 
+# Using the RK45 module in scipy.integrate
+k = 10 #damping coefficient
+m = 1 #mass of pendulum (kg)
+g = 9.81 #gravitational constant (m * s^-2)
+L = 2 #length of string (meters)
+F = 20#magnitude of external force (N, kg * m * s^-2)
+eta = 0.1 #small deviation in forcing frequency, Omega
+interval = [0, 50] #time interval (s)
+    
 t_values, theta_values = pendulum_solver(m, L, k, g, F, eta, interval, np.pi, 0)
+if demo_plot == True:
+    k = 0.7 #damping coefficient
+    m = 10 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 0.7 #length of string (meters)
+    F = 10 #magnitude of external force (N, kg * m * s^-2)
+    eta = 5 #small deviation in forcing frequency, Omega
+    interval = [100, 200] #time interval (s)
 
+    t_values, theta_values = pendulum_solver(m, L, k, g, F, eta, interval, 2 * np.pi, 0)
+
+    fig_example, ax_example = plt.subplots(1, 2, figsize=(15, 5))
+    ax_example[0].plot(t_values, theta_values[:, 0])
+    ax_example[0].set_xlabel('time, $t$')
+    ax_example[0].set_ylabel('$\\theta$')
+    ax_example[0].set_title('Time Domain Plot')
+    ax_example[1].plot(theta_values[:, 0], theta_values[:, 1], marker = '>', markevery = 50, linestyle = '--')
+    ax_example[1].set_xlabel('$\\theta$')
+    ax_example[1].set_ylabel('$\\frac{d\\theta}{dt}$')
+    ax_example[1].set_title('Phase Domain Plot')
+
+    plt.savefig(os.path.join(save_loc, 'demo_limit_cycles.jpg'))
+    plt.show()
+    
 if plot_test == True:
-    fig2, axs2 = plt.subplots(3, 2, figsize=(20, 16))
+    fig2, axs2 = plt.subplots(3, 2, figsize=(15, 17))
     for i in np.linspace(1, 21, 10):
         t_values, theta_values = pendulum_solver(i, L, k, g, F, eta, interval, np.pi, 0)
 
@@ -197,7 +209,7 @@ if plot_test == True:
         t_values, theta_values = pendulum_solver(m, L, k, g, F, q, interval, np.pi, 0)
         
         axs2[2, 0].plot(t_values, theta_values[:, 0], label = f'$\\eta$ = {p:.1f}')
-        set_pi_ticks(axs2[2, 0], data = theta_values)
+        #set_pi_ticks(axs2[2, 0], data = theta_values)
         
     axs2[2, 0].set_title('$\\theta$ against $t$ as coefficient $\\eta$ increases')
     axs2[2, 0].set_xlabel('time, $t$')
@@ -210,7 +222,7 @@ if plot_test == True:
     plt.show()
     
     ##phase plots
-    fig3, axs3 = plt.subplots(3, 2, figsize=(20, 16))
+    fig3, axs3 = plt.subplots(3, 2, figsize=(15, 17))
     for i in np.linspace(1, 21, 10):
         t_values, theta_values = pendulum_solver(i, L, k, g, F, eta, interval, np.pi, 0)
         axs3[0, 0].plot(theta_values[:, 0], theta_values[:, 1], label=f'm = {i:.1f}kg')
@@ -336,15 +348,15 @@ if investigation_number == '1':
 
     F = 9.81 #force in N, F ~ mg in the case as m = 1 and g = 9.81, therefore F = 9.81
 
-    fig_damping, ax_damping = plt.subplots(5, 2, figsize=(20, 16))
+    fig_damping, ax_damping = plt.subplots(5, 2, figsize=(15, 17))
 
-    k_range = np.linspace(0.1, 100, 5)
+    k_range = np.linspace(10, 50, 5)
     k_range = np.flip(k_range)
 
     for p in range(0, 5):  
         t_values, theta_values = pendulum_solver(m, L, k_range[p], g, F, eta, interval, np.pi, 0)
-        ax_damping[p, 0].plot(t_values, theta_values[:, 0], label = f'$k$ = {k_range[p]:.1f}')
-        ax_damping[p, 1].plot(t_values, theta_values[:, 0] % (2 * np.pi), label = f'$k$ = {k_range[p]:.1f}m')
+        ax_damping[p, 0].plot(t_values, theta_values[:, 0], label = f'$k$ = {k_range[p]:.5f}')
+        ax_damping[p, 1].plot(t_values, theta_values[:, 0] % (2 * np.pi), label = f'$k$ = {k_range[p]:.5f}m')
         #set_pi_ticks(ax_damping[p, 0], data = theta_values)
         set_pi_ticks(ax_damping[p, 1], data = theta_values % (2 * np.pi))
         ax_damping[p, 0].legend(loc = 'upper left')
@@ -357,30 +369,29 @@ if investigation_number == '1':
         ax_damping[p, 0].set_xlim(interval)
         ax_damping[p, 1].set_xlim(interval)
 
-        
     fig_damping.suptitle("F ~ mg, as damping coefficient k increases (Right: Normalised by 2$\\pi$)")
 
-    plt.savefig(os.path.join(save_loc, "F~mg as damping coefficient k increases.png"))
+    plt.savefig(os.path.join(save_loc, "F~mg as damping coefficient k increases.jpg"))
 
-    fig_damping_phase, ax_damping_phase = plt.subplots(3, 2, figsize=(20, 16))
+    fig_damping_phase, ax_damping_phase = plt.subplots(3, 2, figsize=(15, 17))
 
     for p in range(0, 3):
         t_values, theta_values = pendulum_solver(m, L, k_range[p], g, F, eta, interval, np.pi, 0)
-        ax_damping_phase[p, 0].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {k_range[p]:.1f}')
-        #ax_damping_phase[p, 0].legend(loc = 'upper left')
+        ax_damping_phase[p, 0].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {k_range[p]:.5f}')
+        ax_damping_phase[p, 0].legend(loc = 'upper left')
         ax_damping_phase[p, 0].set_xlabel('Angle $\\theta$ (rad)')
         ax_damping_phase[p, 0].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
         
     for p in range(0, 2):
         t_values, theta_values = pendulum_solver(m, L, k_range[p + 3], g, F, eta, interval, np.pi, 0)
-        ax_damping_phase[p, 1].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {k_range[p + 3]:.1f}')
-        #ax_damping_phase[p, 1].legend(loc = 'upper left')
+        ax_damping_phase[p, 1].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {k_range[p + 3]:.5f}')
+        ax_damping_phase[p, 1].legend(loc = 'upper left')
         ax_damping_phase[p, 1].set_xlabel('Angle $\\theta$ (rad)')
         ax_damping_phase[p, 1].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
         
     ax_damping_phase[2, 1].axis("off")
     fig_damping_phase.suptitle('Phase Plot: F ~ mg, as damping coefficient k increases')
-    plt.savefig(os.path.join(save_loc, "Phase Plot: F~mg as damping coefficient k increases.png"))
+    plt.savefig(os.path.join(save_loc, "Phase Plot of F~mg as damping coefficient k increases.jpg"))
 
     plt.show()
 
@@ -389,7 +400,7 @@ elif investigation_number == '2':
     print("topic 2")
     #for the case of F >> mg, finding when SHM no longer persists (with 0 damping force)
     #mg is 9.81, so 
-    fig_forcing, ax_forcing = plt.subplots(5, 2, figsize=(20, 16))
+    fig_forcing, ax_forcing = plt.subplots(5, 2, figsize=(15, 17))
     F_range = np.linspace(20, 100, 5)
     F_range = np.flip(F_range)
 
@@ -413,7 +424,7 @@ elif investigation_number == '2':
 
     plt.savefig(os.path.join(save_loc, 'F greater than mg, with 0 damping coeff k.jpg'))
 
-    fig_forcing_phase, ax_forcing_phase = plt.subplots(3, 2, figsize=(20, 16))
+    fig_forcing_phase, ax_forcing_phase = plt.subplots(3, 2, figsize=(15, 17))
 
     for p in range(0, 3):
         
