@@ -218,7 +218,7 @@ if plot_test == True:
     
     axs2[2, 1].axis('off')
 
-    plt.savefig(os.path.join(save_loc, "test_plots.svg"))
+    plt.savefig(os.path.join(save_loc, "test_plots.png"))
     plt.show()
     
     ##phase plots
@@ -271,7 +271,7 @@ if plot_test == True:
     
     axs3[2, 1].axis('off')
     
-    plt.savefig(os.path.join(save_loc, "test_plots_phase.svg"))
+    plt.savefig(os.path.join(save_loc, "test_plots_phase.png"))
     plt.show()
     
     print('test plots done')
