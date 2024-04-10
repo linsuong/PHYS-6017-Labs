@@ -1,4 +1,4 @@
-\documentclass[12pt, twocolumn]{article}
+\documentclass[10pt, twocolumn]{article}
 
 \usepackage{report}
 
@@ -82,15 +82,15 @@ Where:
     \item $F$ is the magnitude of the external force
     \item $\Omega$ is the frequency of the external force $F$
     \item $t$ is the time
+    \item $k\dot{\theta}$ is the damping force
 \end{itemize}
 \\
-It is also useful to note that $k\dot{\theta}$ is the damping force.
-I measure time relative to the period of free oscillations of small amplitude, so I can introduce:
+Since time is measured relative to the period of free oscillations of small amplitude, I can write:
 \begin{equation}
     t = \tau\sqrt{\frac{L}{g}}
     \label{modified time}
 \end{equation}
-Also, I introduce:
+And:
 \begin{equation}
     \Omega = (1 - \eta)\sqrt{\frac{g}{L}}
     \label{modified omega}
@@ -104,14 +104,17 @@ In the following sections, I introduce the method on how to change the 2nd order
 I will then investigate various scenarios, which will be introduced at the end of the Methodology section. Results are then compared to known data.
 \\
 \\
-Additionally, the Rayleigh-Lorentz pendulum \cite{Rayleigh1902} is investigated for the case of a forced simple pendulum. The Rayleigh-Lorentz pendulum \cite{Rayleigh1902}, named after Lord Rayleigh and Hendrik Lorentz, is a simple pendulum where the frequency is changing due to the change of the pendulum length. With the forced simple pendulum, I investigate the effects on the forced simple pendulum with a changing length. 
-\\
-\\
-It has been shown that from \cite{Rayleigh1902}, \cite{SanchezZoido2013}:
+The Rayleigh-Lorentz pendulum \cite{Rayleigh1902}, named after Lord Rayleigh and Hendrik Lorentz, is a simple pendulum where the forcing frequency is changing due to the change of the pendulum length\footnote{It has been shown that from \cite{Rayleigh1902}:
 \begin{equation}
-    \frac{E(t)}{v(t)} = \frac{E(0)}{v(0)}
+    \frac{E(t)}{f(t)} = \frac{E(0)}{f(0)}
 \end{equation}
-This is an example of an adiabatic invariant - meaning that it is a conservation law that stays constant only when changes to the parameters are done slowly. 
+Stating that the ratio of average energy to frequency is constant. This is an example of an adiabatic invariant - meaning that it is a conservation law that stays constant only when changes to the parameters are done slowly. }. With the forced simple pendulum, I investigate the effects on the forced simple pendulum with a changing length. The case of a uniform and exponential change in the pendulum length have been investigated in the case of a simple pendulum in \cite{Brearley1966, Werner1969, Ross1979} (for a uniform change) and \cite{SanchezZoido2013} (for both uniform and exponential), where the linear variation was determined by the equation $l(t) = l_0 (1 + \epsilon{t})$, and the exponentially varying case is given by the equation $l(t) = l_0\exp{\epsilon t}$. Where $\epsilon$ in both equations is a small parameter of unit $s^{-1}$. There are many other variations that I can investigate, for example a sinusoidal (or simply a periodic) variation, a non-linear (quadratic or higher order) variation, or even a random variation (Brownian motion or random walks). A random walk is an interesting option for a number of reasons:
+\begin{itemize}
+    \item Real world systems are experience random fluctuations. For example, a skyscraper or bridge will not experience a constant force.
+    \item Stability of the pendulum system could be assessed. What is the optimum pendulum (one that is resilient to random changes in forces)?
+    \item Resonant frequencies can be identified easily
+    \item Long term behaviour prediction
+\end{itemize}
 
 \section{Methodology}
 To convert equation (\ref{oscillation}) into dimensionless form, we recall that: $t = \tau\sqrt{\frac{L}{g}}$  and by the chain rule, $\frac{d\tau}{dt} = \frac{d\theta}{dt}\frac{dt}{d\tau}$ give the following equations:
@@ -178,7 +181,7 @@ The ODE will be a system of equations of the form $\vec{\bold{Y'}} = A\vec{\bold
 \end{gather}
 
 \section{Setup}\label{setup}
-The code used for the entirety of the project can be found on my \hyperlink{GitHub page}{https://github.com/linsuong/PHYS-6017-Labs/blob/main/Projects/ForcedSimplePendulum/main.py}. 
+The code used for the entirety of the project can be found on my \hyperlink{https://github.com/linsuong/PHYS-6017-Labs/blob/main/Projects/ForcedSimplePendulum}{GitHub page}. 
 \\
 \\
 First, I think it is useful to have a rough understanding on the effects of each parameter on the numerical solution of the pendulum. By giving the constants values and altering each one, I can (without complete certainty, of course) predict the pendulum behaviour for later experiments.
@@ -189,33 +192,35 @@ The system is set up as follows:
     \item The damping coefficient $k$ has a value of 10
     \item The factor $\eta$ has a value of 0.1
     \item $g$ is 9.81$ms^{-1}$
-    \item time interval is 0 to 50 seconds \footnote{As the RK4(5) algorithm goes for longer, the longer the errors stack up. It is not wise to have a long time interval at once.}
+    \item Time interval is 0 to 50 seconds \footnote{As the RK4(5) algorithm goes for longer, the errors stack up. It is not wise to use a long time interval at once without taking any precautions. Therefore a relatively short time period is investigated.}
 \end{itemize}
-By modifying each parameter, I plot the time-domain ($\theta$ against $t$) and the phase portrait ($\frac{d\theta}{dt}$ against $\theta$) - see Section \ref{phase plots appendix} for an explanation on phase portraits (as this is not covered in any core module). Each notable simulation will contain a time-domain plot and a phase portrait plot. With both of these plots side by side, one can identify 
+By modifying each parameter, I plot the time-domain ($\theta$ against $t$) and the phase portrait\footnote{See Section \ref{phase plots appendix} for an explanation on phase portraits, as this is not covered in any core module.}  Each notable simulation will contain a time-domain plot and a phase portrait plot ($\frac{d\theta}{dt}$ against $\theta$). 
 
 \onecolumn
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/WrittenReport/figs/test_plots.jpg}
+    \includegraphics[height=0.9\textheight]{Projects/ForcedSimplePendulum/Plots/test_plots.jpg}
     \caption{Time-domain plots for the case of the simple forced pendulum, where each variable is iterated one by one.}
     \label{time domain test}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/WrittenReport/figs/test_plots_phase.jpg}
+    \includegraphics[height=0.9\textheight]{Projects/ForcedSimplePendulum/Plots/test_plots_phase.jpg}
     \caption{Phase portraits for the case of the simple forced pendulum, where each variable is iterated one by one.}
     \label{phase portrait}
 \end{figure}
 
+\twocolumn
 \section{Areas of Investigation}
 The areas of investigation are:
 \begin{itemize}
     \item When the force, $F$ is almost equal to the weight of the pendulum bob, $mg$. Damping is reduced till a change is observed.
     \item When the force, $F$ is much greater than the weight of the pendulum bob (extreme forcing). Periodic motion is observed in this scenario. I investigate when the periodic motion is gone as I decrease $F$.
-    \item Investigating where $F/mg$ and 
+    \item General behavior for 0 damping, where I investigate scenarios where 'beats' are seen between the natural period and the forcing period.
 \end{itemize}
-
+ 
+\subsection{Simple Forced Pendulum}
 First, I investigate the case on where $F \sim{mg}$. With the same values of the other constants in Section \ref{setup}, with the exception of $F = 9.81N$ and iterating over values of $k$ from 
 \begin{figure}[H]
     \centering
@@ -224,18 +229,12 @@ First, I investigate the case on where $F \sim{mg}$. With the same values of the
     \label{fig:enter-label}
 \end{figure}
 
-
-
-\subsection{Simple Forced Pendulum}
 \subsection{Rayleigh-Lorentz Pendulum}
-The case of a uniform and exponential change in the pendulum length have been investigated in the case of a simple pendulum \cite{SanchezZoido2013}. Therefore I would like to extend this into the case of the forced simple pendulum. Quoting the original equations, the linear variation is determined by the equation $l(t) = l_0 (1 + \epsilon{t})$, and the exponentially varying case is given by the equation $l(t) = l_0\exp{\epsilon t}$. Where $\epsilon$ in both equations is a small parameter of unit $s^{-1}$.
 
-With these equations 
-
-The length would be changed by 
 
 \section{Results}
 
+\section{Analysis}
 \section{Conclusion}
 
 \subsection{Future Work}
@@ -301,10 +300,24 @@ Phase plots (meaning plot of $\frac{d^2\theta}{dt^2}$ against $\frac{d\theta}{dt
  It is useful to consider both plots for this project. I will introduce some simple examples of the comparison of time-domain and phase-domain plots.
  \begin{figure}
      \centering
-     \includegraphics{Projects/ForcedSimplePendulum/Plots/demo_simple_harmonic_motion.jpg
-     \caption{Caption}
+     \includegraphics{Projects/ForcedSimplePendulum/Plots/demo_simple_harmonic_motion.jpg}
+     \caption{Time and Phase domain plots for simple harmonic motion.}
      \label{fig:enter-label}
  \end{figure}
+
+ \begin{figure}
+     \centering
+     \includegraphics{Projects/ForcedSimplePendulum/Plots/demo_limit_cycles.jpg}
+     \caption{Due to the presence of damping (seen in the time-domain plot), these plots showcase the concept of limit cycles (in the phase-domain plot), where trajectories spiral into each other.}
+     \label{fig:enter-label}
+ \end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics{Projects/ForcedSimplePendulum/Plots/demo_chaos.jpg}
+    \caption{An example of chaotic behaviour. It definitely would not have been obvious just by looking at the time-domain plot alone.}
+    \label{fig:enter-label}
+\end{figure}
 
 \section{Appendix B}
 The plots
