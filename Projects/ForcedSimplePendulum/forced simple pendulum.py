@@ -58,8 +58,8 @@ def set_pi_ticks_x(ax, data):
     ax.set_xticklabels([f"{i//np.pi}$\\pi$" for i in ax_ticks])
 
 def pendulum_position(angle, length):
-    x = length * np.sin(angle)
-    y = length * np.cos(angle)
+    x = length * np.cos(angle - (np.pi/2))
+    y = length * np.sin(angle - (np.pi/2))
     
     return x, y
 
@@ -68,14 +68,14 @@ def update(frame):
         ax.clear()
     
     axs[0, 0].set_xlim(0, interval[1])
-    axs[0, 0].plot(t_values, theta_values[:, 0], color = 'blue', label=f'Theta')
-    axs[0, 0].plot(t_values, theta_values[:, 1], color='green', label=f'Angular Velocity')
+    axs[0, 0].plot(t_values, theta_values[:, 0], color = 'blue', label='Angular Displacement, $\\theta$ ($rad s^{-1}$)')
+    axs[0, 0].plot(t_values, theta_values[:, 1], color='green', label='Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
     axs[0, 0].plot(t_values[frame], theta_values[frame, 1], 'ro')
     axs[0, 0].plot(t_values[frame], theta_values[frame, 0], 'ro')  # Red tracer ball    
     axs[0, 0].set_xlabel('Time, t, (s)')
     axs[0, 0].set_title("Angular Displacement vs Time (blue), Angular Velocity vs Time (green)")
     axs[0, 0].legend(loc = 'upper right')
-    set_pi_ticks(axs[0, 0], theta_values)
+    #set_pi_ticks(axs[0, 0], theta_values)
 
     axs[0, 1].clear()
     axs[0, 1].set_xlim(-1.2 * L, 1.2 * L)
@@ -97,7 +97,7 @@ def update(frame):
     axs[1, 0].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
     axs[1, 0].set_title("Phase Portrait")
     axs[1, 0].legend(loc='upper right')
-    set_pi_ticks(axs[1, 0], theta_values)
+    #set_pi_ticks(axs[1, 0], theta_values)
 
     axs[1, 1].clear()
     axs[1, 1].set_xlim(0, interval[1])
@@ -106,47 +106,36 @@ def update(frame):
     axs[1, 1].set_title("Normalized Theta")
     set_pi_ticks(axs[1, 1], theta_values % (2 * np.pi))
     
-    for angle_label in [3/2, 0, 1, 1/2]:
+    for angle_label in [1, 1/2, 0, 3/2]:
         if angle_label == 0:
-            angle_label_text = '0/2$\\pi$'
+            angle_label_text = '2$\\pi$ / 0'
         else:
             angle_label_text = f'{angle_label}$\\pi$'
         
-        axs[0, 1].text((L + 0.2) * np.sin(angle_label * np.pi), (L + 0.1) * np.cos(angle_label * np.pi), 
+        axs[0, 1].text((L + 0.2) * np.cos(angle_label * np.pi - (np.pi/2)), (L + 0.1) * np.sin(angle_label * np.pi - (np.pi/2)), 
                     angle_label_text, color='black', ha='center', va='center')
-
-# Using the RK45 module in scipy.integrate
 
 
 # Plot the results
 big_plot = False
-Animate = False
-plot_test = True
+Animate = True
+plot_test = False
 demo_plot = False
+investigate = True
 
-# Using the RK45 module in scipy.integrate
-k = 10 #damping coefficient
-m = 1 #mass of pendulum (kg)
-g = 9.81 #gravitational constant (m * s^-2)
-L = 2 #length of string (meters)
-F = 20#magnitude of external force (N, kg * m * s^-2)
-eta = 0.1 #small deviation in forcing frequency, Omega
-interval = [0, 50] #time interval (s)
-    
-t_values, theta_values = pendulum_solver(m, L, k, g, F, eta, interval, np.pi, 0)
 if demo_plot == True:
-    k = 0.7 #damping coefficient
-    m = 10 #mass of pendulum (kg)
+    k = 1 #damping coefficient
+    m = 1 #mass of pendulum (kg)
     g = 9.81 #gravitational constant (m * s^-2)
-    L = 0.7 #length of string (meters)
+    L = 1 #length of string (meters)
     F = 10 #magnitude of external force (N, kg * m * s^-2)
-    eta = 5 #small deviation in forcing frequency, Omega
-    interval = [100, 200] #time interval (s)
+    eta = 100 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
 
-    t_values, theta_values = pendulum_solver(m, L, k, g, F, eta, interval, 2 * np.pi, 0)
+    t_values, theta_values = pendulum_solver(m, L, k, g, F, eta, interval, 2 * np.pi, 10)
 
     fig_example, ax_example = plt.subplots(1, 2, figsize=(15, 5))
-    ax_example[0].plot(t_values, theta_values[:, 0])
+    ax_example[0].plot(t_values, theta_values[:, 0])      
     ax_example[0].set_xlabel('time, $t$')
     ax_example[0].set_ylabel('$\\theta$')
     ax_example[0].set_title('Time Domain Plot')
@@ -155,10 +144,31 @@ if demo_plot == True:
     ax_example[1].set_ylabel('$\\frac{d\\theta}{dt}$')
     ax_example[1].set_title('Phase Domain Plot')
 
-    plt.savefig(os.path.join(save_loc, 'demo_limit_cycles.jpg'))
     plt.show()
     
+    filename = input('Save as:')
+    
+    plt.savefig(os.path.join(save_loc, filename + '.png'))
+    
+    fig, axs = plt.subplots(2, 2, figsize =(19.20, 10.80))
+
+    animation = FuncAnimation(fig, update, frames=len(theta_values[:, 0]), interval=5)
+    
+    plt.show()
+    
+    animation.save(os.path.join(save_loc, filename + '.gif'))
+    
+    print('animation saved')
+
 if plot_test == True:
+    k = 0.5 #damping coefficient
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    F = 5 #magnitude of external force (N, kg * m * s^-2)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
+    
     fig2, axs2 = plt.subplots(3, 2, figsize=(15, 17))
     for i in np.linspace(1, 21, 10):
         t_values, theta_values = pendulum_solver(i, L, k, g, F, eta, interval, np.pi, 0)
@@ -168,9 +178,17 @@ if plot_test == True:
     axs2[0, 0].set_title('$\\theta$ against $t$ as mass $m$ increases')
     axs2[0, 0].set_xlabel('time, $t$')
     axs2[0, 0].set_ylabel('$\\theta$')
+    axs2[0, 0].set_xlim(interval)
     axs2[0, 0].legend(loc='upper right')
     #set_pi_ticks(axs2[0, 0], data = theta_values)
 
+    k = 0.5 #damping coefficient
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    F = 20 #magnitude of external force (N, kg * m * s^-2)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
 
     for j in np.linspace(0, 300, 10):
         t_values, theta_values = pendulum_solver(m, L, k, g, j, eta, interval, np.pi, 0)
@@ -180,10 +198,19 @@ if plot_test == True:
     axs2[0, 1].set_title('$\\theta$ against $t$ as force $F$ increases')
     axs2[0, 1].set_xlabel('time, $t$')
     axs2[0, 1].set_ylabel('$\\theta$')
+    axs2[0, 1].set_xlim(interval)
     axs2[0, 1].legend(loc='upper right')
     #set_pi_ticks(axs2[0, 1], data = theta_values)
+    
+    k = 0.5 #damping coefficient
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    F = 20 #magnitude of external force (N, kg * m * s^-2)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
 
-    for l in np.linspace(0.1, 2.1, 10):
+    for l in np.linspace(0.1, 10, 10):
         t_values, theta_values = pendulum_solver(m, l, k, g, F, eta, interval, np.pi, 0)
         
         axs2[1, 0].plot(t_values, theta_values[:, 0], label=f'L = {l:.1f}m')
@@ -191,8 +218,17 @@ if plot_test == True:
     axs2[1, 0].set_title('$\\theta$ against $t$ as length $L$ increases')
     axs2[1, 0].set_xlabel('time, $t$')
     axs2[1, 0].set_ylabel('$\\theta$')
+    axs2[1, 0].set_xlim(interval)
     axs2[1, 0].legend(loc='upper right')
     #set_pi_ticks(axs2[1, 0], data = theta_values)
+    
+    k = 0.5 #damping coefficient
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    F = 20 #magnitude of external force (N, kg * m * s^-2)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
 
     for p in np.linspace(0, 10, 10):
         t_values, theta_values = pendulum_solver(m, L, p, g, F, eta, interval, np.pi, 0)
@@ -202,18 +238,28 @@ if plot_test == True:
     axs2[1, 1].set_title('$\\theta$ against $t$ as coefficient $k$ increases')
     axs2[1, 1].set_xlabel('time, $t$')
     axs2[1, 1].set_ylabel('$\\theta$')
+    axs2[1, 1].set_xlim(interval)
     axs2[1, 1].legend(loc='upper right')
     #set_pi_ticks(axs2[1, 1], data = theta_values)
+    
+    k = 0.5 #damping coefficient
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    F = 20 #magnitude of external force (N, kg * m * s^-2)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
     
     for q in np.linspace(0, 10, 10):
         t_values, theta_values = pendulum_solver(m, L, k, g, F, q, interval, np.pi, 0)
         
-        axs2[2, 0].plot(t_values, theta_values[:, 0], label = f'$\\eta$ = {p:.1f}')
+        axs2[2, 0].plot(t_values, theta_values[:, 0], label = f'$\\eta$ = {q:.1f}')
         #set_pi_ticks(axs2[2, 0], data = theta_values)
         
     axs2[2, 0].set_title('$\\theta$ against $t$ as coefficient $\\eta$ increases')
     axs2[2, 0].set_xlabel('time, $t$')
     axs2[2, 0].set_ylabel('$\\theta$')
+    axs2[2, 0].set_xlim(interval)
     axs2[2, 0].legend(loc='upper right')
     
     axs2[2, 1].axis('off')
@@ -222,6 +268,14 @@ if plot_test == True:
     plt.show()
     
     ##phase plots
+    k = 0.5 #damping coefficient
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    F = 20 #magnitude of external force (N, kg * m * s^-2)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
+    
     fig3, axs3 = plt.subplots(3, 2, figsize=(15, 17))
     for i in np.linspace(1, 21, 10):
         t_values, theta_values = pendulum_solver(i, L, k, g, F, eta, interval, np.pi, 0)
@@ -232,6 +286,14 @@ if plot_test == True:
     axs3[0, 0].set_ylabel('$\\frac{d\\theta}{dt}$')
     axs3[0, 0].legend(loc='upper right')
 
+    k = 0.5 #damping coefficient
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    F = 20 #magnitude of external force (N, kg * m * s^-2)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
+    
     for j in np.linspace(0, 300, 10):
         t_values, theta_values = pendulum_solver(m, L, k, g, j, eta, interval, np.pi, 0)
         axs3[0, 1].plot(theta_values[:, 0], theta_values[:, 1], label=f'F = {j:.1f}N')
@@ -241,7 +303,15 @@ if plot_test == True:
     axs3[0, 1].set_ylabel('$\\frac{d\\theta}{dt}$')
     axs3[0, 1].legend(loc='upper right')
 
-    for l in np.linspace(0.1, 2.1, 10): #length
+    k = 0.5 #damping coefficient
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    F = 20 #magnitude of external force (N, kg * m * s^-2)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
+    
+    for l in np.linspace(0.1, 10, 10): #length
         t_values, theta_values = pendulum_solver(m, l, k, g, F, eta, interval, np.pi, 0)
         axs3[1, 0].plot(theta_values[:, 0], theta_values[:, 1], label=f'L = {l:.1f}m')
         
@@ -250,6 +320,14 @@ if plot_test == True:
     axs3[1, 0].set_ylabel('$\\frac{d\\theta}{dt}$')
     axs3[1, 0].legend(loc='upper right')
 
+    k = 0.5 #damping coefficient
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    F = 20 #magnitude of external force (N, kg * m * s^-2)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
+    
     for p in np.linspace(0, 10, 10): #k
         t_values, theta_values = pendulum_solver(m, L, p, g, F, eta, interval, np.pi, 0)
         axs3[1, 1].plot(theta_values[:, 0], theta_values[:, 1], label=f'$k$ = {p:.1f}')
@@ -259,10 +337,18 @@ if plot_test == True:
     axs3[1, 1].set_ylabel('$\\frac{d\\theta}{dt}$')
     axs3[1, 1].legend(loc='upper right')
 
+    k = 0.5 #damping coefficient
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    F = 20 #magnitude of external force (N, kg * m * s^-2)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
+    
     for q in np.linspace(0, 10, 10): #eta
         t_values, theta_values = pendulum_solver(m, L, k, g, F, q, interval, np.pi, 0)
         
-        axs3[2, 0].plot(theta_values[:, 0], theta_values[:, 1], label = f'$\\eta$ = {p:.1f}')
+        axs3[2, 0].plot(theta_values[:, 0], theta_values[:, 1], label = f'$\\eta$ = {q:.1f}')
         
     axs3[2, 0].set_title('Phase Plot:$\\frac{d\\theta}{dt}$ against $\\theta$ as coefficient $\\eta$ increases')
     axs3[2, 0].set_xlabel('$\\theta$')
@@ -325,7 +411,17 @@ if big_plot == True:
     plt.show()
 
 if Animate == True:
-    fig, axs = plt.subplots(2, 2)
+    k = 0.41 #damping coefficient
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    F = 10 #magnitude of external force (N, kg * m * s^-2)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
+    
+    t_values, theta_values = pendulum_solver(m, L, k, g, F, eta, interval, np.pi, 0)
+    
+    fig, axs = plt.subplots(2, 2, figsize =(19.20, 10.80))
 
     animation = FuncAnimation(fig, update, frames=len(theta_values[:, 0]), interval=5)
     
@@ -338,19 +434,23 @@ if Animate == True:
         animation.save(os.path.join(save_loc, animation_filename + '.gif'))
         
         print('animation saved')
+        
+if investigate == True:
+    #############################################################################################################################    
+        ##investigating the breakdown of simple harmonic motion F ~ mg.
 
-#############################################################################################################################    
-investigation_number = input('select topic (1-3): ')
-
-if investigation_number == '1':
-    print("topic 1")
-    ##investigating the breakdown of simple harmonic motion F ~ mg.
-
-    F = 9.81 #force in N, F ~ mg in the case as m = 1 and g = 9.81, therefore F = 9.81
+    F = 10 #force in N, F ~ mg in the case as m = 1 and g = 9.81, therefore F = 9.81
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
 
     fig_damping, ax_damping = plt.subplots(5, 2, figsize=(15, 17))
 
-    k_range = np.linspace(10, 50, 5)
+    k_start = 0.42
+    k_end = 0.41
+    k_range = np.linspace(k_end, k_start, 5)
     k_range = np.flip(k_range)
 
     for p in range(0, 5):  
@@ -370,8 +470,7 @@ if investigation_number == '1':
         ax_damping[p, 1].set_xlim(interval)
 
     fig_damping.suptitle("F ~ mg, as damping coefficient k increases (Right: Normalised by 2$\\pi$)")
-
-    plt.savefig(os.path.join(save_loc, "F~mg as damping coefficient k increases.jpg"))
+    plt.savefig(os.path.join(save_loc, f"F~mg as damping coefficient k increases from {k_start} to {k_end}.png"))
 
     fig_damping_phase, ax_damping_phase = plt.subplots(3, 2, figsize=(15, 17))
 
@@ -391,83 +490,42 @@ if investigation_number == '1':
         
     ax_damping_phase[2, 1].axis("off")
     fig_damping_phase.suptitle('Phase Plot: F ~ mg, as damping coefficient k increases')
-    plt.savefig(os.path.join(save_loc, "Phase Plot of F~mg as damping coefficient k increases.jpg"))
+
+
+    plt.savefig(os.path.join(save_loc, f"Phase plot of F~mg as damping coefficient k increases from {k_start} to {k_end}.png"))
 
     plt.show()
-
-################################################################################################
-elif investigation_number == '2':
-    print("topic 2")
-    #for the case of F >> mg, finding when SHM no longer persists (with 0 damping force)
-    #mg is 9.81, so 
-    fig_forcing, ax_forcing = plt.subplots(5, 2, figsize=(15, 17))
-    F_range = np.linspace(20, 100, 5)
-    F_range = np.flip(F_range)
-
-    for p in range(0, 5):
-        t_values, theta_values = pendulum_solver(m, L, 0, g, F_range[p], eta, interval, np.pi, 0)
-        ax_forcing[p, 0].plot(t_values, theta_values[:, 0], label = f'$F$ = {F_range[p]:.1f} N')
-        ax_forcing[p, 1].plot(t_values, theta_values[:, 0] % (2 * np.pi), label = f'$F$ = {F_range[p]:.1f} N')
-        #set_pi_ticks(ax_forcing[p, 0], data = theta_values)
-        set_pi_ticks(ax_forcing[p, 1], data = theta_values % (2 * np.pi))
-        ax_forcing[p, 0].legend(loc = 'upper left')
-        ax_forcing[p, 1].legend(loc = 'upper right')
-        ax_forcing[p, 0].set_xlabel("time $t$")
-        ax_forcing[p, 0].set_ylabel("$\\theta$")
-        ax_forcing[p, 1].set_xlabel("time $t$")
-        ax_forcing[p, 1].set_ylabel("$\\theta$")
         
-        ax_forcing[p, 0].set_xlim(interval)
-        ax_forcing[p, 1].set_xlim(interval)
-        
-    plt.suptitle("F >> mg, with 0 damping coefficient k. (Right: Normalised by 2$\\pi$)")
+    k = 0.41 #damping coefficient
+    m = 1 #mass of pendulum (kg)
+    g = 9.81 #gravitational constant (m * s^-2)
+    L = 2 #length of string (meters)
+    F = 10 #magnitude of external force (N, kg * m * s^-2)
+    eta = 0.1 #small deviation in forcing frequency, Omega
+    interval = [0, 50] #time interval (s)
 
-    plt.savefig(os.path.join(save_loc, 'F greater than mg, with 0 damping coeff k.jpg'))
+    fig_damping_compare, ax_damping_compare = plt.subplots(3, 1, figsize = (6, 15))
+    t_values, theta_values = pendulum_solver(m, L, k, g, F, eta, interval, np.pi, 0)
 
-    fig_forcing_phase, ax_forcing_phase = plt.subplots(3, 2, figsize=(15, 17))
+    ax_damping_compare[0].plot(t_values, theta_values[:, 0], label = f'$k$ = {k}')
+    ax_damping_compare[0].legend(loc = 'upper right')
+    ax_damping_compare[0].set_xlabel("time $t$")
+    ax_damping_compare[0].set_ylabel("$\\theta$")
+    ax_damping_compare[0].set_title('Time Domain')
 
-    for p in range(0, 3):
-        
-        t_values, theta_values = pendulum_solver(m, L, 0, g, F_range[p], eta, interval, np.pi, 0)
-        ax_forcing_phase[p, 0].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {F_range[p]:.1f}')
-        ax_forcing_phase[p, 0].legend(loc = 'upper left')
-        ax_forcing_phase[p, 0].set_xlabel('Angle $\\theta$ (rad)')
-        ax_forcing_phase[p, 0].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
-        
-    for p in range(0, 2):
-        t_values, theta_values = pendulum_solver(m, L, 0, g, F_range[p + 3], eta, interval, np.pi, 0)
-        ax_forcing_phase[p, 1].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {F_range[p + 3]:.1f}')
-        ax_forcing_phase[p, 1].legend(loc = 'upper left')
-        ax_forcing_phase[p, 1].set_xlabel('Angle $\\theta$ (rad)')
-        ax_forcing_phase[p, 1].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
-        
-    ax_forcing_phase[2, 1].axis("off")
-    
-    plt.savefig(os.path.join(save_loc, "Phase Plot: F greater than mg, with 0 damping coefficient k.png"))
-    
+    ax_damping_compare[1].plot(t_values, theta_values[:, 0] % (2 * np.pi), label = f'$k$ = {k}')
+    ax_damping_compare[1].legend(loc = 'upper right')
+    ax_damping_compare[1].set_xlabel("time $t$")
+    ax_damping_compare[1].set_ylabel("$\\theta$")
+    ax_damping_compare[1].set_title('Time Domain Normalised')
+
+    ax_damping_compare[2].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {k}')
+    ax_damping_compare[2].legend(loc = 'upper left')
+    ax_damping_compare[2].set_xlabel('Angle $\\theta$ (rad)')
+    ax_damping_compare[2].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
+    ax_damping_compare[2].set_title('Phase Domain')
+
+    fig_damping_compare.suptitle(f'F ~ mg, k = {k}')
+
+    plt.savefig(os.path.join(save_loc, f"Plot of F~mg, k is {k}.png"))
     plt.show()
-        
-    print("plot done")
-
-    plt.show()
-    
-elif investigation_number == '3':
-    #for the case of 0 damping, F/mg and eta are small (beat freq))
-    
-    """More general behaviour in the case of zero damping. If F/mg and η are small
-    the motion shows ‘beats’ between the natural period and the forcing period. For some
-    values of the parameters the ‘beat’ frequency may be such that the pendulum motion is
-    periodic but with a period which is a multiple of the forcing period, and much greater
-    than the natural period. Several things could be investigated here: the beat frequency
-    and the conditions for strictly periodic motion.
-    As F/mg is increased a critical value is reached at which complete loops start to occur.
-    For still larger values there are ranges of F/mg where the motion is bounded and ranges
-    where continual looping occurs. For large values of F/mg periodic solutions have the
-    period of the forcing term."""
-    
-    #F/mg small implies mg is big, 
-    t_values, theta_values = pendulum_solver(m, L, F, g, F, eta, interval, np.pi, 0)
-    
-
-else:
-    print("Invalid selection. Please choose a number between 1 and 3.")

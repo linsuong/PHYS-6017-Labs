@@ -1,0 +1,278 @@
+#############################################################################################################################    
+investigation_number = input('select topic (1-3): ')
+
+if investigation_number == '1':
+    m = 1.0  # mass
+    L = 2.0  # initial length
+    k = 1.0  # damping coefficient
+    g = 9.81  # gravity
+    sigma = 0.5  # std deviation of distribution (non negative)
+    interval = [0, 50]  # time range
+    initial_angle = 0  # initial displacement angle
+    
+    print("topic 1")
+    ##investigating the breakdown of simple harmonic motion F ~ mg.
+
+    F = 9.81 #force in N, F ~ mg in the case as m = 1 and g = 9.81, therefore F = 9.81
+
+    fig_damping, ax_damping = plt.subplots(5, 2, figsize=(15, 17))
+
+    k_start = 0.1
+    k_end = 0.01
+    k_range = np.linspace(k_end, k_start, 5)
+    k_range = np.flip(k_range)
+
+    for p in range(0, 5):  
+        t_values, theta_values, L_values = pendulum_solver_random_walk(m, L, k_range[p], g, F, sigma, interval)
+        ax_damping[p, 0].plot(t_values, theta_values[:, 0], label = f'$k$ = {k_range[p]:.5f}')
+        ax_damping[p, 1].plot(t_values, theta_values[:, 0] % (2 * np.pi), label = f'$k$ = {k_range[p]:.5f}m')
+        #set_pi_ticks(ax_damping[p, 0], data = theta_values)
+        set_pi_ticks(ax_damping[p, 1], data = theta_values % (2 * np.pi))
+        ax_damping[p, 0].legend(loc = 'upper left')
+        ax_damping[p, 1].legend(loc = 'upper right')
+        ax_damping[p, 0].set_xlabel("time $t$")
+        ax_damping[p, 0].set_ylabel("$\\theta$")
+        ax_damping[p, 1].set_xlabel("time $t$")
+        ax_damping[p, 1].set_ylabel("$\\theta$")
+        
+        ax_damping[p, 0].set_xlim(interval)
+        ax_damping[p, 1].set_xlim(interval)
+
+    fig_damping.suptitle("Random Walk, F ~ mg, as damping coefficient k increases (Right: Normalised by 2$\\pi$)")
+    plt.savefig(os.path.join(save_loc, f"Random Walk, F ~ mg as damping coefficient k increases from {k_start} to {k_end}.png"))
+    
+    fig_damping_phase, ax_damping_phase = plt.subplots(3, 2, figsize=(15, 17))
+
+    for p in range(0, 3):
+        t_values, theta_values, L_values = pendulum_solver_random_walk(m, L, k_range[p], g, F, sigma, interval, np.pi, 0)
+        ax_damping_phase[p, 0].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {k_range[p]:.5f}')
+        ax_damping_phase[p, 0].legend(loc = 'upper left')
+        ax_damping_phase[p, 0].set_xlabel('Angle $\\theta$ (rad)')
+        ax_damping_phase[p, 0].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
+        
+    for p in range(0, 2):
+        t_values, theta_values, L_values = pendulum_solver_random_walk(m, L, k_range[p + 3], g, F, sigma, interval, np.pi, 0)
+        ax_damping_phase[p, 1].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {k_range[p + 3]:.5f}')
+        ax_damping_phase[p, 1].legend(loc = 'upper left')
+        ax_damping_phase[p, 1].set_xlabel('Angle $\\theta$ (rad)')
+        ax_damping_phase[p, 1].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
+        
+    ax_damping_phase[2, 1].axis("off")
+    
+    fig_damping_phase.suptitle('Random Walk, Phase Plot: F ~ mg, as damping coefficient k increases')
+    plt.savefig(os.path.join(save_loc, f"Random Walk, Phase plot of F~mg as damping coefficient k increases from {k_start} to {k_end}.png"))
+
+    plt.show()
+    
+if investigation_number == '1.1':    
+    k = 0.35
+    
+    fig_damping_compare, ax_damping_compare = plt.subplots(3, 1, figsize = (6, 15))
+    t_values, theta_values, L_values = pendulum_solver_random_walk(m, L, k, g, F, sigma, interval, np.pi, 0)
+    
+    ax_damping_compare[0].plot(t_values, theta_values[:, 0], label = f'$k$ = {k}')
+    ax_damping_compare[0].legend(loc = 'upper right')
+    ax_damping_compare[0].set_xlabel("time $t$")
+    ax_damping_compare[0].set_ylabel("$\\theta$")
+    
+    ax_damping_compare[1].plot(t_values, theta_values[:, 0] % (2 * np.pi), label = f'$k$ = {k}')
+    ax_damping_compare[1].legend(loc = 'upper right')
+    ax_damping_compare[1].set_xlabel("time $t$")
+    ax_damping_compare[1].set_ylabel("$\\theta$")
+    
+    ax_damping_compare[2].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {k}')
+    ax_damping_compare[2].legend(loc = 'upper left')
+    ax_damping_compare[2].set_xlabel('Angle $\\theta$ (rad)')
+    ax_damping_compare[2].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
+    
+    fig_damping_compare.suptitle(f'Random Walk, F ~ mg, k = {k}')
+    
+    plt.savefig(os.path.join(save_loc, f"Random Walk, Plot of F~mg, k is {k}.png"))
+    plt.show()
+    
+################################################################################################
+elif investigation_number == '2':
+    print("topic 2")
+    #for the case of F >> mg, finding when SHM no longer persists (with 0 damping force)
+    #mg is 9.81, so 
+    fig_forcing, ax_forcing = plt.subplots(5, 2, figsize=(15, 17))
+    F_start = 100
+    F_end = 20
+    F_range = np.linspace(F_end, F_start, 5)
+    F_range = np.flip(F_range)
+
+    for p in range(0, 5):
+        t_values, theta_values, L_values = pendulum_solver_random_walk(m, L, 0, g, F_range[p], sigma, interval, np.pi, 0)
+        ax_forcing[p, 0].plot(t_values, theta_values[:, 0], label = f'$F$ = {F_range[p]:.1f} N')
+        ax_forcing[p, 1].plot(t_values, theta_values[:, 0] % (2 * np.pi), label = f'$F$ = {F_range[p]:.1f} N')
+        #set_pi_ticks(ax_forcing[p, 0], data = theta_values)
+        set_pi_ticks(ax_forcing[p, 1], data = theta_values % (2 * np.pi))
+        ax_forcing[p, 0].legend(loc = 'upper left')
+        ax_forcing[p, 1].legend(loc = 'upper right')
+        ax_forcing[p, 0].set_xlabel("time $t$")
+        ax_forcing[p, 0].set_ylabel("$\\theta$")
+        ax_forcing[p, 1].set_xlabel("time $t$")
+        ax_forcing[p, 1].set_ylabel("$\\theta$")
+        
+        ax_forcing[p, 0].set_xlim(interval)
+        ax_forcing[p, 1].set_xlim(interval)
+        
+    plt.suptitle("Random Walk, F >> mg, with 0 damping coefficient k. (Right: Normalised by 2$\\pi$)")
+
+    plt.savefig(os.path.join(save_loc, f'Random Walk, F greater than mg, with 0 damping coeff k, F from {F_start} to {F_end}.png'))
+
+    fig_forcing_phase, ax_forcing_phase = plt.subplots(3, 2, figsize=(15, 17))
+
+    for p in range(0, 3):
+        
+        t_values, theta_values, L_values = pendulum_solver_random_walk(m, L, 0, g, F_range[p], sigma, interval, np.pi, 0)
+        ax_forcing_phase[p, 0].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {F_range[p]:.1f}')
+        ax_forcing_phase[p, 0].legend(loc = 'upper left')
+        ax_forcing_phase[p, 0].set_xlabel('Angle $\\theta$ (rad)')
+        ax_forcing_phase[p, 0].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
+        
+    for p in range(0, 2):
+        t_values, theta_values, L_values = pendulum_solver_random_walk(m, L, 0, g, F_range[p + 3], sigma, interval, np.pi, 0)
+        ax_forcing_phase[p, 1].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {F_range[p + 3]:.1f}')
+        ax_forcing_phase[p, 1].legend(loc = 'upper left')
+        ax_forcing_phase[p, 1].set_xlabel('Angle $\\theta$ (rad)')
+        ax_forcing_phase[p, 1].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
+        
+    ax_forcing_phase[2, 1].axis("off")
+    
+    plt.suptitle("Random Walk, Phase plot, F >> mg, with 0 damping coefficient k.")
+    plt.savefig(os.path.join(save_loc, f"Random Walk, Phase Plot of F greater than mg, with 0 damping coefficient k, F from {F_start} to {F_end}.png"))
+    
+    plt.show()
+        
+    print("plot done")
+
+    plt.show()
+
+if investigation_number == '2.1':
+    F = 0.35
+    
+    fig_forcing_compare, ax_forcing_compare = plt.subplots(3, 1, figsize = (6, 15))
+    t_values, theta_values, L_values = pendulum_solver_random_walk(m, L, 0, g, F, sigma, interval, np.pi, 0)
+    
+    ax_forcing_compare[0].plot(t_values, theta_values[:, 0], label = f'$k$ = {k}')
+    ax_forcing_compare[0].legend(loc = 'upper right')
+    ax_forcing_compare[0].set_xlabel("time $t$")
+    ax_forcing_compare[0].set_ylabel("$\\theta$")
+    
+    ax_forcing_compare[1].plot(t_values, theta_values[:, 0] % (2 * np.pi), label = f'$k$ = {k}')
+    ax_forcing_compare[1].legend(loc = 'upper right')
+    ax_forcing_compare[1].set_xlabel("time $t$")
+    ax_forcing_compare[1].set_ylabel("$\\theta$")
+    
+    ax_forcing_compare[2].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {k}')
+    ax_forcing_compare[2].legend(loc = 'upper left')
+    ax_forcing_compare[2].set_xlabel('Angle $\\theta$ (rad)')
+    ax_forcing_compare[2].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
+    
+    fig_forcing_compare.suptitle(f'Random Walk, F >> mg, F = {F}')
+    
+    plt.savefig(os.path.join(save_loc, f"Random Walk, Plot of F>>mg, F is {F}.png"))
+    plt.show()
+    
+elif investigation_number == '3':
+    #for the case of 0 damping, F/mg and eta are small (beat freq))
+    
+    """More general behaviour in the case of zero damping. If F/mg and η are small
+    the motion shows ‘beats’ between the natural period and the forcing period. For some
+    values of the parameters the ‘beat’ frequency may be such that the pendulum motion is
+    periodic but with a period which is a multiple of the forcing period, and much greater
+    than the natural period. Several things could be investigated here: the beat frequency
+    and the conditions for strictly periodic motion.
+    As F/mg is increased a critical value is reached at which complete loops start to occur.
+    For still larger values there are ranges of F/mg where the motion is bounded and ranges
+    where continual looping occurs. For large values of F/mg periodic solutions have the
+    period of the forcing term."""
+    
+    #F/mg small implies mg is big or F is small, and take eta as very small.
+    #take F as 1
+    m_start = 20
+    m_end = 10
+    
+    m_range = np.linspace(m_start, m_end, 4)
+    
+    fig_general_forcing, ax_general_forcing = plt.subplots(4, 2, figsize=(15, 15))
+    
+    for p in range(0, 4):
+        t_values, theta_values, L_values = pendulum_solver_random_walk(m_range[p], L, 0, g, 1, sigma, interval, np.pi, 0)
+        ax_general_forcing[p, 0].plot(t_values, theta_values[:, 0], label = f'$F/mg$ = {F/(m_range[p] * g)}')
+        ax_general_forcing[p, 1].plot(t_values, theta_values[:, 0] % (2 * np.pi), label = f'$F/mg$ = {F/(m_range[p] * g)}')
+        #set_pi_ticks(ax_general_forcing[p, 0], data = theta_values)
+        set_pi_ticks(ax_general_forcing[p, 1], data = theta_values % (2 * np.pi))
+        ax_general_forcing[p, 0].legend(loc = 'upper left')
+        ax_general_forcing[p, 1].legend(loc = 'upper right')
+        ax_general_forcing[p, 0].set_xlabel("time $t$")
+        ax_general_forcing[p, 0].set_ylabel("$\\theta$")
+        ax_general_forcing[p, 1].set_xlabel("time $t$")
+        ax_general_forcing[p, 1].set_ylabel("$\\theta$")
+        
+        ax_general_forcing[p, 0].set_xlim(interval)
+        ax_general_forcing[p, 1].set_xlim(interval)
+        
+    plt.suptitle(f"Random Walk, General damping, $\\eta$ = {eta}")
+
+    plt.savefig(os.path.join(save_loc, f'Random Walk, Plot of Fmg, m from {m_start} to {m_end}.png'))
+
+    fig_general_forcing_phase, ax_general_forcing_phase = plt.subplots(2, 2, figsize=(15, 17))
+
+    for p in range(0, 2):
+        t_values, theta_values, L_values = pendulum_solver_random_walk(m_range[p], L, 0, g, 1, sigma, interval, np.pi, 0)
+        ax_general_forcing_phase[p, 0].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$F/mg$ = {F/(m_range[p] * g)}')
+        ax_general_forcing_phase[p, 0].legend(loc = 'upper left')
+        ax_general_forcing_phase[p, 0].set_xlabel('Angle $\\theta$ (rad)')
+        ax_general_forcing_phase[p, 0].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
+        
+    for p in range(0, 2):
+        t_values, theta_values, L_values = pendulum_solver_random_walk(m_range[p + 2], L, 0, g, 1, sigma, interval, np.pi, 0)
+        ax_general_forcing_phase[p, 1].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$F/mg$ = {F/(m_range[p + 2] * g)}')
+        ax_general_forcing_phase[p, 1].legend(loc = 'upper left')
+        ax_general_forcing_phase[p, 1].set_xlabel('Angle $\\theta$ (rad)')
+        ax_general_forcing_phase[p, 1].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
+        
+    plt.suptitle(f"Random Walk, Phase Plot: General damping, $\\eta$ = {eta}")
+    plt.savefig(os.path.join(save_loc, f"Random Walk, Phase Plot of Plot of Fmg, m from {m_start} to {m_end}.png"))
+    
+    plt.show()
+        
+    print("plot done")
+
+    plt.show()
+
+elif investigation_number == '3.1':
+    eta = 1e-08
+    F = 1e-8
+    m = 1e8
+    
+    t_values, theta_values, L_values = pendulum_solver_random_walk(m, L, F, g, F, sigma, interval, np.pi, 0)
+    
+    fig_general_forcing_compare, ax_general_forcing_compare = plt.subplots(3, 1, figsize = (6, 15))
+    t_values, theta_values, L_values = pendulum_solver_random_walk(m, L, 0, g, F, sigma, interval, np.pi, 0)
+    
+    ax_general_forcing_compare[0].plot(t_values, theta_values[:, 0], label = f'$k$ = {k}')
+    ax_general_forcing_compare[0].legend(loc = 'upper right')
+    ax_general_forcing_compare[0].set_xlabel("time $t$")
+    ax_general_forcing_compare[0].set_ylabel("$\\theta$")
+    
+    ax_general_forcing_compare[1].plot(t_values, theta_values[:, 0] % (2 * np.pi), label = f'$k$ = {k}')
+    ax_general_forcing_compare[1].legend(loc = 'upper right')
+    ax_general_forcing_compare[1].set_xlabel("time $t$")
+    ax_general_forcing_compare[1].set_ylabel("$\\theta$")
+    
+    ax_general_forcing_compare[2].plot(theta_values[:, 0], theta_values[:, 1], marker='>', markevery=50, label = f'$k$ = {k}')
+    ax_general_forcing_compare[2].legend(loc = 'upper left')
+    ax_general_forcing_compare[2].set_xlabel('Angle $\\theta$ (rad)')
+    ax_general_forcing_compare[2].set_ylabel('Angular Velocity, $\\frac{d\\theta}{dt}$ ($rad s^{-1}$)')
+    
+    fig_general_forcing_compare.suptitle(f'Random Walk, General damping, F/mg = {F/(m * g)}, $\\eta$ = {eta}')
+    
+    plt.savefig(os.path.join(save_loc, f"Random Walk, Plot of Fmg, m is {m}.png"))
+    plt.show()
+    
+
+else:
+    print("Invalid selection. Please choose a number between 1 and 3.")
