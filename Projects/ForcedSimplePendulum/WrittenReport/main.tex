@@ -56,7 +56,9 @@
 
 %results go here
 \end{abstract}
+In this project, I investigated the dynamics of the forced simple pendulum, utilizing numerical methods to solve its second-order differential equation, by employing the Runge-Kutta 4(5) (RK4(5)) method. Initially, the pendulum is subjected to an external force nearly equal to its mass, leading to behaviour akin to a simple harmonic oscillator at high damping coefficients, represented by $k$. However, as $k$ decreases, particularly around $k\approx 0.41$, the pendulum undergoes full rotations due to resonance between the forcing frequency and its natural frequency.
 
+Subsequently, I explored a variation where the forcing frequency was substituted with variations in the pendulum's length, inspired by the Rayleigh-Lorentz pendulum. These length changes are determined by a random walk following a normal distribution ($sigma = 10^{-10}$, $\mu = 0$), dynamically altered at each numerical integration step. The observed discrepancies between the ratio of energy to frequency at $t = 0$ and later time points, with an average difference ranging from $0.01$ to $0.7$, and the occasional spikes in the differences across time indicate that the changing of the length L of the pendulum via a random walk does not adhere to adiabatic invariance.
 % keywords can be removed
 %\keywords{First keyword \and Second keyword \and More}
 \twocolumn
@@ -304,7 +306,7 @@ The bottom left and right plots are the emphasis of this section of the project.
 
 \begin{figure}
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 4.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 2000, g = 9.81, F = 20, sigma = 1e-10, run number 4.png}
     \caption{Fifth Iteration.}
     \label{fig:enter-label}
 \end{figure}
@@ -353,14 +355,14 @@ The expected result was that there would be a breakdown in simple harmonic motio
 Regarding the specific damping constant $k = 0.41$ (Fig. \ref{k = 0.41}), there was a \textbf{full oscillation} happening around $t \sim{30}$. I hypothesised was due to the resonance -- forcing frequency $\approx$ natural frequency, so the pendulum had enough energy to make a full oscillation. However as the value of $k$ decreased, the magnitude of the damping term was not enough to keep the resonance under control.
 
 \subsection{Rayleigh Lorentz Pendulum Random Walk}
-The goal was to test if the change of L in the case of a random walk allowed the R-L pendulum to remain adiabatically invariant. The random walk followed a normal distribution with $\sigma = 10^{-20}$ with a mean of 0. The most important graphs were the comparison between the random walk in L and the difference between $\frac{E(t)}{f(t)}$ and $\frac{E(0)}{f(0)}$. If said differences were so small to the point that it is negligible, it could be hypothesised that the random walk (following a normal distribution) for the Rayleigh-Lorentz pendulum is adiabatically invariant (because adiabatic invariance requires time in between 2 endpoints to be almost infinite). From the results shown in Section \ref{rlresults}, the average $|Delta\frac{E}{f}$ ranged from $10^{}$ to $10^{}$. Due to the large range of values, I cannot conclude that the change of L in the case of a random walk allows the system to remain adiabatically invariant.
+The goal was to test if the change of L in the case of a random walk allowed the R-L pendulum to remain adiabatically invariant. The random walk followed a normal distribution with $\sigma = 10^{-20}$ with a mean of 0. The most important graphs were the comparison between the random walk in L and the difference between $\frac{E(t)}{f(t)}$ and $\frac{E(0)}{f(0)}$. If said differences were so small to the point that it is negligible, it could be hypothesised that the random walk (following a normal distribution) for the Rayleigh-Lorentz pendulum is adiabatically invariant (because adiabatic invariance requires time in between 2 endpoints to be almost infinite). From the results shown in Section \ref{rlresults}, the average $|Delta\frac{E}{f}$ ranged from $0.01$ to $0.7$. Due to the large range of values, and large values $|Delta\frac{E}{f}$ appearing throughout the simulation, I cannot conclude that the change of L in the case of a random walk allows the system to remain adiabatically invariant.
 
 \section{Conclusion}
 This project focused on the forced simple pendulum, where the 2nd-order differential equation was solved numerically using the Runge-Kutta 4(5) (RK4(5)) method.
 
 First, in the forced simple pendulum, the pendulum was affected by an external force that was almost equal to its mass. At large values of the damping coefficient, $k$, the system exhibited the behaviour of a simple harmonic oscillator. As the value of $k$ decreased, up to $k\approx 0.41$, the pendulum started doing full rotations due to the resonance of the forcing frequency and the natural frequency of the pendulum.
 
-Next, the forcing frequency was changed out for the change in the length of the pendulum -- akin to the Rayleigh-Lorentz pendulum, which is a form of a forced simple pendulum. The change in length was determined by a random walk that followed a normal distribution. For each step of numerical integration done in the RK4(5) method, the length was changed dynamically with each step. The next value of L was determined by the last value + a random value from the distribution. After many iterations, it was concluded that the difference between the ratio of energy to frequency at t = 0 was not always equal to the ratio of energy to frequency at other, and the average difference ranged from , which showed that this case of the pendulum was not adiabatically invariant. Future work could involve extending the Rayleigh-Lorentz pendulum to the case of a double pendulum and also rather than relying on a random walk to determine the pendulum's length variations, employing a non-linear function could offer a more structured approach. 
+Next, the forcing frequency was changed out for the change in the length of the pendulum -- akin to the Rayleigh-Lorentz pendulum, which is a form of a forced simple pendulum. The change in length was determined by a random walk that followed a normal distribution. For each step of numerical integration done in the RK4(5) method, the length was changed dynamically with each step. The next value of L was determined by the last value + a random value from the distribution. After many iterations, it was concluded that the difference between the ratio of energy to frequency at t = 0 was not always equal to the ratio of energy to frequency at other, and the average difference ranged from $0.01$ to $0.7$, which showed that this case of the pendulum was not adiabatically invariant. Future work could involve extending the Rayleigh-Lorentz pendulum to the case of a double pendulum and also rather than relying on a random walk to determine the pendulum's length variations, employing a non-linear function could offer a more structured approach. 
 \newpage
 \section{Addendum} %complete
 This section outlines 3 concepts studied in PHYS6017, namely random walks, Monte Carlo simulations, and random walks. A brief description of each concept is stated before some examples in and out of academia are given.
@@ -442,56 +444,56 @@ Phase plots (meaning plot of $\frac{d^2\theta}{dt^2}$ against $\frac{d\theta}{dt
 
 \section{Appendix B: Plots for the case of $F \sim{mg}$}{\label{plotsFmg}}
 This section contains graphs that have not been used in the main body of the text or are not necessary to show, but showcase the iterative process where I select values of parameters used. Initially, I tested for values of k of a large magnitude:
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/F~mg as damping coefficient k increases from 50 to 10.png}
     \caption{$F \sim{mg}$ for $k = 50$ to $k = 10$.}
     \label{k 50 to 10}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/Phase plot of F~mg as damping coefficient k increases from 50 to 10.png}
     \caption{Phase plot of $F \sim{mg}$ for $k = 5$ to $k = 1$.}
     \label{Phase plot of k 50 to 10}
 \end{figure}
 From the plots, it just looked to me as if the pendulum was not doing a whole lot - oscillating around the $0/2\pi$ mark, which is the lowest point of the pendulum's motion. I then reduced $k$ from 5 to 1.
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/F~mg as damping coefficient k increases from 5 to 1.png}
     \caption{$F \sim{mg}$ for $k = 5$ to $k = 1$.}
     \label{k 5 to 1}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/Phase plot of F~mg as damping coefficient k increases from 5 to 1.png}
     \caption{Phase plot of $F \sim{mg}$ for $k = 5$ to $k = 1$.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/F~mg as damping coefficient k increases from 5 to 1 (med).png}
     \caption{$F \sim{mg}$ for $k = 5$ to $k = 1$ (200 time steps)}
     \label{k 5 to 1 med}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/Phase plot of F~mg as damping coefficient k increases from 5 to 1 (med).png}
     \caption{Phase plot of $F \sim{mg}$ for $k = 5$ to $k = 1$ (200 time steps)}
     \label{Phase plot of k 5 to 1 med}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/F~mg as damping coefficient k increases from 5 to 1 (long).png}
     \caption{$F \sim{mg}$ for $k = 5$ to $k = 1$ (600 time steps)}
     \label{k 5 to 1 long}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/F~mg as damping coefficient k increases from 5 to 1 (long).png}
     \caption{Phase plot of $F \sim{mg}$ for $k = 5$ to $k = 1$ (600 time steps)}
@@ -499,116 +501,133 @@ From the plots, it just looked to me as if the pendulum was not doing a whole lo
 \end{figure}
 
 Something was happening in that range of $k = 5$ to $k = 1$, so I investigated where k goes from 1 to 0.1.
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/F~mg as damping coefficient k increases from 1 to 0.1.png}
     \caption{$F \sim{mg}$ for $k = 1$ to $k = 0.1$.}
     \label{k 1 to 0.1}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/Phase plot of F~mg as damping coefficient k increases from 1 to 0.1.png}
     \caption{Phase plot of $F \sim{mg}$ for $k = 1$ to $k = 0.1$.}
     \label{Phase plot of k 1 to 0.1}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/F~mg as damping coefficient k increases from 0.42 to 0.38.png}
     \caption{$F \sim{mg}$ for $k = 0.42$ to $k = 0.38$.}
     \label{k 0.42 to 0.38}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/Phase plot of F~mg as damping coefficient k increases from 0.42 to 0.38.png}
     \caption{Phase plot of $F \sim{mg}$ for $k = 0.42$ to $k = 0.38$.}
     \label{phase plot of k 0.42 to 0.38}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/F~mg as damping coefficient k increases from 0.42 to 0.41.png}
     \caption{$F \sim{mg}$ for $k = 0.42$ to $k = 0.41$.}
     \label{k 0.42 to 0.41}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/Phase plot of F~mg as damping coefficient k increases from 0.42 to 0.41.png}
     \caption{Phase plot of $F \sim{mg}$ for $k = 0.42$ to $k = 0.41$.}
     \label{Phase plot of k 0.42 to 0.41}
 \end{figure}
-\end{document}
+
+\twocolumn
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/Plot of F~mg, k is 0.41 (med).png}
+    \caption{Plots for the case of $F\sim{mg}$ when $k = 0.41$, 300 steps}
+    \label{k = 0.41 med}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/Plot of F~mg, k is 0.41 (long).png}
+    \caption{Plots for the case of $F\sim{mg}$ when $k = 0.41$, 600 steps}
+    \label{k = 0.41 long}
+\end{figure}
+\onecolumn
 
 \section{Appendix C: Plots for the R-L pendulum}{\label{rlplots}}
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 0.png}
     \caption{First Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 1.png}
     \caption{Second Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 2.png}
     \caption{Third Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 3.png}
     \caption{Fourth Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 4.png}
     \caption{Fifth Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 5.png}
     \caption{Sixth Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 6.png}
     \caption{Seventh Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 7.png}
     \caption{Eighth Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 8.png}
     \caption{Ninth Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 9.png}
     \caption{Tenth Iteration.}
     \label{fig:enter-label}
 \end{figure}
+
+\end{document}
