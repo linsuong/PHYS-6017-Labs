@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import os
 from matplotlib.animation import FuncAnimation
 from scipy.integrate import RK45
-from scipy.interpolate import interp1d
+
 
 save_loc = "C:\\Repositories\\PHYS-6017-Labs\\Projects\\ForcedSimplePendulum\\Plots"
 

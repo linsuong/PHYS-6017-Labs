@@ -117,11 +117,11 @@ def update(frame):
 
 
 # Plot the results
-big_plot = False
-Animate = True
-plot_test = False
-demo_plot = False
-investigate = True
+big_plot = False #plots a big plot containing results for particular simulations (NOT USED IN REPORT)
+Animate = True #does an animation
+plot_test = False #plots scenarios of different values of each parameters into one big plot
+demo_plot = False #demonstration plots to compare time domain and phase domain plots
+investigate = True #main code for investigating F~mg
 
 if demo_plot == True:
     k = 1 #damping coefficient
@@ -497,12 +497,6 @@ if investigate == True:
     plt.show()
         
     k = 0.41 #damping coefficient
-    m = 1 #mass of pendulum (kg)
-    g = 9.81 #gravitational constant (m * s^-2)
-    L = 2 #length of string (meters)
-    F = 10 #magnitude of external force (N, kg * m * s^-2)
-    eta = 0.1 #small deviation in forcing frequency, Omega
-    interval = [0, 200] #time interval (s)
 
     fig_damping_compare, ax_damping_compare = plt.subplots(3, 1, figsize = (6, 15))
     t_values, theta_values = pendulum_solver(m, L, k, g, F, eta, interval, np.pi, 0)
