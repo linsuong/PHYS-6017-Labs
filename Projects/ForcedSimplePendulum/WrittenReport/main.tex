@@ -32,14 +32,19 @@
     \vspace{1cm}
     {\scshape\Large The University of Southampton \par}
     \vspace{1cm}
-    \vspace{1cm}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width = 0.2\columnwidth]{Projects/ForcedSimplePendulum/WrittenReport/figs/crest.jpg}
+        \label{fig:enter-label}
+    \end{figure}
+    \vspace{0.5cm}
     {\huge\bfseries The Forced Simple Pendulum \par}
     \vspace{1cm}
     {\Large Ong Chin Phin (Linus) \par}
     \vspace{1cm}
     {\Large Student ID: 33184747 \par}
     \vfill
-    {\large November 2023 \par}
+    {\large April 2024\par}
 \end{titlepage}
 
 %\maketitle
@@ -58,7 +63,7 @@
 \end{abstract}
 In this project, I investigated the dynamics of the forced simple pendulum, utilizing numerical methods to solve its second-order differential equation, by employing the Runge-Kutta 4(5) (RK4(5)) method. Initially, the pendulum is subjected to an external force nearly equal to its mass, leading to behaviour akin to a simple harmonic oscillator at high damping coefficients, represented by $k$. However, as $k$ decreases, particularly around $k\approx 0.41$, the pendulum undergoes full rotations due to resonance between the forcing frequency and its natural frequency.
 
-Subsequently, I explored a variation where the forcing frequency was substituted with variations in the pendulum's length, inspired by the Rayleigh-Lorentz pendulum. These length changes are determined by a random walk following a normal distribution ($sigma = 10^{-10}$, $\mu = 0$), dynamically altered at each numerical integration step. The observed discrepancies between the ratio of energy to frequency at $t = 0$ and later time points, with an average difference ranging from $0.01$ to $0.7$, and the occasional spikes in the differences across time indicate that the changing of the length L of the pendulum via a random walk does not adhere to adiabatic invariance.
+Subsequently, I explored a variation where the forcing frequency was substituted with variations in the pendulum's length, inspired by the Rayleigh-Lorentz pendulum. These length changes are determined by a random walk following a normal distribution ($sigma = 10^{-10}$, $\mu = 0$), dynamically altered at each numerical integration step. The observed discrepancies between the ratio of energy to frequency at $t = 0$ and later time points, with an average difference magnitude ranging from $0.01$ to $0.8$, and the occasional spikes in the differences across time indicate that the changing of the length L of the pendulum via a random walk does not adhere to adiabatic invariance.
 % keywords can be removed
 %\keywords{First keyword \and Second keyword \and More}
 \twocolumn
@@ -240,23 +245,23 @@ I noticed an interesting pattern as the mass changes. As the mass of the pendulu
 
 \twocolumn
 \section{Areas of Investigation}
-For the simple forced pendulum, I will investigate the case when the external force, $F$ is almost equal to $mg$ -- $F \sim{mg}$. I iterate through values of $k$, decreasing $k$ until something happens. With the same values of the other constants in Section \ref{setup}, with the exception of $F = 10N$ and iterating over values of $k$ until something happens.\\
+For the simple forced pendulum, I investigated the case when the external force, $F$ was almost equal to $mg$ -- $F \sim{mg}$. With the same values of the other constants in Section \ref{setup}, except $F = 10N$. I iterated through values of $k$, decreasing $k$ until something happened.\\ 
 \\
-For the R-L pendulum, I will implement the case where the length of the pendulum changes with a random walk, and verify if Equation \eqref{adiabatic} still holds for the case of a random walk. The energies in this system are simply the kinetic and potential energy, given by:
+For the R-L pendulum, I implemented the case where the length of the pendulum changes with a random walk.\footnote{In code, this means that each step of integration is stopped and started for each integration step and the values of L are changed on the fly. The next integration step's starting point is then the current step's stopping step. The idea behind this came from \href{https://stackoverflow.com/questions/54767096/odeint-returns-wrong-results-for-an-ode-including-descrete-function}{this stack overflow question}.} and verified if Equation \eqref{adiabatic} still held for the case of a random walk. The energies in this system were simply the kinetic and potential energy, given by:
 \begin{equation}
     T = \frac{1}{2}mv^2 = \frac{1}{2}m(L\omega)^2
 \end{equation}
 \begin{equation}
     V = mgL\cos(\theta) 
 \end{equation}
-The angular frequency at each time step can be calculated by
+The angular frequency at each time step could be calculated by:
 \begin{equation}
     \omega = 2\pi{f} = \sqrt{\frac{g}{L}}
 \end{equation}
-The algorithm will run for several iterations, and then an average of the angular displacement, angular velocity, length of pendulum, frequency and energy will be taken at every time step. 4 important graphs will be plotted: the time-domain plot, phase domain plot, plot of average values of L against t, and the difference of the average energy-frequency ratio at $t = 0$ to the values of energy-frequency at each time step.
+The algorithm ran for 500 iterations for a time range of 0 to 100, and then an average of the angular displacement, angular velocity, length of pendulum, frequency and energy were taken at each step of integration. 4 important graphs will be plotted: the time-domain plot, phase domain plot, plot of average values of L against t, and the difference of the average energy-frequency ratio at $t = 0$ to the values of energy-frequency at each time step.
 \section{Results}
 \subsection{$F \sim{mg}$}
-By iterating through different values of $k$, the following time-domain and phase plots are obtained (when something interesting happened - the not-so-interesting plots can be found in Section \ref{plotsFmg}. I won't bore you with 20 different-but-not-too-different plots). After testing different ranges of $k$, I found a range where something interesting happened.
+Iterating through different values of $k$, time-domain and phase plots were obtained (the less significant plots are in Section \ref{plotsFmg}). After testing different ranges of $k$, I found a range where something interesting happened (Fig. \ref{k 5 to 1 short}). I also investigated the case of a longer period but found nothing of interest (Fig. \ref{k = 0.41 med} and \ref{k = 0.41 long}). The significance and physical meaning were discussed further in Section \ref{analysisFmg}.
 \onecolumn
 \begin{figure}
     \centering
@@ -272,80 +277,80 @@ At $k = 0.41$,
     \caption{Plots for the case of $F\sim{mg}$ when $k = 0.41$. Animation \href{https://github.com/linsuong/PHYS-6017-Labs/blob/main/Projects/ForcedSimplePendulum/Plots/F~mg\%2C\%20k\%20is\%200.41.gif}{here}.}
     \label{k = 0.41}
 \end{figure}
-I also investigated the case of a longer period but found nothing of interest (Fig. \ref{k = 0.41 med} and \ref{k = 0.41 long}). The significance and physical meaning will be discussed further in Section \ref{analysisFmg}.
+
+\subsection{Rayleigh-Lorentz Pendulum - Random Walk}{\label{rlresults}}
+The bottom left and right plots in Fig. \ref{first main} are important in this section of the project. Therefore only the time-domain and phase-domain plots for the first iteration are shown (as they are similar in the other iterations). The more complete plots are in Section \ref{rlplots}.
+
 \onecolumn
-\subsection{Rayleigh-Lorentz Pendulum Random Walk}{\label{rlresults}}
-The bottom left and right plots are the emphasis of this section of the project. Therefore I will only show the time-domain and phase-domain plots for the first iteration. The more complete plots can be found in Section \ref{rlplots}
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 0.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 0.png}
     \caption{First Iteration.}
-    \label{fig:enter-label}
+    \label{first main}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 2000, g = 9.81, F = 20, sigma = 1e-10, run number 1.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 1.png}
     \caption{Second Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 2000, g = 9.81, F = 20, sigma = 1e-10, run number 2.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 2.png}
     \caption{Third Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 3.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 3.png}
     \caption{Fourth Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 2000, g = 9.81, F = 20, sigma = 1e-10, run number 4.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 4.png}
     \caption{Fifth Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 5.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 5.png}
     \caption{Sixth Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 6.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 6.png}
     \caption{Seventh Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 7.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 7.png}
     \caption{Eighth Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 8.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 8.png}
     \caption{Ninth Iteration.}
     \label{fig:enter-label}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 9.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/simplified m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 9.png}
     \caption{Tenth Iteration.}
     \label{fig:enter-label}
 \end{figure}
-
 
 \twocolumn
 \section{Analysis}{\label{analysis}}
@@ -354,16 +359,18 @@ The expected result was that there would be a breakdown in simple harmonic motio
 \\
 Regarding the specific damping constant $k = 0.41$ (Fig. \ref{k = 0.41}), there was a \textbf{full oscillation} happening around $t \sim{30}$. I hypothesised was due to the resonance -- forcing frequency $\approx$ natural frequency, so the pendulum had enough energy to make a full oscillation. However as the value of $k$ decreased, the magnitude of the damping term was not enough to keep the resonance under control.
 
-\subsection{Rayleigh Lorentz Pendulum Random Walk}
-The goal was to test if the change of L in the case of a random walk allowed the R-L pendulum to remain adiabatically invariant. The random walk followed a normal distribution with $\sigma = 10^{-20}$ with a mean of 0. The most important graphs were the comparison between the random walk in L and the difference between $\frac{E(t)}{f(t)}$ and $\frac{E(0)}{f(0)}$. If said differences were so small to the point that it is negligible, it could be hypothesised that the random walk (following a normal distribution) for the Rayleigh-Lorentz pendulum is adiabatically invariant (because adiabatic invariance requires time in between 2 endpoints to be almost infinite). From the results shown in Section \ref{rlresults}, the average $|Delta\frac{E}{f}$ ranged from $0.01$ to $0.7$. Due to the large range of values, and large values $|Delta\frac{E}{f}$ appearing throughout the simulation, I cannot conclude that the change of L in the case of a random walk allows the system to remain adiabatically invariant.
+\subsection{Rayleigh-Lorentz Pendulum - Random Walk}
+The goal was to test if the change of L in the case of a random walk allowed the R-L pendulum to remain adiabatically invariant. The random walk followed a normal distribution with $\sigma = 10^{-20}$ with a mean of 0. The most important graphs were the comparison between the random walk in L and the difference between $\frac{E(t)}{f(t)}$ and $\frac{E(0)}{f(0)}$. If said differences were so small to the point that it is negligible, it could be hypothesised that the random walk (following a normal distribution) for the Rayleigh-Lorentz pendulum is adiabatically invariant (because adiabatic invariance requires time in between 2 endpoints to be almost infinite). From the results shown in Section \ref{rlresults}, the average $\Delta\frac{E}{f}$ ranged from $0.01$ to $0.7$. Due to the large range of values, and large values $|Delta\frac{E}{f}$ appearing throughout the simulation, I cannot conclude that the change of L in the case of a random walk allows the system to remain adiabatically invariant. Also, the values of L do not seem to correspond to the magnitude of the difference in ratios.
 
 \section{Conclusion}
-This project focused on the forced simple pendulum, where the 2nd-order differential equation was solved numerically using the Runge-Kutta 4(5) (RK4(5)) method.
-
-First, in the forced simple pendulum, the pendulum was affected by an external force that was almost equal to its mass. At large values of the damping coefficient, $k$, the system exhibited the behaviour of a simple harmonic oscillator. As the value of $k$ decreased, up to $k\approx 0.41$, the pendulum started doing full rotations due to the resonance of the forcing frequency and the natural frequency of the pendulum.
-
-Next, the forcing frequency was changed out for the change in the length of the pendulum -- akin to the Rayleigh-Lorentz pendulum, which is a form of a forced simple pendulum. The change in length was determined by a random walk that followed a normal distribution. For each step of numerical integration done in the RK4(5) method, the length was changed dynamically with each step. The next value of L was determined by the last value + a random value from the distribution. After many iterations, it was concluded that the difference between the ratio of energy to frequency at t = 0 was not always equal to the ratio of energy to frequency at other, and the average difference ranged from $0.01$ to $0.7$, which showed that this case of the pendulum was not adiabatically invariant. Future work could involve extending the Rayleigh-Lorentz pendulum to the case of a double pendulum and also rather than relying on a random walk to determine the pendulum's length variations, employing a non-linear function could offer a more structured approach. 
+This project focused on the forced simple pendulum, where the 2nd-order differential equation was solved numerically using the Runge-Kutta 4(5) (RK4(5)) method.\\
+\\
+First, in the forced simple pendulum, the pendulum was affected by an external force that was almost equal to its mass. At large values of the damping coefficient, $k$, the system exhibited the behaviour of a simple harmonic oscillator. As the value of $k$ decreased, up to $k\approx 0.41$, the pendulum started doing full rotations due to the resonance of the forcing frequency and the natural frequency of the pendulum.\\
+\\
+Next, the forcing frequency was changed out for the change in the length of the pendulum -- akin to the Rayleigh-Lorentz pendulum, which is a form of a forced simple pendulum. The change in length was determined by a random walk that followed a normal distribution. For each step of numerical integration done in the RK4(5) method, the length was changed dynamically with each step. The next value of L was determined by the last value + a random value from the distribution. After many iterations, it was concluded that the difference between the ratio of energy to frequency at t = 0 was not always equal to the ratio of energy to frequency at other, and the magnitude of the average difference ranged from $0.01$ to $0.8$, which showed that this case of the pendulum was not adiabatically invariant. Future work could involve extending the Rayleigh-Lorentz pendulum to the case of a double pendulum and also rather than relying on a random walk to determine the pendulum's length variations, employing a non-linear function could offer a more structured approach. 
+\onecolumn
 \newpage
+\twocolumn
 \section{Addendum} %complete
 This section outlines 3 concepts studied in PHYS6017, namely random walks, Monte Carlo simulations, and random walks. A brief description of each concept is stated before some examples in and out of academia are given.
 %stuff here
@@ -406,21 +413,21 @@ True random number generators (TRNG), as outlined in \cite{Sunar2009} are used i
 \onecolumn
 \newpage
 \section{Appendix A: Phase Plots (or Phase portrait)} \label{phase plots appendix}
-Phase plots (meaning plot of $\frac{d^2\theta}{dt^2}$ against $\frac{d\theta}{dt}$ in this case), are different from the usual time-domain plots ($\theta$ against t). The classic time-domain plot is a good way to visualise the change of the pendulum's position over time. The time-domain plots give the oscillation period (thereby the frequency), and amplitude, and it is easy to see if any damping/external forces have been applied to the system (the pendulum). A phase portrait, on the other hand, gives a visualisation of the system's evolution in phase space. The intersection of trajectories at a point (or the approach of trajectories to a point) can indicate equilibrium points, stability (via attractors or repellers), limit cycles (repeated behaviour) or chaotic behaviour.
+Phase plots (meaning plot of $\frac{d^2\theta}{dt^2}$ against $\frac{d\theta}{dt}$ in this case), are different from the usual time-domain plots ($\theta$ against t). The classic time-domain plot is a good way to visualise the change of the pendulum's position over time. The time-domain plots give the oscillation period (thereby the frequency), and amplitude, and it is easy to see if any damping/external forces have been applied to the system (the pendulum). A phase portrait, on the other hand, gives a visualisation of the system's evolution in phase space. The intersection of trajectories at a point (or the approach of trajectories to a point) can indicate equilibrium points, stability (via attractors or repellers), limit cycles (repeated behaviour) or chaotic behaviour. For example, in Fig \ref{ballholmes}, the points at $-\pi$ and $\pi$ is an equilibrium point, the 2 rings around the origin are limit cycles.
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.7\columnwidth]{Projects/ForcedSimplePendulum/WrittenReport/figs/The-phase-space-of-the-simple-pendulum.png}
+    \includegraphics[width = 0.5\columnwidth]{Projects/ForcedSimplePendulum/WrittenReport/figs/The-phase-space-of-the-simple-pendulum.png}
     \caption{Phase plot for a simple pendulum. Taken from \cite{Ball2007}.}
-    \label{fig:enter-label}
+    \label{ballholmes}
 \end{figure}
 
 \begin{figure}[H]
     \centering  
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/WrittenReport/figs/Pendulum_phase_portrait_illustration.svg.png}
+    \includegraphics[width = 0.7\columnwidth]{Projects/ForcedSimplePendulum/WrittenReport/figs/Pendulum_phase_portrait_illustration.svg.png}
     \caption{How a phase portrait is compared to a time-domain plot for a simple pendulum. The blue dot for the illustration of the system corresponds to the blue dots on the time series graph and the phase portrait (and so do the other coloured dots). Taken from \href{https://commons.wikimedia.org/wiki/File:Pendulum_phase_portrait_illustration.svg}{WikiMedia}.}
     \label{fig:enter-label}
 \end{figure}
- It is useful to consider both plots for this project. I will introduce some simple examples of the comparison of time-domain and phase-domain plots.
+ It is useful to consider both plots for this project. I will introduce some simple examples of comparing time-domain and phase-domain plots.
  \begin{figure}[H]
      \centering
      \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/demo_shm.png}
@@ -441,9 +448,11 @@ Phase plots (meaning plot of $\frac{d^2\theta}{dt^2}$ against $\frac{d\theta}{dt
     \caption{An example of chaotic behaviour. It definitely would not have been obvious just by looking at the time-domain plot alone.\href{https://github.com/linsuong/PHYS-6017-Labs/blob/main/Projects/ForcedSimplePendulum/Plots/demo\%20chaos.gif}{(Animation of a different plot here, but still chaotic)}}
     \label{fig:enter-label}
 \end{figure}
+Bonus: Here is an \href{https://github.com/linsuong/PHYS-6017-Labs/blob/main/Projects/ForcedSimplePendulum/Plots/cool\%20plot\%20big\%20eta\%20low\%20k.gif}{very cool animation} with quite a pretty phase portrait.
 
 \section{Appendix B: Plots for the case of $F \sim{mg}$}{\label{plotsFmg}}
-This section contains graphs that have not been used in the main body of the text or are not necessary to show, but showcase the iterative process where I select values of parameters used. Initially, I tested for values of k of a large magnitude:
+This section contains graphs that have not been used in the main body of the text or are not necessary to show, but showcase the iterative process where I select values of parameters used. Initially, I tested for values of k of a large magnitude (Fig. \ref{k 50 to 10}):
+\newpage
 \begin{figure}[H]
     \centering
     \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/F~mg as damping coefficient k increases from 50 to 10.png}
@@ -495,7 +504,7 @@ From the plots, it just looked to me as if the pendulum was not doing a whole lo
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/F~mg as damping coefficient k increases from 5 to 1 (long).png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/Phase plot of F~mg as damping coefficient k increases from 5 to 1 (long).png}
     \caption{Phase plot of $F \sim{mg}$ for $k = 5$ to $k = 1$ (600 time steps)}
     \label{Phase plot of k 5 to 1 long}
 \end{figure}
@@ -562,72 +571,72 @@ Something was happening in that range of $k = 5$ to $k = 1$, so I investigated w
 \section{Appendix C: Plots for the R-L pendulum}{\label{rlplots}}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 0.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 0.png}
     \caption{First Iteration.}
-    \label{fig:enter-label}
+    \label{First Iteration.}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 1.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 1.png}
     \caption{Second Iteration.}
-    \label{fig:enter-label}
+    \label{Second Iteration.}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 2.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 2.png}
     \caption{Third Iteration.}
-    \label{fig:enter-label}
+    \label{Third Iteration}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 3.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 3.png}
     \caption{Fourth Iteration.}
-    \label{fig:enter-label}
+    \label{Fourth Iteration}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 4.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 4.png}
     \caption{Fifth Iteration.}
-    \label{fig:enter-label}
+    \label{Fifth Iteration}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 5.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 5.png}
     \caption{Sixth Iteration.}
-    \label{fig:enter-label}
+    \label{Sixth Iteration}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 6.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 6.png}
     \caption{Seventh Iteration.}
-    \label{fig:enter-label}
+    \label{Seventh Iteration}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 7.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 7.png}
     \caption{Eighth Iteration.}
-    \label{fig:enter-label}
+    \label{Eighth Iteration}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 8.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 8.png}
     \caption{Ninth Iteration.}
-    \label{fig:enter-label}
+    \label{Ninth Iteration}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 1000, g = 9.81, F = 20, sigma = 1e-10, run number 9.png}
+    \includegraphics[width = \columnwidth]{Projects/ForcedSimplePendulum/Plots/m = 1.0, L0= 2.0, k = 0.5, g = 9.81, F = 20, sigma = 1e-10, run number 9.png}
     \caption{Tenth Iteration.}
-    \label{fig:enter-label}
+    \label{Tenth Iteration}
 \end{figure}
 
 \end{document}
