@@ -234,10 +234,10 @@ for o in range(0, 10):
     L_values_total = np.array(L_values_total)
 
 
-    for k in range(len(t_values)):
-        avg_ang_disp.append(np.average(ang_disps[:, k]))
-        avg_ang_vel.append(np.average(ang_vels[:, k]))
-        avg_L_values.append(np.average(L_values_total[:, k]))
+    for h in range(len(t_values)):
+        avg_ang_disp.append(np.average(ang_disps[:, h]))
+        avg_ang_vel.append(np.average(ang_vels[:, h]))
+        avg_L_values.append(np.average(L_values_total[:, h]))
         
     print(np.shape(avg_ang_disp))
     print(np.shape(avg_ang_vel))
