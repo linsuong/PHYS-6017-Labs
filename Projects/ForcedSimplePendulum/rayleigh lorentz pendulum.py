@@ -208,7 +208,7 @@ for o in range(0, 10):
     k = 0.5
     g = 9.81  
     F = 20
-    interval = [0, 50]
+    interval = [0, 100]
     sigma = 1e-10
     num_iterations = 500
 
@@ -288,7 +288,7 @@ for o in range(0, 10):
     ax1[1].set_ylabel('$\\Delta\\frac{E}{F}$, (Js)')
     ax1[1].set_title('$\\frac{E(t)}{f(t)} - \\frac{E(t)}{f(t)}$')
     
-    plt.text(0.0, -0.2, f"m = {m}, L0= {L}, k = {k}, g = {g}, F = {F}, $\\sigma$ = {sigma}, average $\\Delta$ = {avgDelta}", horizontalalignment='center', verticalalignment='center', transform=ax1[1].transAxes)
+    plt.text(0.0, -0.1, f"m = {m}, L0= {L}, k = {k}, g = {g}, F = {F}, $\\sigma$ = {sigma}, average $\\Delta$ = {avgDelta}", horizontalalignment='center', verticalalignment='center', transform=ax1[1].transAxes)
     plt.savefig(os.path.join(save_loc, f"simplified m = {m}, L0= {L}, k = {k}, g = {g}, F = {F}, sigma = {sigma}, run number {o}" + '.png'))
     
 print("all done")
