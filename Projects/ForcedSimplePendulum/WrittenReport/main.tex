@@ -226,19 +226,19 @@ The system is set up as follows:
 \end{itemize}
 By modifying each parameter, I plot the time-domain ($\theta$ against $t$) and the phase portrait\footnote{See Section \ref{phase plots appendix} for an explanation on phase portraits, as this is not covered in any core module.}  in Figs. (\ref{time domain test} and \ref{phase portrait test}). Each notable simulation will contain a time-domain plot and a phase portrait plot ($\frac{d\theta}{dt}$ against $\theta$). \\
 \\
-I noticed an interesting pattern as the mass changes. As the mass of the pendulum bob increased, the motion of the pendulum went from a simple harmonic to a dampened system. This is probably because the magnitude of the external force was not enough to keep the pendulum in a simple harmonic motion. As the force was modified, what changed was just the magnitude of oscillation of the pendulum, up to as high as 30 radians. This meant that the pendulum would have completed many full rotations ($\sim{9}$ for $\theta\sim{30}$).Increasing the length allowed the pendulum to do complete rotations in some cases. An increase in length meant an increase in angular velocity. A change in length should also affect the frequency\footnote{Recall $f = \frac{1}{2\pi}\frac{g}{L}$}, as a longer pendulum length will result in a shorter frequency (longer time to complete one oscillation). 
+I noticed an interesting pattern as the mass changes. As the mass of the pendulum bob increased, the motion of the pendulum went from a simple harmonic to a dampened system. This is probably because the magnitude of the external force was not enough to keep the pendulum in a simple harmonic motion. As the force was modified, what changed was just the magnitude of oscillation of the pendulum, up to as high as 30 radians. This meant that the pendulum would have completed many full rotations ($\sim{9}$ for $\theta\sim{30}$).Increasing the length allowed the pendulum to do complete rotations in some cases. An increase in length meant an increase in angular velocity. A change in length should also affect the frequency\footnote{Recall $f = \frac{1}{2\pi}\frac{g}{L}$}, as a longer pendulum length will result in a shorter frequency (longer time to complete one oscillation). as k is increased, unsurprisingly the magnitude of $\theta$ decreases over time. As $\eta$ increases, the magnitude of $\theta$ increases, and some interesting things are going on, for example when $\eta = 2.2$. It looked like there were "beats" in the graph.
 
 \onecolumn
 \begin{figure}
     \centering
-    \includegraphics[width = 1.2\columnwidth]{Projects/ForcedSimplePendulum/Plots/test_plots.png}
+    \includegraphics[width = 1.1\columnwidth]{Projects/ForcedSimplePendulum/Plots/test_plots.png}
     \caption{Time-domain plots for the case of the simple forced pendulum, where each variable is iterated one by one.}
     \label{time domain test}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width = 1.2\columnwidth]{Projects/ForcedSimplePendulum/Plots/test_plots_phase.png}
+    \includegraphics[width = 1.1\columnwidth]{Projects/ForcedSimplePendulum/Plots/test_plots_phase.png}
     \caption{Phase portraits for the case of the simple forced pendulum, where each variable is iterated one by one.}
     \label{phase portrait test}
 \end{figure}
