@@ -417,7 +417,7 @@ if Animate == True:
     L = 2 #length of string (meters)
     F = 10 #magnitude of external force (N, kg * m * s^-2)
     eta = 0.1 #small deviation in forcing frequency, Omega
-    interval = [0, 50] #time interval (s)
+    interval = [50, 200] #time interval (s)
     
     t_values, theta_values = pendulum_solver(m, L, k, g, F, eta, interval, np.pi, 0)
     
@@ -448,8 +448,8 @@ if investigate == True:
 
     fig_damping, ax_damping = plt.subplots(5, 2, figsize=(15, 17))
 
-    k_start = 0.42
-    k_end = 0.41
+    k_start = 5
+    k_end = 1
     k_range = np.linspace(k_end, k_start, 5)
     k_range = np.flip(k_range)
 
@@ -502,7 +502,7 @@ if investigate == True:
     L = 2 #length of string (meters)
     F = 10 #magnitude of external force (N, kg * m * s^-2)
     eta = 0.1 #small deviation in forcing frequency, Omega
-    interval = [0, 50] #time interval (s)
+    interval = [0, 200] #time interval (s)
 
     fig_damping_compare, ax_damping_compare = plt.subplots(3, 1, figsize = (6, 15))
     t_values, theta_values = pendulum_solver(m, L, k, g, F, eta, interval, np.pi, 0)
@@ -527,5 +527,5 @@ if investigate == True:
 
     fig_damping_compare.suptitle(f'F ~ mg, k = {k}')
 
-    plt.savefig(os.path.join(save_loc, f"Plot of F~mg, k is {k}.png"))
+    plt.savefig(os.path.join(save_loc, f"Plot of F~mg, k is {k} (med).png"))
     plt.show()

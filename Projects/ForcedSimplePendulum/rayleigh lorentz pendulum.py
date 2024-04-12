@@ -209,7 +209,7 @@ for o in range(0, 10):
     g = 9.81  
     F = 20
     interval = [0, 50]
-    sigma = 1e-20
+    sigma = 1e-10
     num_iterations = 500
 
     avg_ang_disp = []
@@ -242,12 +242,18 @@ for o in range(0, 10):
     print(np.shape(avg_ang_disp))
     print(np.shape(avg_ang_vel))
     print(np.shape(avg_L_values))
-        
+    print(type(avg_ang_disp))
+    avg_ang_disp = np.array(avg_ang_disp)
+    print(type(avg_ang_disp))
+    
     freq_values, energy_values, ratios, ratio_diff = ratio_calculator(t_values, avg_ang_disp, avg_ang_vel, L_values)
-
+    
+    avgDelta = np.mean(ratio_diff)
+    
     fig, ax = plt.subplots(2, 2, figsize=(10, 10))
+    #ax[0, 0].plot(t_values, avg_ang_disp % (2 * np.pi), label = 'Normalised Average Angular Displacement, $\\theta$ (rad)', linestyle = "dashed")
     ax[0, 0].plot(t_values, avg_ang_disp, label = 'Average Angular Displacement, $\\theta$ (rad)')
-    ax[0, 0].plot(t_values, avg_ang_vel, label = 'Average Angular Velocity, $\\theta$ (rad)')
+    ax[0, 0].plot(t_values, avg_ang_vel, label = 'Average Angular Velocity, $\\frac{\\theta}{dt}$ (rad s$^{-1}$)')
     ax[0, 0].set_xlabel('Time, t, (s)')
     ax[0, 0].set_title(f'Average time-domain plot over {num_iterations} iterations')
     ax[0, 0].legend(loc = 'upper right')
@@ -267,8 +273,22 @@ for o in range(0, 10):
     ax[1, 1].set_ylabel('$\\Delta\\frac{E}{F}$, (Js)')
     ax[1, 1].set_title('$\\frac{E(t)}{f(t)} - \\frac{E(t)}{f(t)}$')
 
-    plt.text(0.0, -0.1, f"m = {m}, L0= {L}, k = {k}, g = {g}, F = {F}, $\\sigma$ = {sigma}", horizontalalignment='center', verticalalignment='center', transform=ax[1, 1].transAxes)
+    plt.text(0.0, -0.2, f"m = {m}, L0= {L}, k = {k}, g = {g}, F = {F}, $\\sigma$ = {sigma}, average $\\Delta$ = {avgDelta}", horizontalalignment='center', verticalalignment='center', transform=ax[1, 1].transAxes)
 
     plt.savefig(os.path.join(save_loc, f"m = {m}, L0= {L}, k = {k}, g = {g}, F = {F}, sigma = {sigma}, run number {o}" + '.png'))
+    
+    fig1, ax1 = plt.subplots(1, 2, figsize= (12, 7))
+    ax1[0].plot(t_values, avg_L_values)
+    ax1[0].set_xlabel('Time, t (s)')
+    ax1[0].set_ylabel('Length, L (m)')
+    ax1[0].set_title('Average random walk of L')
 
+    ax1[1].plot(t_values, ratio_diff)
+    ax1[1].set_xlabel('Time, t (s)')
+    ax1[1].set_ylabel('$\\Delta\\frac{E}{F}$, (Js)')
+    ax1[1].set_title('$\\frac{E(t)}{f(t)} - \\frac{E(t)}{f(t)}$')
+    
+    plt.text(0.0, -0.2, f"m = {m}, L0= {L}, k = {k}, g = {g}, F = {F}, $\\sigma$ = {sigma}, average $\\Delta$ = {avgDelta}", horizontalalignment='center', verticalalignment='center', transform=ax1[1].transAxes)
+    plt.savefig(os.path.join(save_loc, f"simplified m = {m}, L0= {L}, k = {k}, g = {g}, F = {F}, sigma = {sigma}, run number {o}" + '.png'))
+    
 print("all done")
