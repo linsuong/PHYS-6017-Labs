@@ -1,0 +1,221 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+%\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out
+                                                          % if you need a4paper
+\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+% This is needed to prevent the style file preventing citations from linking to 
+% the bibliography
+\makeatletter
+\let\NAT@parse\undefined
+\makeatother
+
+\usepackage[dvipsnames]{xcolor}
+
+\newcommand*\linkcolours{ForestGreen}
+
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{gensymb}
+\usepackage{amsmath}
+\usepackage{breakurl}
+\def\UrlBreaks{\do\/\do-}
+\usepackage{url,hyperref}
+\hypersetup{
+colorlinks,
+linkcolor=\linkcolours,
+citecolor=\linkcolours,
+filecolor=\linkcolours,
+urlcolor=\linkcolours}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\usepackage[labelfont={bf},font=small]{caption}
+\usepackage[none]{hyphenat}
+
+\usepackage{mathtools, cuted}
+
+\usepackage[noadjust, nobreak]{cite}
+\def\citepunct{,\,} % Style file defaults to listing references separately
+
+\usepackage{tabularx}
+\usepackage{amsmath}
+
+\usepackage{float}
+
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+\newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
+\newcommand*\imgres{600}
+
+\newcommand*\GitHubLoc{https://github.com/Jeffrey-Ede/ALRC}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+%\usepackage{parskip}
+
+\usepackage[]{placeins}
+
+% \usepackage{epstopdf}
+% \epstopdfDeclareGraphicsRule{.tif}{png}{.png}{convert #1 \OutputFile}
+% \AppendGraphicsExtensions{.tif}
+
+\newcommand\extraspace{3pt}
+
+\usepackage{placeins}
+
+\usepackage{tikz}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=0.8pt] (char) {#1};}}
+            
+\usepackage[framemethod=tikz]{mdframed}
+
+\usepackage{afterpage}
+
+\usepackage{stfloats}
+
+\usepackage{atbegshi}
+\newcommand{\handlethispage}{}
+\newcommand{\discardpagesfromhere}{\let\handlethispage\AtBeginShipoutDiscard}
+\newcommand{\keeppagesfromhere}{\let\handlethispage\relax}
+\AtBeginShipout{\handlethispage}
+
+\usepackage{comment}
+
+\title{\LARGE \bf
+An analysis in cryptocurrency trends and if predictions are practical
+}
+
+\author{ \parbox{3 in}{\centering Chin Phin Ong\\
+          School of Physics and Astronomy\\
+          University of Southampton}}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+
+abstract this pantsgrab
+
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+Following the crypto boom that happens almost every 3 years, people are looking to make a quick dollar out of trading cryptocurrencies. Many want to know if there is any relationship between various cryptocurrencies, or relationships between cryptocurrencies - i.e. BTC (Bitcoin), ETH (Ethereum), USDT (Theter USD), USDC (USD Coin) and "traditional" currency - i.e. USD (United States Dollar), GBP (British Pound Sterling), JPY (Japanese Yen), etc. Time-series analysis is a way that the data can be analysed. With an appropriate time scale, some meaningful observations can be concluded, and possibly short-term predictions for the future of certain cryptocurrency pairings can be theorised.
+
+Time series analysis can be done with Fourier transforms (FT), introduced by Joseph Fourier in his book \textit{Th'eorie analytique de la chaleur} in 1888 \cite{Fourier1888} - to be specific the discrete Fourier transform (DFT) will be used. 
+
+The equation of a FT for a time-domain function $f(t)$ to its spatial domain $F(t)$ is:
+\begin{equation}
+    F(x) = \int_{0}^{\infty} f(t)\exp^{-2\pi{i}f} dt
+\end{equation}
+The problem here is that due the nature of this problem, I do not have a function that I can apply a FT onto. Therefore, the discrete Fourier transform (DFT), which takes samples from a dataset is more appropriate. The equation of the DFT for a sampled function $x_k$, where $k = 1,..., N$ can be written like:
+\begin{equation}
+    equation
+\end{equation}
+
+I will have to apply a window onto the function followed by a sampling function. This will be done via \hyperref[convolution]{convolution theorem}.
+
+The questions that I will answer in the following sections are:
+\begin{enumerate}
+    \item Is there any correlation between the time series? To what degree are they correlated? %correlation
+    \item Is there any observable lag between them? %autocorrelation
+    \item Is the correlation/lag visible if a periodic and non-periodic data gap is introduced? %if there is, i don't think so
+    \item Does it make sense to predict the trend of cryptocurrency pairs? If so, what is the suitable time frame? %obviously no
+\end{enumerate}
+
+The following sections will go through the methodology, where I explain in detail the methods used in obtaining correlation, time-lag, 
+\section{Methodology}
+The time-series data of cryptocurrency/USD pairs are obtained and I will perform an FFT onto the data. A window will be chosen along with a sampling frequency. 
+
+\section{Results}
+\\qweqwe
+\section{Analysis}
+\\qweqwe
+\section{Conclusion}
+\\qweqwe
+\section{Addendum}{\label{addendum}}
+This section outlines the last 3 concepts studied in PHYS6017: integration, Runge-Kutta methods and Fourier transforms. A brief description of each is stated before some examples in and out of academia are given.
+\\
+\subsection{Integration}
+A widely used mathematical concept, integration in a graphical representation is to find the area under the curve.
+\\
+\subsubsection{In Academia}
+In Physics, path integrals are used heavily in classical and quantum mechanics. Maxwell's equations (in integral form) are so powerful in describing the world of electromagnetism. The Gauss integral is used in \cite{Rogen2003} to classify protein structure 
+\\
+\subsubsection{Outside of Academia}
+Integrals (special integrals, to be exact) are incorporated into the world of economics \cite{Sherdor2023} in solving problems related to economic stability and market analysis. Fractional calculus (non-integer order differentiation, integration, summations) \cite{Ross1977} are used heavily in economics and have been used in the "Memory revolution" - an economic theory that takes into account the memory in economic processes \cite{Tarasov2019}. 
+\\
+\subsection{Runge-Kutta Method} %COMPLETE
+The Runge-Kutta (RK) method is an iterative numerical method used to solve (commonly) non-linear differential equations, usually ill-posed. 
+\\
+\subsubsection{In Academia} %COMPLETE
+The Runge-Kutta segmentation network (RKSeg) developed in \cite{Zhu2023} used the Runge-Kutta method to segment organ image datasets which outperformed other segmentation networks. In \cite{Jday2023}, an adaptive RK method was developed to solve the Cauchy problem\footnote{The solution of a partial differential equation defined in $\mathbb{R}^{n+1}$, where $n$ is the number of dimensions} of a modified Helmholtz equation. This ill-posed problem is hard to solve using "traditional" numerical methods, so using RK method is the way to go. The two-dimensional Riez-space fractional complex Ginzburg-Landau\footnote{A mathematical physical theory used to describe superconductivity, superfluidity and Bose-Einstein condensation. See \url{https://en.wikipedia.org/wiki/Ginzburg\%E2\%80\%93Landau_theory} and \cite{Aranson2002}} equations \cite{Wang2018} were solved using the exponential RK method \cite{Hochbruck2005}\cite{Hochbruck2010}.
+\\
+\subsubsection{Outside of Academia} %COMPLETE
+RK method is practical for real-world scenarios as it is good at solving non-linear differential equations (which what most of the real world is), and it can be used in data science with data interpolation, as shown in \cite{Karim2018}. Traffic flow equations can be solved with RK methods, which have been summarised in \cite{Naja2022}. For example, the macroscopic model of traffic (where traffic flow is taken to act like a fluid), which is expressed as a differential equation \cite{Lighthill1955}\cite{Nagatani2002}: 
+\begin{equation}
+    \frac{\partial{\rho}}{\partial{t}} + \frac{\partial(f)}{\partial{x}}
+\end{equation}
+In \cite{Asri2021}, the Rubella vaccine's effect was analysed using RK-4 and RK-5 method in solving the SEIRS (Suspectible, Exposed, Infected, Recovered, Suspected) Model, showing that RK-5 method was better than RK-5 in predicting the rate of the Rubella disease spread. 
+\\
+
+\subsection{Fourier Transform} %COMPLETE
+Fourier transforms, not to be confused with a Fourier series (where a function is written in terms of sums of exponential or sine and cosine functions) allows the time domain of a signal, periodic or otherwise to be expressed in the frequency domain (along with another phase component), and vice versa. Fast Fourier transforms (FFT) are used in most situations, i.e. in computing due to the number of operations needed. FFTs took $N\log{N}$ operations, compared to $N^2$ operations that the old FT algorithms took \cite{Cooley1969}.
+\\
+\subsubsection{In Academia} %COMPLETE
+FFTs, along with convolution theory can be used by home security devices in smart homes to analyse the audio recorded, shown in \cite{Vadeiadis2020}, which shows the potential of intruder detection by smart home systems. In \cite{Hu1992}, 3-D random rough surfaces are simulated by using a 2-D digital filter, by introducing a method using spectrum analysis to calculate filter coefficients while employing the FFT for efficient filter implementation, similarly, FTs are used in describing the overall shape and ruggedness of particles in \cite{Wettimuny2004}. \cite{Orzechowski2019} explored the FT as an extension of the Black-Scholes-Merton Model in the context of pricing options.
+\\
+\subsubsection{Outside of Academia} %COMPLETE
+In audio engineering, when taking acoustic measurements of audio devices, a FFT is applied onto the signal captured by a measurement microphone, which shows measurement graphs that tell the sonic characteristics of the drivers\footnote{Example:\url{https://crinacle.com/graphs/headphones/sennheiser-hd800s/}}. FFT is also used in music production with the same idea, by allowing the mixing engineer to visualise a waveform in the form of frequency spectrum and amplitude. In the same realm of audio engineering, FFTs are used to calculate the HRTF (Head Related Transfer Functions)\footnote{HRTFs characterise how an individual perceives sound. Due to the different physical properties of each individual, having a personalised HRTF is beneficial in immersive audio \cite{Oehler2023}.}, for example, to allow real-time spatial representation of moving sound sources in \cite{Tsakostas2007}.  In \cite{Nogata2012}, Fourier analysis is used to detect and visualise heart sounds using an FFT image and wavelet image that allows physicians to detect any abnormal heart sounds, showing that this could be used to develop an automatic detection system. 
+
+
+\newpage
+\section{Bibliography}
+\bibliographystyle{apalike}
+\bibliography{ref}
+\section{Abbreviations}
+The abbreviations below are used in this manuscript:
+\begin{itemize}
+    \item BTC - Bitcoin
+    \item ETH - Ethereum
+    \item USD - United States Dollar
+    \item FT - Fourier Transform
+    \item DFT - Discrete Fourier Transform
+    \item FFT - Fast Fourier Transform
+\end{itemize}
+\\
+The abbreviations below are used in the Addendum (Section \ref{addendum}):
+\begin{itemize}
+    \item RK - Runge Kutta
+    \item FT - Fourier Transform
+    \item FFT - Fast Fourier Transform
+    \item HRTF - Head Related Transfer Function
+\end{itemize}
+
+\section{Appendix}
+\subsection{Fast Fourier Transform and Convolution Theorem}
+\subsubsection{Convolution Theorem}{\label{convolution}}
+\subsubsection{Nyquist Frequency}
+\subsection{Testing the algoritm}
+To know if the algorithm works, it makes sense to use generated data for testing.
+\end{document}
