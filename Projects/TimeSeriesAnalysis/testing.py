@@ -1,27 +1,34 @@
 import numpy as np
-from matplotlib import pyplot as plt
-import scipy.fft as fft
+import scipy
 import scipy.signal.windows as windows
 import os
+import pandas as pd
+from matplotlib import pyplot as plt
 
 dataPath = r"C:\Repositories\PHYS-6017-Labs\Projects\TimeSeriesAnalysis\data"
-#generate sample data:
-time = np.linspace(0, 10, 100, endpoint = False)
-size = np.size(time)
 
-y = np.sin(2 * np.pi * time) #f = 10
+btc = pd.read_csv(os.path.join(dataPath, "Gemini_BTCUSD_d.csv"), usecols= ["date", "close"])
 
-#fft of data
-fft_y = fft.fft(y)
+eth = pd.read_csv(os.path.join(dataPath, "Gemini_ETHUSD_d.csv"), usecols= ["date", "close"])
 
-plt.plot(fft_y)
+btcPrice = btc["close"].values
+ethPrice = eth["close"].values
+
+# Aligning data
+min_len = min(len(btcPrice), len(ethPrice))
+btcPrice = btcPrice[:min_len]
+ethPrice = ethPrice[:min_len]
+
+# Compute cross-correlation
+correlation = np.correlate(btcPrice - btcPrice.mean(), ethPrice - ethPrice.mean(), mode='full')
+correlation /= np.std(btcPrice) * np.std(ethPrice)
+
+# Generate lags
+lags = np.arange(-len(btcPrice) + 1, len(btcPrice))
+
+plt.plot(lags, correlation)
+plt.xlabel('Lag')
+plt.ylabel('Cross-correlation')
+plt.title('Cross-correlation between BTC and ETH prices')
+plt.grid(True)
 plt.show()
-
-
-
-#correlation -> np.correlate(array1, array2, mode = "full")
-#convolution -> np.convolve(array1, array2)
-#binning -> np.digitize(array, bins)
-#sampling frequency > 2 * nyquist freq == 1/2(N/T)
-
-
