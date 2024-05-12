@@ -114,7 +114,7 @@ Time-series Analysis on Cryptocurrency Pricing and its relationship with Economi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-abstract this pantsgrab
+This project delves into the dynamics of cryptocurrency markets, particularly focusing on Bitcoin (BTC) and its relationships with other cryptocurrencies, as well as external factors such as search popularity and traditional financial indices after the pandemic (2021-2023). Using time-series analysis techniques, I explore the correlations and time-lags between BTC and selected cryptocurrencies (ETH, SOL, LTC, USDT), as well as BTC's relationship with Google search trends, the S\&P500 index, gold prices, and the EUR-USD exchange rate. Positive monotonic relationships between BTC and most cryptocurrencies were observed, with negligible time lags on the scale of days. Additionally, I observe a positive correlation between BTC prices and search popularity, as well as with the S\&P500 index, indicating potential influences from broader economic trends. However, no significant relationships were found between BTC and gold prices or the EUR-USD exchange rate.
 
 \end{abstract}
 
@@ -130,20 +130,18 @@ One way that financial data can be analysed is via time-series analysis. This me
 
 In this project, the questions that I will explore and answer in the following sections are:
 \begin{enumerate}
-    \item Is there any correlation between the time series? To what degree are they correlated? %correlation
+    \item Is there any correlation between the time series of cryptocurrency pairings? To what degree are they correlated? %correlation
     \item Is there any observable lag between them? %correlation
-    \item Is the correlation/lag visible if a periodic and non-periodic data gap is introduced? %if there is, i don't think so
     \item What about the stock market? What is the correlation between these cryptocurrencies, i.e. BTC against the S\&P 500 (SPX), or BTC against gold spot\footnote{Gold spot prices are typically quoted as USD per troy ounce, about $0.03kg$} prices (XAU)?
     \item Does the popularity (based on Google search trends) of BTC influence the price of BTC, or is it the other way round?
 \end{enumerate}
 
-In the upcoming sections, I will describe the methodology used to answer the questions in detail. Then, I will present the results that answer the questions above and provide a thorough analysis of them. Finally, I will offer a brief conclusion on the findings of this project and discuss future work.
+In the following sections, I will describe the methodology used to answer the questions. Then, I will present the results that answer the questions above and thoroughly analyse them. Finally, I will offer a brief conclusion on the findings of this project and discuss future work.
 
 \section{Methodology}
 One of the main tools used in time-series analysis is correlation. Correlation is the relationship between two sets of data. In this project, I will be using the Spearman correlation coefficient  Methods are taken from \cite{Pal2017}
 \subsection{Processing Data}
-The time scales of the data are from the beginning of 2021 to 2023. The historical price data of the cryptocurrencies are downloaded from \url{https://www.cryptodatadownload.com/data/bitstamp/}, and historical stock prices are downloaded from \url{nasdaq.com}, where the daily closing prices of the assets are taken. Search popularity data is taken from \url{https://trends.google.co.uk/trends/explore?date=today\%205-y&q=\%2Fm\%2F05p0rrx&hl=en}. EUR-USD exchange rate data is from \url{www.macrotrends.net}.
-
+The time scales of the data are from the beginning of 2021 to 2023. Sources for the Python code and data used can be found under Section \ref{data_aval}.
 \subsection{Pearson Correlation Coefficient}\label{Pearson}
 The Pearson correlation coefficient measures the monotonic\footnote{"monotonic" carries a similar relationship to the word "linear", but it is not the same. It means that the behaviour of data moves in a direction that is constantly increasing/decreasing but does not follow the linear equation $y = mx + b$.} relationship between two variables, ranging from $-1$ to $1$. $-1$ indicates perfect negative linear relationship, $1$ indicates perfect linear relationship, and $0$ represents no  linear relationship \cite{Dowdy1983}. The correlation coefficient, $\rho_{p}$, for two vectors $x$ and $y$ is:
 \begin{equation}
@@ -167,143 +165,202 @@ Cross-correlation is a measure of similarity between two signals as a function o
 for $k = 0, 1,..., ||x||+||y||-2$, $N = max(||x||, ||y||)$, $y_m = 0$ if $m > ||y||$\footnote{Source: \url{https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.correlate.html}}
 
 \subsection{Error Handling}
-According to \cite{Misra2018}, the traditional method to obtain the error on cross-correlation (or the time-lag), the signal is divided into equal segments and the cross-correlation is found for each segment. The net cross-correlation is the average of the cross-correlation of the segments, and the variance is the error. However, \cite{Misra2018} also considers data size to be "small" at $\sim1000$ data points, stating that dividing the data into segments is less practical. Therefore, I decided to do a sampling (with replacement) of the datasets, where the sample size is large\footnote{In this case, it will be the same length of the original dataset.} such that a relationship between the two datasets can be drawn \cite{Kose2023} and the standard deviation can be calculated. The standard deviation on the time lag, $\sigma_\tau$ is the standard deviation of the time lags that correspond to the maximum cross-correlation value for each cross-correlation of the sample. The standard deviation on the cross correlation at time lag $\tau$, $\sigma_{corr}(\tau)$ is the standard deviation of the cross-correlation value for each sample at time lag $\tau$. The average standard deviation of the cross-correlation is calculated by taking the average of all $\sigma_{corr}(\tau)$ at every time $\tau$.
-
+According to \cite{Misra2018}, the traditional method to obtain the error on cross-correlation (or the time-lag), the signal is divided into equal segments and the cross-correlation is found for each segment. The net cross-correlation is the average of the cross-correlation of the segments, and the variance is the error. However, \cite{Misra2018} also considers data size to be "small" at $\sim1000$ data points, stating that dividing the data into segments is less practical. Therefore, I decided to do a sampling (with replacement) of the datasets, where the sample size is large\footnote{In this case, it will be the same length of the original dataset.} such that a relationship between the two datasets can be drawn \cite{Kose2023} and the standard deviation can be calculated. The standard deviation on the time lag, $\sigma_\tau$ is the standard deviation of the time lags that correspond to the maximum cross-correlation value for each cross-correlation of the sample. The standard deviation on the cross-correlation at time lag $\tau$ (not to be confused with Kendall's tau - I am not using that in this report), $\sigma_{corr}(\tau)$ is the standard deviation of the cross-correlation value for each sample at time lag $\tau$. The average standard deviation of the cross-correlation is calculated by taking the average of all $\sigma_{corr}(\tau)$ at every time $\tau$. A standard error is calculated with:
+\begin{equation}
+    \epsilon = \frac{\sigma}{\sqrt{n}}
+\end{equation}
+Where $\epsilon$ is the standard error, and $n$ is the sample size.
 \section{Results}
 The relationship between cryptocurrencies will be investigated from the year January 1st, 2021 to December 31st, 2023, to determine if the trend of the relationships between cryptocurrency pairs or cryptocurrency stock pairs has changed, building upon the work of \cite{Sifat2019} (BTC-ETH pairs), and \cite{Georgoula2015} (BTC-SPX, BTC-XAU), and comparing analysis to \cite{Corbet2020contagion}. The pairs investigated are BTC-ETH, BTC-LTC, BTC-SOL and BTC-USDT. It is expected that BTC-ETH to show 0 time-lag, and a positive monotonic relationship - I hypothesise this will be the case for most "popular" coins. The only cryptocurrency pair that would likely show no monotonic relationship will be the BTC-USDT pair, since the value of USDT is based off the USD, so there would be not much of a fluctuation in price relative to BTC. The two main graphs that I will show are: scatter plots which show the relationship (monotonic/non-monotonic) of the pairs of data analysed, and the cross-correlation against time-lag for all the BTC-X coin pairings. The Pearson and Spearman correlation coefficients,  will be calculated and quoted.
 
-\subsection{Correlation and time-lag (cross-correlation) between cryptocurrencies}
-The scatter plots of the BTC-X pairings are shown below:
-The most popular pair is the BTC-ETH pairing. This was expected to have a monotonic relationship.
-\begin{figure}
-    \centering
-    \includegraphics[width = \columnwidth]{scatter plot btc-eth}
-    \caption{Scatter Plot for BTC and ETH prices from Jan 2021 to Dec 2022.}
-    \label{btc-eth}
-\end{figure}
-The calculated values for $\rho_p$ and $\rho_s$ are:\\
-\begin{centering}
-    $\rho_p$\\ 
-    $\rho_s$\\ 
-\end{centering}
-
-\begin{figure}
-    \centering
-    \includegraphics[width = \columnwidth]{scatter plot btc-sol}
-    \caption{Scatter Plot for BTC and SOL prices from Jan 2021 to Dec 2022.}
-    \label{btc-sol}
-\end{figure}
-The calculated values for $\rho_p$ and $\rho_s$ are:\\
-\begin{centering}
-    $\rho_p$\\ 
-    $\rho_s$\\ 
-\end{centering}
-
-\begin{figure}
-    \centering
-    \includegraphics[width = \columnwidth]{scatter plot btc-ltc}
-    \caption{Caption}
-    \label{fig:enter-label}
-\end{figure}
-The calculated values for $\rho_p$ and $\rho_s$ are:\\
-\begin{centering}
-    $\rho_p$\\ 
-    $\rho_s$\\ 
-\end{centering}
-
-\begin{figure}
-    \centering
-    \includegraphics[width = \columnwidth]{scatter plot btc-usdt}
-    \caption{Caption}
-    \label{fig:enter-label}
-\end{figure}
-The calculated values for $\rho_p$ and $\rho_s$ are:\\
-\begin{centering}
-    $\rho_p$\\ 
-    $\rho_s$\\ 
-\end{centering}
-
-The cross-correlation plot is shown below:
-\begin{figure}
-    \centering
-    \includegraphics[width = \columnwidth]{cross corr}
-    \caption{Caption}
-    \label{fig:enter-label}
-\end{figure}
-The final values of the time-lag are:
-\begin{itemize}
-    \item BTC-ETH:$\pm$
-    \item BTC-SOL:$\pm$
-    \item BTC-LTC:$\pm$
-    \item BTC-USDT:$\pm$
-\end{itemize}
-
-\subsection{Introduction of periodic/non-periodic time gap}
-The periodic time gaps were introduced as a square wave, of values 1 and 0.
-The non-peropdic time gaps were introduced as a random walk.
-
-\subsection{Correlation and time-lag of BTC and other things}
-Some interesting data to work with are the effects on BTC based on factors that are not cryptocurrency. Things that I will consider are:
+Some interesting data to work with are the effects on BTC based on factors that are not cryptocurrency.Results are shown in Section \ref{extras}. The areas of investigation are:
 \begin{itemize}
     \item The relationship between the popularity of "Bitcoin" as a search engine term and the price of BTC
     \item The relationship between BTC pricing the S\&P500 index (which is an indicator of global economy)
     \item The relationship between BTC and the price of gold
-    \item The relationship between BTC and the value of the dollar, based off the USD-EUR exchange rate (\cite{Georgoula2015})
+    \item The relationship between BTC and the value of the dollar, based off the USD-EUR exchange rate \cite{Georgoula2015}
 \end{itemize}
 
-The relationship of BTC and search popularity was investigated. The search popularity is a relative measurement, where 100 is the peak popularity of the search term. The scatter plot and time-lag plot are plotted below.
+\subsection{Correlation and time-lag (cross-correlation) between cryptocurrencies}
+The scatter plots of the BTC-X pairings are shown in Fig. \ref{btc-eth} to Fig. \ref{btc-usdt}:
+The most popular pair is the BTC-ETH pairing. This was expected to have a monotonic relationship.
+\begin{figure}
+    \centering
+    \includegraphics[width = \columnwidth]{Projects/TimeSeriesAnalysis/WrittenReport/plots/btcEth.png}
+    \caption{Scatter Plot of BTC and ETH prices, Jan '21 to Dec '23.\\
+        \centering
+        \begin{tabular}{c}
+            $\rho_p = 0.786$\\
+            $\rho_s = 0.819$
+        \end{tabular}
+        }
+    \label{btc-eth}
+\end{figure}
 
-The same were done with the price of the S\%P500 index.
+\begin{figure}
+    \centering
+    \includegraphics[width = \columnwidth]{Projects/TimeSeriesAnalysis/WrittenReport/plots/btcSol.png}
+    \caption{Scatter Plot of BTC and SOL prices, Jan '21 to Dec '23.\\
+        \centering
+        \begin{tabular}{c}
+            $\rho_p = 0.843$\\
+            $\rho_s = 0.680$
+        \end{tabular}
+    }
+    \label{btc-sol}
+\end{figure}
 
+\begin{figure}
+    \centering
+    \includegraphics[width = \columnwidth]{Projects/TimeSeriesAnalysis/WrittenReport/plots/btcLtc.png}
+    \caption{Scatter Plot of BTC and LTC prices, Jan '21 to Dec '23.\\
+        \centering
+        \begin{tabular}{c}
+            $\rho_p = 0.842$\\
+            $\rho_s = 0.844$
+        \end{tabular}
+    }
+    \label{btc-ltc}
+\end{figure}
 
+\begin{figure}
+    \centering
+    \includegraphics[width = \columnwidth]{Projects/TimeSeriesAnalysis/WrittenReport/plots/btcUsdt.png}
+    \caption{Scatter Plot of BTC and USDT prices, Jan '21 to Dec '23.\\
+    \centering
+        \begin{tabular}{c}
+        $\rho_p = 0.165$\\
+        $\rho_s = 0.329$
+    \end{tabular}
+    }
+    \label{btc-usdt}
+\end{figure}
+
+The cross-correlation plot is shown in Fig. \ref{crosscorr}.
+\begin{figure}
+    \centering
+    \includegraphics[width = \columnwidth]{Projects/TimeSeriesAnalysis/WrittenReport/plots/cross_correlation_main.png}
+    \caption{Cross correlation across cryptocurrency pairs (BTC-X) of their prices from Jan '21 to Dec '23.}
+    \label{crosscorr}
+\end{figure}
+The final values of the time-lag are:\\
+\begin{table}[H]
+    \centering
+        \begin{tabular}{|c|c|c|}
+             \hline
+             Pair & Time Lag, $\tau$ (days) & Std. Dev. (days) \\
+             \hline
+             \hline
+             BTC-ETH & $0\pm0.0684$ & $3.20$ \\
+             \hline
+             BTC-SOL & $0\pm0.124$ & $4.92$ \\
+             \hline
+             BTC-LTC & $0\pm0.0874$ & $4.21$ \\
+             \hline
+             BTC-USDT & $0\pm0.000$ & $0.00$ \\
+             \hline
+       \end{tabular}
+     \label{tablevalues}
+     \caption{Numerical values of the time lag of cryptocurrency pairs.}
+\end{table}
+
+\subsection{Correlation and time-lag of BTC and other things}\label{extras}
+The relationship of BTC and search popularity was investigated for years 2020 to 2023. The search popularity is a relative measurement, where 100 is the peak popularity of the search term. The scatter plot and time-lag plot is shown in Fig. \ref{btc-search}. Fig. \ref{btc-gold} is for BTC-XAU and Fig. \ref{btc-eur} is for BTC-SPX. Finally, \ref{btc-snp} is BTC-SPX.
+\begin{figure}
+    \centering
+    \includegraphics[width =\columnwidth]{Projects/TimeSeriesAnalysis/WrittenReport/plots/btcPricebtcSearch.png}
+    \caption{Scatter and cross-correlation plots for BTC and BTC popularity by means of Google search frequencies.\\
+        \begin{centering}
+        $\rho_p = 0.682$\\
+        $\rho_s = 0.776$\\
+        $\tau = 0 \pm 0.162$ days\\
+        $\sigma_\tau = 1.60$ days\\
+    \end{centering}
+    }
+    \label{btc-search}
+\end{figure}
+
+\begin{figure}
+    \centering
+        \includegraphics[width = \columnwidth]{Projects/TimeSeriesAnalysis/WrittenReport/plots/btcPriceGoldPrice.png}
+        \caption{Scatter and cross-correlation plots for BTC and gold spot price.\\
+        \begin{centering}
+            $\rho_p = 0.213$\\
+            $\rho_s = 0.196$\\
+            $\tau = 0 \pm 0.0217$ days\\
+            $\sigma = 1.59$ days\\
+        \end{centering}
+        }
+        \label{btc-gold}
+\end{figure}
+
+\begin{figure}
+    \centering
+        \includegraphics[width = \columnwidth]{Projects/TimeSeriesAnalysis/WrittenReport/plots/btcPriceEur.png}
+        \caption{Scatter and Cross-correlation plots for BTC and EUR-USD exchange rate.\\
+            \begin{centering}
+                $\rho_p = 0.340$\\
+                $\rho_s = 0.322$\\
+                $\tau = 0 \pm 0.0194$ days\\
+                $\sigma = 0.959$ days\\
+            \end{centering}
+            }
+        \label{btc-eur}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = \columnwidth]{Projects/TimeSeriesAnalysis/WrittenReport/plots/btcPriceSnp.png}
+    \caption{Scatter and Cross-correlation plots for BTC and the S\&P500 index.\\
+        \begin{centering}
+        $\rho_p = 0.770$\\
+        $\rho_s = 0.803$\\
+        $\tau =  0 \pm 0.0394$ days\\
+        $\sigma = 1.69$ days\\
+    \end{centering}
+        }
+    \label{btc-snpg}
+\end{figure}
+\subsection{Summary of Results}
+In the table below, I summarise the relationship between BTC-X pairs and the time-lags of the pairs.
+\begin{table}[H]
+    \centering
+        \begin{tabular}{|c|c|c|}
+            \hline
+             Exchange pair & Relationship & Time Lag (days) \\
+             \hline
+             \hline
+             BTC-ETH & Positive Monotonic & $0\pm0.0684$ \\
+             \hline
+             BTC-SOL & Positive Linear & $0\pm0.124$ \\
+             \hline
+             BTC-LTC & Positive Monotonic & $0\pm0.0874$ \\
+             \hline
+             BTC-USDT & None & $0\pm0.000$ \\
+             \hline
+             BTC-Search & Positive Monotonic & $0 \pm 0.162$ \\
+             \hline
+             BTC-XAU & None & $0 \pm 0.0217$ \\
+             \hline
+             BTC-EURUSD & None & $0 \pm 0.0194$ \\
+             \hline
+             BTC-SPX & Positive Monotonic & $0 \pm 0.0394$\\
+             \hline
+        \end{tabular}
+    \caption{Summary of the relationships and time lag between BTC-X pairings.}
+    \label{summaryvals}
+\end{table}
 
 \section{Analysis}
-In \cite{Sifat2019}, it was concluded that there was no lead-lag relationship between BTC and ETH. From my findings, indeed there is
+Most of the cryptocurrency pairings were positively monotonic ($\rho\sim1$) except for BTC-USDT. This is expected as the value of the USDt coin is pegged to the USD, whereas the value of the other coins in the pairings were linked to other factors. The relationships of the other coins are positive monotonic with very little time lag (based on the errors). On other factors, I conclude that there is only positive relationship between BTC prices with the search popularity and the S\&P500. 
 
-According to \cite{Georgoula2015}, 
-%what are the limitations of time-series analysis?
-\\qweqwe
+From my findings, there is no significant lead-lag relationship (on the order of days), but there is an error on the time lag of $\pm\sim1.64$ hours. This is in line with the findings in \cite{Sifat2019}, although it was concluded that there was no lead-lag relationship between BTC and ETH, they also concluded that there was some merit for intra-day traders to exploit this small time lag difference. My hypothesis on BTC-USDT were also accurate as there was no relationship and no time-lag founded between the two.
+
+The search popularity of BTC had a positive effect on the price of BTC, but there was no relationship founded on the EUR-USD exchange rate and BTC, as well as BTC-XAU, contrary to \cite{Georgoula2015}. Also, BTC was positively correlated to the S\&P500 index, an indicator of the global economy, which is also opposite from the findings in \cite{Georgoula2015}.
+
 \section{Conclusion}
-\\qweqwe
-\section{Addendum}{\label{addendum}}
-This section outlines the last 3 concepts studied in PHYS6017: integration, Runge-Kutta methods and Fourier transforms. A brief description of each is stated before some examples in and out of academia are given.
-\\
-\subsection{Integration}
-A widely used mathematical concept, integration in a graphical representation is to find the area under the curve.
-\\
-\subsubsection{In Academia}
-In Physics, path integrals are used heavily in classical and quantum mechanics. Maxwell's equations (in integral form) are so powerful in describing the world of electromagnetism. The Gauss integral is used in \cite{Rogen2003} to classify protein structure 
-\\
-\subsubsection{Outside of Academia}
-Integrals (special integrals, to be exact) are incorporated into the world of economics \cite{Sherdor2023} in solving problems related to economic stability and market analysis. Fractional calculus (non-integer order differentiation, integration, summations) \cite{Ross1977} are used heavily in economics and have been used in the "Memory revolution" - an economic theory that takes into account the memory in economic processes \cite{Tarasov2019}. 
-\\
-\subsection{Runge-Kutta Method} %COMPLETE
-The Runge-Kutta (RK) method is an iterative numerical method used to solve (commonly) non-linear differential equations, usually ill-posed. 
-\\
-\subsubsection{In Academia} %COMPLETE
-The Runge-Kutta segmentation network (RKSeg) developed in \cite{Zhu2023} used the Runge-Kutta method to segment organ image datasets which outperformed other segmentation networks. In \cite{Jday2023}, an adaptive RK method was developed to solve the Cauchy problem\footnote{The solution of a partial differential equation defined in $\mathbb{R}^{n+1}$, where $n$ is the number of dimensions} of a modified Helmholtz equation. This ill-posed problem is hard to solve using "traditional" numerical methods, so using RK method is the way to go. The two-dimensional Riez-space fractional complex Ginzburg-Landau\footnote{A mathematical physical theory used to describe superconductivity, superfluidity and Bose-Einstein condensation. See \url{https://en.wikipedia.org/wiki/Ginzburg\%E2\%80\%93Landau_theory} and \cite{Aranson2002}} equations \cite{Wang2018} were solved using the exponential RK method \cite{Hochbruck2005}\cite{Hochbruck2010}.
-\\
-\subsubsection{Outside of Academia} %COMPLETE
-RK method is practical for real-world scenarios as it is good at solving non-linear differential equations (which what most of the real world is), and it can be used in data science with data interpolation, as shown in \cite{Karim2018}. Traffic flow equations can be solved with RK methods, which have been summarised in \cite{Naja2022}. For example, the macroscopic model of traffic (where traffic flow is taken to act like a fluid), which is expressed as a differential equation \cite{Lighthill1955}\cite{Nagatani2002}: 
-\begin{equation}
-    \frac{\partial{\rho}}{\partial{t}} + \frac{\partial(f)}{\partial{x}}
-\end{equation}
-In \cite{Asri2021}, the Rubella vaccine's effect was analysed using RK-4 and RK-5 method in solving the SEIRS (Suspectible, Exposed, Infected, Recovered, Suspected) Model, showing that RK-5 method was better than RK-5 in predicting the rate of the Rubella disease spread. 
-\\
-\subsection{Fourier Transform} %COMPLETE
-Fourier transforms, not to be confused with a Fourier series (where a function is written in terms of sums of exponential or sine and cosine functions) allows the time domain of a signal, periodic or otherwise to be expressed in the frequency domain (along with another phase component), and vice versa. Fast Fourier transforms (FFT) are used in most situations, i.e. in computing due to the number of operations needed. FFTs took $N\log{N}$ operations, compared to $N^2$ operations that the old FT algorithms took \cite{Cooley1969}.
-\\
-\subsubsection{In Academia} %COMPLETE
-FFTs, along with convolution theory can be used by home security devices in smart homes to analyse the audio recorded, shown in \cite{Vadeiadis2020}, which shows the potential of intruder detection by smart home systems. In \cite{Hu1992}, 3-D random rough surfaces are simulated by using a 2-D digital filter, by introducing a method using spectrum analysis to calculate filter coefficients while employing the FFT for efficient filter implementation, similarly, FTs are used in describing the overall shape and ruggedness of particles in \cite{Wettimuny2004}. \cite{Orzechowski2019} explored the FT as an extension of the Black-Scholes-Merton Model in the context of pricing options.
-\\
-\subsubsection{Outside of Academia} %COMPLETE
-In audio engineering, when taking acoustic measurements of audio devices, a FFT is applied onto the signal captured by a measurement microphone, which shows measurement graphs that tell the sonic characteristics of the drivers\footnote{Example: \url{https://crinacle.com/graphs/headphones/sennheiser-hd800s/}}. FFT is also used in music production with the same idea, by allowing the mixing engineer to visualise a waveform in the form of frequency spectrum and amplitude. In the same realm of audio engineering, FFTs are used to calculate the HRTF (Head Related Transfer Functions)\footnote{HRTFs characterise how an individual perceives sound. Due to the different physical properties of each individual, having a personalised HRTF is beneficial in immersive audio \cite{Oehler2023}.}, for example, to allow real-time spatial representation of moving sound sources in \cite{Tsakostas2007}.  In \cite{Nogata2012}, Fourier analysis is used to detect and visualise heart sounds using an FFT image and wavelet image that allows physicians to detect any abnormal heart sounds, showing that this could be used to develop an automatic detection system. 
+In this project, I investigate the prices of BTC against various coins and indexes, where the price data is the daily closing prices taken from January 2021 to December 2023 to investigate the effects on the COVID-19 pandemic. I conclude that BTC has a positive monotonic relationship and 0-day lag with most popular cryptocurrencies except for coins tied to "real" currencies such as USD. BTC was found to not have any relationship to the spot price of gold and the EUR-USD exchange rate, but a positive monotonic relationship and 0-day time lag with the S\&P500 index and the search frequency on Google. Future work would involve a prediction algorithm based on past data.
 
-
-\newpage
-\section{Bibliography}
-\bibliographystyle{apalike}
-\bibliography{ref}
 \section{Abbreviations}
 The abbreviations below are used in this manuscript:
 \begin{itemize}
@@ -318,7 +375,7 @@ The abbreviations below are used in this manuscript:
     \item DFT - Discrete Fourier Transform
     \item FFT - Fast Fourier Transform
 \end{itemize}
-\\
+
 The abbreviations below are used in the Addendum (Section \ref{addendum}):
 \begin{itemize}
     \item RK - Runge Kutta
@@ -326,4 +383,57 @@ The abbreviations below are used in the Addendum (Section \ref{addendum}):
     \item FFT - Fast Fourier Transform
     \item HRTF - Head Related Transfer Function
 \end{itemize}
+
+\section{Data Availability}{\label{data_aval}}
+The code used in this project, along with the datasets used can be found over at: \url{https://github.com/linsuong/PHYS-6017-Labs/tree/main/Projects/TimeSeriesAnalysis}
+\newline
+Data sources:
+\begin{itemize}
+    \item The historical price data of the cryptocurrencies are from:\url{https://www.cryptodatadownload.com/data/bitstamp/}
+    \item Historical stock prices are downloaded from \url{nasdaq.com}, where the daily closing prices of the assets are taken.
+    \item Search popularity of the term 'Bitcoin' is taken from \url{https://trends.google.co.uk/trends/explore?date=today\%205-y&q=\%2Fm\%2F05p0rrx&hl=en}
+    \item Daily EUR-USD exchange rate data is from \url{www.macrotrends.net}.
+\end{itemize}
+
+\newpage
+\section{Addendum}{\label{addendum}}
+This section outlines the last 3 concepts studied in PHYS6017: Integration (Trapezium Rule, Simpson's Rule, etc.), Runge-Kutta methods and Fourier transform. A brief description of each is stated before some examples in and out of academia are given.
+
+\subsection{Integration}
+A widely used mathematical concept, integration in a graphical representation is to find the area under the curve. Methods that are commonly used are Simpson's Rule and the Trapezium Rule for numerical integration.
+
+\subsubsection{In Academia}
+In Physics, path integrals are used heavily in classical and quantum mechanics. Maxwell's equations (in integral form) are so powerful in describing the world of electromagnetism. The Gauss integral is an absolute measure of structure and is used in \cite{Rogen2003} to classify protein structures. The study of the simple pendulum involves numerical integration methods such as the Simpson's method and Trapezium method. In \cite{abdulkareem2020numerical}, the numerical solution of the ODE for a simple pendulum with a large oscillation angle was introduced to obtain the time period via Simpson's 3/8 method and Boole's method. \cite{shen2006fast} employed Fast-Fourier-Transform direct integration method onto the Rayleigh-Sommerfield diffraction integral and using Simpson's Rule to improve accuracy. In sports physiology, the peak mechanical power output in a jump can be calculated by using Simpson's rule or the trapezium rule.
+ 
+\subsubsection{Outside of Academia}
+Integrals (special integrals, to be exact) are incorporated into the world of economics \cite{Sherdor2023} in solving problems related to economic stability and market analysis. Fractional calculus (non-integer order differentiation, integration, summations) \cite{Ross1977} are used heavily in economics and have been used in the "Memory revolution" - an economic theory that takes into account the memory in economic processes \cite{Tarasov2019}. For example, in options pricing, \cite{andricopoulos2003universal} uses Simpson's method of integration, starting from the Black Scholes equation \cite{black1973pricing}, doing transformations, and obtaining an integral that has to be solved numerically. Therefore, quadrature methods (Simpsons Rule, Trapezium Rule) are used to solve the equation. In \cite{devore2019evaluation}, the left ventricular size and function of a fetus was evaluated using speckle tracking software \cite{kremkau2015general} which uses Simpson's rule. Consumer surplus (benefit or utility consumers derive from purchasing a good or service at a price that is lower than the maximum price they are willing to pay) is calculated from the demand curve. Since the demand curve is a curve, the Trapezium rule is used in solving the integral, dividing the curve up into many intervals to reduce the error.
+
+\subsection{Runge-Kutta Method} %COMPLETE
+The Runge-Kutta (RK) method is an iterative numerical method used to solve (commonly) non-linear differential equations, usually ill-posed. 
+
+\subsubsection{In Academia} %COMPLETE
+The Runge-Kutta segmentation network (RKSeg) developed in \cite{Zhu2023} used the Runge-Kutta method to segment organ image datasets, by taking a neural network as a time dependent dynamical system, where the system state is of time $t$. The RK method is used to approximate the system state at time t, which outperformed other segmentation networks. In \cite{Jday2023}, an adaptive RK method was developed to solve the Cauchy problem\footnote{The solution of a partial differential equation defined in $\mathbb{R}^{n+1}$, where $n$ is the number of dimensions} of a modified Helmholtz equation. This ill-posed problem is hard to solve using "traditional" numerical methods, so using RK method is the way to go. The two-dimensional Riez-space fractional complex Ginzburg-Landau\footnote{A mathematical physical theory used to describe superconductivity, superfluidity and Bose-Einstein condensation. See \url{https://en.wikipedia.org/wiki/Ginzburg\%E2\%80\%93Landau_theory} and \cite{Aranson2002}} equations \cite{Wang2018} were solved using the exponential RK method \cite{Hochbruck2005, Hochbruck2010}, by proposing the Riesz space fractional derivative that is approximated by a 4th order RK method.
+
+\subsubsection{Outside of Academia} %COMPLETE
+RK method is practical for real-world scenarios as it is good at solving non-linear differential equations (which what most of the real world is), and it can be used in data science with data interpolation, as shown in \cite{Karim2018}, where the data is interpolated through cubic spline interpolation method (RK4-CS). Traffic flow equations can be solved with RK methods, which have been summarised in \cite{Naja2022}. For example, the macroscopic model of traffic (where traffic flow is taken to act like a fluid), which is expressed as a differential equation \cite{Lighthill1955}\cite{Nagatani2002}: 
+\begin{equation}
+    \frac{\partial{\rho}}{\partial{t}} + \frac{\partial(f)}{\partial{x}}
+\end{equation}
+In \cite{Asri2021}, the Rubella vaccine's effect was analysed using RK-4 and RK-5 method in solving the SEIRS (Susceptible, Exposed, Infected, Recovered, Suspected) Model, where each alphabet corresponds to a differential equation (therefore building a system of differential equations), and solving numerically using RK-5, showing that RK-5 method was better than RK-5 in predicting the rate of the Rubella disease spread. 
+
+\subsection{Fourier Transform} %COMPLETE
+Fourier transforms, not to be confused with a Fourier series (where a function is written in terms of sums of exponential or sine and cosine functions) allows the time domain of a signal, periodic or otherwise to be expressed in the frequency domain (along with another phase component), and vice versa. Fast Fourier transforms (FFT) are used in most situations, i.e. in computing due to the number of operations needed. FFTs took $N\log{N}$ operations, compared to $N^2$ operations that the old FT algorithms took \cite{Cooley1969}.
+
+\subsubsection{In Academia} %COMPLETE
+FFTs, along with convolution theory can be used by home security devices in smart homes to analyse the audio recorded, shown in \cite{Vadeiadis2020}, which shows the potential of intruder detection by smart home systems by combining gammatone frequency cepstral coefficients and discrete wavelet transform coefficients and to use a gradient boosting classifier. In \cite{Hu1992}, 3-D random rough surfaces are simulated by using a 2-D digital filter, by introducing a method using spectrum analysis to calculate filter coefficients while employing the FFT for efficient filter implementation. Similarly, FTs are used in describing the overall shape and ruggedness of particles in \cite{Wettimuny2004}. \cite{Orzechowski2019} explored the FT as an extension of the Black-Scholes-Merton Model \cite{black1973pricing} under some conditions in the context of pricing options, by using the Carr-Madan model.
+
+\subsubsection{Outside of Academia} %COMPLETE
+In audio engineering, when taking acoustic measurements of audio devices, an FFT is applied onto the signal captured by a measurement microphone (usually a sine sweep from 20-2000Hz), which shows measurement graphs that tell the sonic characteristics of the drivers\footnote{Example: \url{https://crinacle.com/graphs/headphones/sennheiser-hd800s/}}. FFT is also used in music production with the same idea, by allowing the mixing engineer to visualise a waveform in the form of frequency spectrum and amplitude. In the same realm of audio engineering, FFTs are used to calculate the HRTF (Head Related Transfer Functions)\footnote{HRTFs characterise how an individual perceives sound. Due to the different physical properties of each individual, having a personalised HRTF is beneficial in immersive audio \cite{Oehler2023}.}, for example, to allow real-time spatial representation of moving sound sources in \cite{Tsakostas2007}.  In \cite{Nogata2012}, Fourier analysis is used to detect and visualise heart sounds using an FFT image and wavelet image that allows physicians to detect any abnormal heart sounds, showing that this could be used to develop an automatic detection system. 
+
+\newpage
+\section{Bibliography}
+\bibliographystyle{apalike}
+\bibliography{ref}
+
+
 \end{document}
