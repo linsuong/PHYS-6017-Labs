@@ -18,8 +18,8 @@ def correlation_coefficient(coin_a ,coin_b,  mode = 'both'):
                                 choices: 'pearson', 'spearman', 'both's
 
     Returns:
-       spearman, pearson or both correlation coefficients
        returns in the order pearson, spearman for both
+       
     """
     if len(coin_a) != len(coin_b):
         raise Exception("datasets must be of same length. use merge_dates() function first.")
@@ -41,7 +41,7 @@ def correlation_coefficient(coin_a ,coin_b,  mode = 'both'):
         spearman_r = scipy.stats.spearmanr(coin_a, coin_b, alternative = 'less')
         pearson_r = scipy.stats.pearsonr(coin_a, coin_b)
         
-        return pearson_r, spearman_r
+        return pearson_r[0], spearman_r[0]
     
 def cross_correlation(coin_a, coin_b, n_times):
     total_correlation = [0] * n_times
@@ -90,9 +90,11 @@ def cross_correlation(coin_a, coin_b, n_times):
     
     lag_index = np.argmax(avg_corr)
     lag_value = lag[lag_index]
-    print(std_dev_lag)
     
-    return lag, avg_corr, std_dev_lag, std_dev_corr, lag_value
+    std_error_lag = std_dev_lag/np.sqrt(len(lag))
+    std_error_corr = std_dev_corr/np.sqrt(len(lag))
+    
+    return lag, avg_corr, std_error_lag, std_error_corr, lag_value
 
 def plot_scatter(coin_a, coin_b, names, save_loc, title =''):
     
