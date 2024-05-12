@@ -49,7 +49,7 @@ ax[0].set_ylabel('Gold spot price (US dollars per troy ounce)')
 
 ax[1].grid('True')
 ax[1].errorbar(lagBtcGold, correlationBtcGold, color= 'purple', xerr= sdLagBtcGold, yerr= sdCorrelationBtcGold,
-               ecolor='black', elinewidth=1, capsize=2, errorevery= 3)
+               ecolor='black', elinewidth=1, capsize=2, errorevery=10)
 ax[1].text(-30, 0.375, f"$\\sigma$ on cross-correlation = {np.mean(sdCorrelationBtcGold):.2f},\n$\\sigma$ on time lag = {sdLagBtcGold:.2f} days")
 ax[1].axvline(x=0, color='black', linestyle='--')
 ax[1].set_xlim(-20, 20)
@@ -82,11 +82,11 @@ ax1[0].grid('True')
 ax1[0].set_title('Scatter plot between BTC Price and S&P 500 index from 2020 to 2023')
 ax1[0].scatter(btcPrice, snpPrice, s = 5, color = 'black')
 ax1[0].set_xlabel('Price of BTC in USD')
-ax1[0].set_ylabel('snp spot price (US dollars per troy ounce)')
+ax1[0].set_ylabel('S&P500 index price in USD')
 
 ax1[1].grid('True')
 ax1[1].errorbar(lagBtcSnp, correlationBtcSnp, color= 'purple', xerr= sdLagBtcSnp, yerr= sdCorrelationBtcSnp,
-               ecolor='black', elinewidth=1, capsize=2, errorevery= 3)
+               ecolor='black', elinewidth=1, capsize=2, errorevery=10)
 ax1[1].text(-30, 0.375, f"$\\sigma$ on cross-correlation = {np.mean(sdCorrelationBtcSnp):.2f},\n$\\sigma$ on time lag = {sdLagBtcSnp:.2f} days")
 ax1[1].axvline(x=0, color='black', linestyle='--')
 ax1[1].set_xlim(-15, 15)
@@ -123,7 +123,7 @@ ax2[0].set_ylabel('EUR-USD exchange rate (higher = USD stronger)')
 
 ax2[1].grid('True')
 ax2[1].errorbar(lagBtcEur, correlationBtcEur, color= 'purple', xerr= sdLagBtcEur, yerr= sdCorrelationBtcEur,
-               ecolor='black', elinewidth=1, capsize=2, errorevery= 3)
+               ecolor='black', elinewidth=1, capsize=2, errorevery=10)
 ax2[1].text(-30, 0.375, f"$\\sigma$ on cross-correlation = {np.mean(sdCorrelationBtcEur):.2f},\n$\\sigma$ on time lag = {sdLagBtcEur:.2f} days")
 ax2[1].axvline(x=0, color='black', linestyle='--')
 ax2[1].set_xlim(-20, 20)
@@ -171,7 +171,7 @@ ax3[0].set_ylabel('Search interest relative to the highest point (100), a value 
 
 ax3[1].grid('True')
 ax3[1].errorbar(lagBtcSearch, correlationBtcSearch, color= 'purple', xerr= sdLagBtcSearch, yerr= sdCorrelationBtcSearch,
-               ecolor='black', elinewidth=1, capsize=2)
+               ecolor='black', elinewidth=1, capsize=2, errorevery=5)
 ax3[1].text(-30, 0.375, f"$\\sigma$ on cross-correlation = {np.mean(sdCorrelationBtcSearch):.2f},\n$\\sigma$ on time lag = {sdLagBtcSearch:.2f} days")
 ax3[1].axvline(x=0, color='black', linestyle='--')
 ax3[1].set_xlim(-15, 15)
