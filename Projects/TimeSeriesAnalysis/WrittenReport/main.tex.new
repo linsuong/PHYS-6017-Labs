@@ -1,0 +1,234 @@
+% mnras_template.tex 
+%
+% LaTeX template for creating an MNRAS paper
+%
+% v3.3 released April 2024
+% (version numbers match those of mnras.cls)
+%
+% Copyright (C) Royal Astronomical Society 2015
+% Authors:
+% Keith T. Smith (Royal Astronomical Society)
+
+% Change log
+%
+% v3.3 April 2024
+%   Updated \pubyear to print the current year automatically
+% v3.2 July 2023
+%	Updated guidance on use of amssymb package
+% v3.0 May 2015
+%    Renamed to match the new package name
+%    Version number matches mnras.cls
+%    A few minor tweaks to wording
+% v1.0 September 2013
+%    Beta testing only - never publicly released
+%    First version: a simple (ish) template for creating an MNRAS paper
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Basic setup. Most papers should leave these options alone.
+\documentclass[fleqn,usenatbib]{mnras}
+
+% MNRAS is set in Times font. If you don't have this installed (most LaTeX
+% installations will be fine) or prefer the old Computer Modern fonts, comment
+% out the following line
+\usepackage{newtxtext,newtxmath}
+% Depending on your LaTeX fonts installation, you might get better results with one of these:
+%\usepackage{mathptmx}
+%\usepackage{txfonts}
+
+% Use vector fonts, so it zooms properly in on-screen viewing software
+% Don't change these lines unless you know what you are doing
+\usepackage[T1]{fontenc}
+
+% Allow "Thomas van Noord" and "Simon de Laguarde" and alike to be sorted by "N" and "L" etc. in the bibliography.
+% Write the name in the bibliography as "\VAN{Noord}{Van}{van} Noord, Thomas"
+\DeclareRobustCommand{\VAN}[3]{#2}
+\let\VANthebibliography\thebibliography
+\def\thebibliography{\DeclareRobustCommand{\VAN}[3]{##3}\VANthebibliography}
+
+
+%%%%% AUTHORS - PLACE YOUR OWN PACKAGES HERE %%%%%
+
+% Only include extra packages if you really need them. Avoid using amssymb if newtxmath is enabled, as these packages can cause conflicts. newtxmatch covers the same math symbols while producing a consistent Times New Roman font. Common packages are:
+\usepackage{graphicx}	% Including figure files
+\usepackage{amsmath}	% Advanced maths commands
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% AUTHORS - PLACE YOUR OWN COMMANDS HERE %%%%%
+
+% Please keep new commands to a minimum, and use \newcommand not \def to avoid
+% overwriting existing commands. Example:
+%\newcommand{\pcm}{\,cm$^{-2}$}	% per cm-squared
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%%
+
+% Title of the paper, and the short title which is used in the headers.
+% Keep the title short and informative.
+\title[Time-Series Analysis of Cryptocurrency Pricing]{Time-series Analysis of Cryptocurrency Pricing and Relationships with Economic Factors.}
+
+% The list of authors, and the short list which is used in the headers.
+% If you need two or more lines of authors, add an extra line using \newauthor
+\author[Chin Phin Ong]{Chin Phin Ong\\
+University of Southampton, Department of Physics and Astronomy}
+
+% These dates will be filled out by the publisher
+%\date{Accepted XXX. Received YYY; in original form ZZZ}
+
+% Prints the current year, for the copyright statements etc. To achieve a fixed year, replace the expression with a number. 
+\pubyear{\the\year{May 2024}}
+
+% Don't change these lines
+\begin{document}
+\label{firstpage}
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}
+\maketitle
+
+% Abstract of the paper
+\begin{abstract}
+This is a simple template for authors to write new MNRAS papers.
+The abstract should briefly describe the aims, methods, and main results of the paper.
+It should be a single paragraph not more than 250 words (200 words for Letters).
+No references should appear in the abstract.
+\end{abstract}
+
+% Select between one and six entries from the list of approved keywords.
+% Don't make up new ones.
+%\begin{keywords}
+%keyword1 -- keyword2 -- keyword3
+%\end{keywords}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%% BODY OF PAPER %%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+As cryptocurrency continues to grow in popularity, many people are interested in trading to earn a quick profit. In this project, I will explore the correlation between the values of four of the top cryptocurrencies - BTC (Bitcoin), ETH (Ethereum), USDT (Tether USD), and BNB based on their values in USD (United States Dollar), as they are the top 4 cryptocurrencies\footnote{From: \url{https://coinmarketcap.com/}, May 2024.} in terms of market cap (the total market value of a cryptocurrency's circulating supply.). BTC is the most popular cryptocurrency on the market, with a market cap of 1.2 trillion USD (May 2024). It was introduced in \cite{Nakamoto2008} as a way to send digital payments via peer-to-peer (P2P) method without passing through a middle-man (e.g., a bank or broker) to prevent "double-spending" - having to pay additional costs on top of the transaction\footnote{According to \cite{Nakamoto2008}, "financial institutions cannot avoid mediating disputes", therefore the cost of the mediation brings up the transaction costs.}. Since then, many other cryptocurrencies have entered the market. As of April 2024, there are over \textbf{2.4 million} cryptocurrencies on the market, with an average of 5,300 launched daily\footnote{Source: \url{https://www.coingecko.com/research/publications/how-many-cryptocurrencies-are-there}.}.
+
+Among them, some notable cryptocurrencies are ETH, USDT, LTC and DOGE. Each of these coins (a term used interchangeably with cryptocurrency) have their unique properties. Ethereum uses a proof-of-stake consensus model\footnote{\url{https://ethereum.org/en/developers/docs/consensus-mechanisms/}}, which is different from the proof-of-work model used by Bitcoin. USDT is a "stablecoin" that is pegged to the value of the US dollar, making it less volatile than other cryptocurrencies. These properties and features of each cryptocurrency can impact their use cases and potential for adoption in various industries.
+
+Numerous studies have investigated the properties of such cryptocurrencies - the seasonality\footnote{The tendency for the cryptocurrency/asset to perform better in certain times compared to others - this can be on the time scale of days, weeks, months, half-years or years. Source: \url{https://corporatefinanceinstitute.com/resources/valuation/seasonality/}. Apart from finance, there have been studies in psychology analysing the seasonality of schizophrenia patient admissions \cite{Yao2023}.} \cite{Kaiser2019}, hedging ability \cite{Chan2019}, multifractality\footnote{The property of complex systems where irregular patterns or structures exhibit varying degrees of complexity across different scales, extending the concept of fractals to multiple scales of organization - e.g. seeing a pattern that changes in how detailed or messy it looks depending on how closely you're looking at it. For more information, read to \cite{Harte2001}} \cite{Takaishi2018}, interdependence between \cite{Qureshi2020} and even the environmental impact \cite{Wendl2023, Mohsin2021, Corbet2020} of cryptocurrencies. On the other hand, \cite{Georgoula2015} studied how Twitter, Wikipedia search queries, hash rates, USD/EUR\footnote{United States Dollar to Euro} exchange rate, number of coins in circulation, S\&P500 index (state of the global economy) affected the price of Bitcoin.
+
+One way that financial data can be analysed is via time-series analysis. This method has been used to analyse the stock market - \cite{cao1992nonlinear, naik2013does, parray2020time}, as well as cryptocurrencies - \cite{Georgoula2015, Catania2017, Hagemann2018, Maleki2023, Vaz2020, Toyoda2018}. With an appropriate time scale, some observations between cryptocurrency pairs, crypto-stock pairings, crypto-query (search query) pairings can be done.
+
+In this project, the questions that I will explore and answer in the following sections are:
+\begin{enumerate}
+    \item Is there any correlation between the time series? To what degree are they correlated? %correlation
+    \item Is there any observable lag between them? %correlation
+    \item Is the correlation/lag visible if a periodic and non-periodic data gap is introduced? %if there is, i don't think so
+    \item What about the stock market? What is the correlation between these cryptocurrencies (mainly BTC) against the S\&P 500?
+\end{enumerate}
+
+In the upcoming sections, I will describe the methodology used to answer the questions in detail. Then, I will present the results and provide a thorough analysis of them. Finally, I will offer a brief conclusion on the findings of this project and discuss future work.
+
+\section{Methodology}
+One of the main tools used in time-series analysis is correlation. Correlation is the relationship between two sets of data. In this project, I will be using the Spearman correlation coefficient  Methods are taken from \cite{Pal2017}
+\subsection{Processing Data}
+The historical price data of the cryptocurrencies are downloaded from \url{https://www.cryptodatadownload.com/data/bitstamp/}, and historical stock prices are downloaded from \url{marketwatch.com}. Comparing cryptocurrency prices against each other is straightforward. However, the stock market closes on weekends and holidays. To fix this, I applied some simple smoothing processes 
+\subsection{Pearson Correlation Coefficient}\label{Pearson}
+The Pearson correlation coefficient measures the monotonic\footnote{"monotonic" carries a similar relationship to the word "linear", but it is not the same. It means that the behaviour of data moves in a direction that is constantly increasing/decreasing but does not follow the linear equation $y = mx + b$.} relationship between two variables, ranging from $-1$ to $1$. $-1$ indicates perfect negative linear relationship, $1$ indicates perfect linear relationship, and $0$ represents no  linear relationship \cite{Dowdy1983}. The correlation coefficient, $\rho_{p}$, for two vectors $x$ and $y$ is:
+\begin{equation}
+    \centering
+    \rho_{p} = \frac{\sum(x-m_x)(y-m_y)}{\sqrt{\sum(x-m_x)^2\sum(y-m_y)^2}}
+\end{equation}
+Where $m_x$ and $m_y$ are means of the vectors $x$ and $y$. A positive correlation means that if $x$ increases, $y$ increases, and vice versa.
+
+\subsection{Spearman's (Rank) Correlation Coefficient}
+Similar in purpose to the Pearson Correlation Coefficient (Section \ref{Pearson}), the difference in the Spearman coefficient is that it measures the \textbf{monotonic} relationship between 2 sets of data instead of the linear relationship. By converting the raw data of the two samples, $X_i$ and $Y_i$ into ranks\footnote{"ranking" data here means arranging the data points from smallest to largest, and then ranking the datapoints relative to the rest, where the rank of 1 corresponds to the smallest data point. If two values are the same, the rank of the numbers are the average rank of where they would fall if they were different.} $R(X_i)$ and $R_(Y_i)$, the Spearman coefficient, $\rho_s$ can be obtained with:
+\begin{equation}
+    \centering
+    \rho_s = \rho_{p(R(X), R(Y))} = \frac{cov(R(X), R(Y)}{\sigma_{R(X)}\sigma_{R(Y)}}
+\end{equation}
+
+where $\rho$ is the Pearson coefficient applied to the rank variables, $cov(R(X), R(Y))$ is the covariance of the rank variables, and $\sigma_{R(X)}$ and $\sigma_{R(Y)}$ are the standard deviations of the rank variables. Between two datasets X and Y, a positive value of the Spearman correlation coefficient means that there is an increasing monotonic relationship (with 1 being a perfectly increasing monotonic relationship), and a negative value indicates a decreasing monotonic relationship (with -1 being a perfectly decreasing monotonic relationship), whereas 0 means there is no monotonic relationship between the two datasets. 
+ 
+\subsection{Cross-correlation}
+Cross-correlation is a measure of similarity between two signals as a function of the relative shift of one signal to another. It measures the degree to which two signals resemble each other as one signal is shifted in time relative to another. The time series data is presented as arrays. If the correlation between 2 time series, $x$ and $y$ (with length $||x||$ and $||y||$ respectively) is the array $z$, with ${k}^{th}$ element $z[{k}]$, the correlation can be written as: 
+\begin{equation}
+    \centering
+    z[{k}] = (x * y)(k - N + 1) = \sum_{l=0}^{||x||-1}x_{l}y^{*}_{l-k+N-1}
+\end{equation}
+for $k = 0, 1,..., ||x||+||y||-2$, $N = max(||x||, ||y||)$, $y_m = 0$ if $m > ||y||$\footnote{Source: \url{https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.correlate.html}}
+
+\subsection{Error Handling}
+According to \cite{Misra2018}, the traditional method to obtain the error on cross-correlation (or the time-lag) is to divide the signal into equal segments and the cross-correlation is found for each segment. The net cross-correlation is the average of the cross-correlation of the segments, and the variance is the error. However, \cite{Misra2018} also argues that at small ($\sim1000$) points, data is considered "small" and dividing the data into segments is less practical. Therefore, I decided to do a sampling of the datasets, where the sample size is large such that a relationship between the two datasets can be drawn \cite{Kose2023} and the standard deviation can be calculated. The standard deviation on the time lag, $\sigma_\tau$ is the standard deviation of the time lags that correspond to the maximum cross-correlation value for each cross-correlation of the sample. The standard deviation on the cross-correlation at time lag $\tau$, $\sigma_{corr}(\tau)$ is the standard deviation of the cross-correlation value for each sample at time lag $\tau$. The average standard deviation of the cross-correlation is calculated by taking the average of all $\sigma_{corr}(\tau)$ at every time $\tau$
+
+\section{Results}
+\subsection{Correlation and time-lag (cross-correlation) between cryptocurrencies}
+
+\subsection{Introduction of periodic/non-periodic time gap}
+\subsection{Correlation and time-lag of BTC and other things}
+\section{Analysis}
+%what are the limitations of time-series analysis?
+\\qweqwe
+\section{Conclusion}
+\\qweqwe
+\section{Addendum}{\label{addendum}}
+This section outlines the last 3 concepts studied in PHYS6017: integration, Runge-Kutta methods and Fourier transforms. A brief description of each is stated before some examples in and out of academia are given.
+\\
+\subsection{Integration}
+A widely used mathematical concept, integration in a graphical representation is to find the area under the curve.
+\\
+\subsubsection{In Academia}
+In Physics, path integrals are used heavily in classical and quantum mechanics. Maxwell's equations (in integral form) are so powerful in describing the world of electromagnetism. The Gauss integral is used in \cite{Rogen2003} to classify protein structure 
+\\
+\subsubsection{Outside of Academia}
+Integrals (special integrals, to be exact) are incorporated into the world of economics \cite{Sherdor2023} in solving problems related to economic stability and market analysis. Fractional calculus (non-integer order differentiation, integration, summations) \cite{Ross1977} are used heavily in economics and have been used in the "Memory revolution" - an economic theory that takes into account the memory in economic processes \cite{Tarasov2019}. 
+\\
+\subsection{Runge-Kutta Method} %COMPLETE
+The Runge-Kutta (RK) method is an iterative numerical method used to solve (commonly) non-linear differential equations, usually ill-posed. 
+\\
+\subsubsection{In Academia} %COMPLETE
+The Runge-Kutta segmentation network (RKSeg) developed in \cite{Zhu2023} used the Runge-Kutta method to segment organ image datasets which outperformed other segmentation networks. In \cite{Jday2023}, an adaptive RK method was developed to solve the Cauchy problem\footnote{The solution of a partial differential equation defined in $\mathbb{R}^{n+1}$, where $n$ is the number of dimensions} of a modified Helmholtz equation. This ill-posed problem is hard to solve using "traditional" numerical methods, so using RK method is the way to go. The two-dimensional Riez-space fractional complex Ginzburg-Landau\footnote{A mathematical physical theory used to describe superconductivity, superfluidity and Bose-Einstein condensation. See \url{https://en.wikipedia.org/wiki/Ginzburg\%E2\%80\%93Landau_theory} and \cite{Aranson2002}} equations \cite{Wang2018} were solved using the exponential RK method \cite{Hochbruck2005}\cite{Hochbruck2010}.
+\\
+\subsubsection{Outside of Academia} %COMPLETE
+RK method is practical for real-world scenarios as it is good at solving non-linear differential equations (which what most of the real world is), and it can be used in data science with data interpolation, as shown in \cite{Karim2018}. Traffic flow equations can be solved with RK methods, which have been summarised in \cite{Naja2022}. For example, the macroscopic model of traffic (where traffic flow is taken to act like a fluid), which is expressed as a differential equation \cite{Lighthill1955}\cite{Nagatani2002}: 
+\begin{equation}
+    \centering
+    \frac{\partial{\rho}}{\partial{t}} + \frac{\partial(f)}{\partial{x}}
+\end{equation}
+In \cite{Asri2021}, the Rubella vaccine's effect was analysed using RK-4 and RK-5 method in solving the SEIRS (Suspectible, Exposed, Infected, Recovered, Suspected) Model, showing that RK-5 method was better than RK-5 in predicting the rate of the Rubella disease spread. 
+\\
+\subsection{Fourier Transform} %COMPLETE
+Fourier transforms, not to be confused with a Fourier series (where a function is written in terms of sums of exponential or sine and cosine functions) allows the time domain of a signal, periodic or otherwise to be expressed in the frequency domain (along with another phase component), and vice versa. Fast Fourier transforms (FFT) are used in most situations, i.e. in computing due to the number of operations needed. FFTs took $N\log{N}$ operations, compared to $N^2$ operations that the old FT algorithms took \cite{Cooley1969}.
+\\
+\subsubsection{In Academia} %COMPLETE
+FFTs, along with convolution theory can be used by home security devices in smart homes to analyse the audio recorded, shown in \cite{Vadeiadis2020}, which shows the potential of intruder detection by smart home systems. In \cite{Hu1992}, 3-D random rough surfaces are simulated by using a 2-D digital filter, by introducing a method using spectrum analysis to calculate filter coefficients while employing the FFT for efficient filter implementation, similarly, FTs are used in describing the overall shape and ruggedness of particles in \cite{Wettimuny2004}. \cite{Orzechowski2019} explored the FT as an extension of the Black-Scholes-Merton Model in the context of pricing options.
+\\
+\subsubsection{Outside of Academia} %COMPLETE
+In audio engineering, when taking acoustic measurements of audio devices, a FFT is applied onto the signal captured by a measurement microphone, which shows measurement graphs that tell the sonic characteristics of the drivers\footnote{Example: \url{https://crinacle.com/graphs/headphones/sennheiser-hd800s/}}. FFT is also used in music production with the same idea, by allowing the mixing engineer to visualise a waveform in the form of frequency spectrum and amplitude. In the same realm of audio engineering, FFTs are used to calculate the HRTF (Head Related Transfer Functions)\footnote{HRTFs characterise how an individual perceives sound. Due to the different physical properties of each individual, having a personalised HRTF is beneficial in immersive audio \cite{Oehler2023}.}, for example, to allow real-time spatial representation of moving sound sources in \cite{Tsakostas2007}.  In \cite{Nogata2012}, Fourier analysis is used to detect and visualise heart sounds using an FFT image and wavelet image that allows physicians to detect any abnormal heart sounds, showing that this could be used to develop an automatic detection system. 
+
+
+\newpage
+\section{Bibliography}
+\bibliographystyle{apalike}
+\bibliography{ref}
+\section{Abbreviations}
+The abbreviations below are used in this manuscript:
+\begin{itemize}
+    \item BTC - Bitcoin
+    \item ETH - Ethereum
+    \item USD - United States Dollar
+    \item FT - Fourier Transform
+    \item DFT - Discrete Fourier Transform
+    \item FFT - Fast Fourier Transform
+\end{itemize}
+\\
+The abbreviations below are used in the Addendum (Section \ref{addendum}):
+\begin{itemize}
+    \item RK - Runge Kutta
+    \item FT - Fourier Transform
+    \item FFT - Fast Fourier Transform
+    \item HRTF - Head Related Transfer Function
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Don't change these lines
+\bsp	% typesetting comment
+\label{lastpage}
+\end{document}
+
+% End of mnras_template.tex
