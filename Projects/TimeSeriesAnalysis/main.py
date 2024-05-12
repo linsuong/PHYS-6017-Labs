@@ -67,16 +67,16 @@ lagBtcLtc, correlationBtcLtc, sdLagBtcLtc, sdCorrelationBtcLtc, lagBtcLtcVal = c
 plt.axvline(x= 0, color= 'black', linestyle= '--')
 
 plt.errorbar(lagBtcEth, correlationBtcEth, color= 'purple', xerr= sdLagBtcEth, yerr= sdCorrelationBtcEth, 
-             ecolor= 'black', elinewidth= 1, capsize= 2, errorevery= 10, label = 'BTC ETH')
+             ecolor= 'black', elinewidth= 1, capsize= 2, errorevery= 3, label = 'BTC ETH')
 
 plt.errorbar(lagBtcSol, correlationBtcSol, color= 'red', xerr= sdLagBtcSol, yerr= sdCorrelationBtcSol, 
-             ecolor= 'black', elinewidth= 1, capsize= 2, errorevery= 10, label = 'BTC SOL')
+             ecolor= 'black', elinewidth= 1, capsize= 2, errorevery= 3, label = 'BTC SOL')
 
 plt.errorbar(lagBtcUsdt, correlationBtcUsdt, color= 'black', xerr= sdLagBtcUsdt, yerr= sdCorrelationBtcUsdt, 
-             ecolor= 'black', elinewidth= 1, capsize= 2, errorevery= 10, label = 'BTC USDT')
+             ecolor= 'black', elinewidth= 1, capsize= 2, errorevery= 3, label = 'BTC USDT')
 
 plt.errorbar(lagBtcLtc, correlationBtcLtc, color= 'green', xerr= sdLagBtcLtc, yerr= sdCorrelationBtcLtc, 
-             ecolor= 'black', elinewidth= 1, capsize= 2, errorevery= 10, label = 'BTC LTC')
+             ecolor= 'black', elinewidth= 1, capsize= 2, errorevery= 3, label = 'BTC LTC')
 
 #plt.plot(lagBtcEth, correlationBtcEth, linewidth = 3, color = 'red')
 #plt.plot(lagBtcLtc, correlationBtcLtc, label = 'btc ltc')
@@ -91,12 +91,12 @@ plt.legend()
 plt.savefig(os.path.join(current_directory, 'WrittenReport', 'plots', 'cross_correlation_main.png'))
 plt.clf()
 
-print(correlation_coefficient(btcEthPrice, ethPrice))
-print(correlation_coefficient(btcSolPrice, solPrice))
-print(correlation_coefficient(btcLtcPrice, ltcPrice))
-print(correlation_coefficient(btcUsdtPrice, usdtPrice))
+print('eth', correlation_coefficient(btcEthPrice, ethPrice))
+print('sol', correlation_coefficient(btcSolPrice, solPrice))
+print('ltc', correlation_coefficient(btcLtcPrice, ltcPrice))
+print('usdt', correlation_coefficient(btcUsdtPrice, usdtPrice))
 
-print(lagBtcEthVal, 'with sd=', sdLagBtcEth)
-print(lagBtcLtcVal,'with sd=', sdLagBtcLtc)
-print(lagBtcEthVal,'with sd=', sdLagBtcEth)
-print(lagBtcUsdtVal,'with sd=', sdLagBtcUsdt)
+print(lagBtcEthVal, '\pm', sdLagBtcEth)
+print(lagBtcLtcVal,'\pm', sdLagBtcLtc)
+print(lagBtcSolVal,'\pm', sdLagBtcSol)
+print(lagBtcUsdtVal,'\pm', sdLagBtcUsdt)

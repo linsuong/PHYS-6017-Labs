@@ -37,6 +37,7 @@ btcPrice = np.array(btcPrice)
 fig, ax = plt.subplots(2, 1, figsize = (9, 13))
 lagBtcGold, correlationBtcGold, sdLagBtcGold, sdCorrelationBtcGold, lagvalueBtcGold = base.cross_correlation(btcPrice, goldPrice, n_times= 1000)
 spearman_r_gold, pearson_r_gold  = base.correlation_coefficient(btcPrice, goldPrice)
+print('gold')
 print(spearman_r_gold)
 print(pearson_r_gold)
 
@@ -48,7 +49,7 @@ ax[0].set_ylabel('Gold spot price (US dollars per troy ounce)')
 
 ax[1].grid('True')
 ax[1].errorbar(lagBtcGold, correlationBtcGold, color= 'purple', xerr= sdLagBtcGold, yerr= sdCorrelationBtcGold,
-               ecolor='black', elinewidth=1, capsize=2, errorevery=10)
+               ecolor='black', elinewidth=1, capsize=2, errorevery= 3)
 ax[1].text(-30, 0.375, f"$\\sigma$ on cross-correlation = {np.mean(sdCorrelationBtcGold):.2f},\n$\\sigma$ on time lag = {sdLagBtcGold:.2f} days")
 ax[1].axvline(x=0, color='black', linestyle='--')
 ax[1].set_xlim(-20, 20)
@@ -60,7 +61,7 @@ ax[1].set_xlabel('Time Lag (days)')
 plt.savefig(os.path.join(current_directory, "WrittenReport", "plots", "btcPriceGoldPrice.png"))
 plt.clf()
 
-print(lagvalueBtcGold, 'sd =', sdLagBtcGold)
+print(lagvalueBtcGold, '\pm', sdLagBtcGold)
 #####################################################################################
 #####################################################################################
 
@@ -71,6 +72,7 @@ snpPrice = merged_data['close_y']
 
 lagBtcSnp, correlationBtcSnp, sdLagBtcSnp, sdCorrelationBtcSnp, lagValBtcSnp = base.cross_correlation(btcPrice, snpPrice, n_times= 1000)
 spearman_r_snp, pearson_r_snp  = base.correlation_coefficient(btcPrice, snpPrice)
+print('snp')
 print(spearman_r_snp)
 print(pearson_r_snp)
 
@@ -84,7 +86,7 @@ ax1[0].set_ylabel('snp spot price (US dollars per troy ounce)')
 
 ax1[1].grid('True')
 ax1[1].errorbar(lagBtcSnp, correlationBtcSnp, color= 'purple', xerr= sdLagBtcSnp, yerr= sdCorrelationBtcSnp,
-               ecolor='black', elinewidth=1, capsize=2, errorevery=10)
+               ecolor='black', elinewidth=1, capsize=2, errorevery= 3)
 ax1[1].text(-30, 0.375, f"$\\sigma$ on cross-correlation = {np.mean(sdCorrelationBtcSnp):.2f},\n$\\sigma$ on time lag = {sdLagBtcSnp:.2f} days")
 ax1[1].axvline(x=0, color='black', linestyle='--')
 ax1[1].set_xlim(-15, 15)
@@ -96,7 +98,7 @@ ax1[1].set_xlabel('Time Lag (days)')
 plt.savefig(os.path.join(current_directory, "WrittenReport", "plots", "btcPriceSnp.png"))
 plt.clf()
 
-print(lagValBtcSnp, 'sd =', sdLagBtcSnp)
+print(lagValBtcSnp, '\pm', sdLagBtcSnp)
 
 #####################################################################################
 #####################################################################################
@@ -107,6 +109,7 @@ eurPrice = merged_data['close_y']
 
 lagBtcEur, correlationBtcEur, sdLagBtcEur, sdCorrelationBtcEur, lagValBtcEur = base.cross_correlation(btcPrice, eurPrice, n_times= 1000)
 spearman_r_eur, pearson_r_eur  = base.correlation_coefficient(btcPrice, eurPrice)
+print('eur')
 print(spearman_r_eur)
 print(pearson_r_eur)
 
@@ -120,7 +123,7 @@ ax2[0].set_ylabel('EUR-USD exchange rate (higher = USD stronger)')
 
 ax2[1].grid('True')
 ax2[1].errorbar(lagBtcEur, correlationBtcEur, color= 'purple', xerr= sdLagBtcEur, yerr= sdCorrelationBtcEur,
-               ecolor='black', elinewidth=1, capsize=2, errorevery=10)
+               ecolor='black', elinewidth=1, capsize=2, errorevery= 3)
 ax2[1].text(-30, 0.375, f"$\\sigma$ on cross-correlation = {np.mean(sdCorrelationBtcEur):.2f},\n$\\sigma$ on time lag = {sdLagBtcEur:.2f} days")
 ax2[1].axvline(x=0, color='black', linestyle='--')
 ax2[1].set_xlim(-20, 20)
@@ -132,7 +135,8 @@ ax2[1].set_xlabel('Time Lag (days)')
 plt.savefig(os.path.join(current_directory, "WrittenReport", "plots", "btcPriceEur.png"))
 plt.clf()
 
-print(lagValBtcEur, 'sd =', sdLagBtcEur)
+print("eur")
+print(lagValBtcEur, '\pm', sdLagBtcEur)
 
 ##################################################################################
 ###################################################################################
@@ -154,6 +158,7 @@ plt.show()
 fig3, ax3 = plt.subplots(2, 1, figsize = (9, 13))
 lagBtcSearch, correlationBtcSearch, sdLagBtcSearch, sdCorrelationBtcSearch, lagValBtcSearch = base.cross_correlation(btcPrice, btcSearch, n_times= 1000)
 spearman_r, pearson_r  = base.correlation_coefficient(btcPrice, btcSearch)
+print('search')
 print(spearman_r)
 print(pearson_r)
 
@@ -166,7 +171,7 @@ ax3[0].set_ylabel('Search interest relative to the highest point (100), a value 
 
 ax3[1].grid('True')
 ax3[1].errorbar(lagBtcSearch, correlationBtcSearch, color= 'purple', xerr= sdLagBtcSearch, yerr= sdCorrelationBtcSearch,
-               ecolor='black', elinewidth=1, capsize=2, errorevery=5)
+               ecolor='black', elinewidth=1, capsize=2)
 ax3[1].text(-30, 0.375, f"$\\sigma$ on cross-correlation = {np.mean(sdCorrelationBtcSearch):.2f},\n$\\sigma$ on time lag = {sdLagBtcSearch:.2f} days")
 ax3[1].axvline(x=0, color='black', linestyle='--')
 ax3[1].set_xlim(-15, 15)
@@ -177,4 +182,4 @@ ax3[1].set_xlabel('Time Lag (days)')
 
 plt.savefig(os.path.join(current_directory, "WrittenReport", "plots", "btcPricebtcSearch.png"))
 
-print(lagValBtcSearch, 'sd =', sdLagBtcSearch)
+print(lagValBtcSearch, '\pm', sdLagBtcSearch)
