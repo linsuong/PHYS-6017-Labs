@@ -98,7 +98,7 @@ urlcolor=\linkcolours}
 \usepackage{comment}
 
 \title{\LARGE \bf
-An analysis in cryptocurrency trends and if predictions are practical
+Time-series Analysis on Cryptocurrency Pricing and its relationship with Economic Factors in a post-COVID world.
 }
 
 \author{ \parbox{3 in}{\centering Chin Phin Ong\\
@@ -120,36 +120,148 @@ abstract this pantsgrab
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
-Following the crypto boom that happens almost every 3 years, people are looking to make a quick dollar out of trading cryptocurrencies. Many want to know if there is any relationship between various cryptocurrencies, or relationships between cryptocurrencies - i.e. BTC (Bitcoin), ETH (Ethereum), USDT (Theter USD), USDC (USD Coin) and "traditional" currency - i.e. USD (United States Dollar), GBP (British Pound Sterling), JPY (Japanese Yen), etc. Time-series analysis is a way that the data can be analysed. With an appropriate time scale, some meaningful observations can be concluded, and possibly short-term predictions for the future of certain cryptocurrency pairings can be theorised.
+As cryptocurrency continues to grow in popularity, especially during the COVID-19 pandemic, where people have realised the importance of investing and have looked into cryptocurrency as a viable investment \cite{Corbet2018}. In this project, I will explore the correlation between the values between 2021-2023 of some of the top cryptocurrencies - BTC (Bitcoin), ETH (Ethereum), USDT (Tether USD), and SOL (Solana) based on their market caps\footnote{Based on: \url{https://coinmarketcap.com/}, May 2024.} (the total market value of a cryptocurrency's circulating supply.). BTC is the most popular cryptocurrency on the market, with a market cap of 1.2 trillion USD (May 2024). It was introduced in \cite{Nakamoto2008} as a way to send digital payments via peer-to-peer (P2P) method without passing through a middle-man (e.g., a bank or broker) to prevent "double-spending" - having to pay additional costs on top of the transaction\footnote{According to \cite{Nakamoto2008}, "financial institutions cannot avoid mediating disputes", therefore the cost of the mediation brings up the transaction costs.}. Since then, many other cryptocurrencies have entered the market. As of April 2024, there are over \textbf{2.4 million} cryptocurrencies on the market, with an average of 5,300 launched daily\footnote{Source: \url{https://www.coingecko.com/research/publications/how-many-cryptocurrencies-are-there}.}.
 
-Time series analysis can be done with Fourier transforms (FT), introduced by Joseph Fourier in his book \textit{Th'eorie analytique de la chaleur} in 1888 \cite{Fourier1888} - to be specific the discrete Fourier transform (DFT) will be used. 
+Among them, some notable cryptocurrencies are ETH, USDT, LTC and DOGE. Each of these coins (a term used interchangeably with cryptocurrency) have their unique properties. Ethereum uses a proof-of-stake consensus model\footnote{\url{https://ethereum.org/en/developers/docs/consensus-mechanisms/}}, which is different from the proof-of-work model used by Bitcoin. USDT is a "stablecoin" that is pegged to the value of the US dollar, making it less volatile than other cryptocurrencies. These properties and features of each cryptocurrency can impact their use cases and potential for adoption in various industries.
 
-The equation of a FT for a time-domain function $f(t)$ to its spatial domain $F(t)$ is:
-\begin{equation}
-    F(x) = \int_{0}^{\infty} f(t)\exp^{-2\pi{i}f} dt
-\end{equation}
-The problem here is that due the nature of this problem, I do not have a function that I can apply a FT onto. Therefore, the discrete Fourier transform (DFT), which takes samples from a dataset is more appropriate. The equation of the DFT for a sampled function $x_k$, where $k = 1,..., N$ can be written like:
-\begin{equation}
-    equation
-\end{equation}
+Numerous studies have investigated the properties of such cryptocurrencies - the seasonality\footnote{The tendency for the cryptocurrency/asset to perform better in certain times compared to others - this can be on the time scale of days, weeks, months, half-years or years. Source: \url{https://corporatefinanceinstitute.com/resources/valuation/seasonality/}. Apart from finance, there have been studies in psychology analysing the seasonality of schizophrenia patient admissions \cite{Yao2023}.} \cite{Kaiser2019}, hedging ability \cite{Chan2019}, multifractality\footnote{The property of complex systems where irregular patterns or structures exhibit varying degrees of complexity across different scales, extending the concept of fractals to multiple scales of organization - e.g. seeing a pattern that changes in how detailed or messy it looks depending on how closely you're looking at it. For more information, read to \cite{Harte2001}} \cite{Takaishi2018}, interdependence between \cite{Qureshi2020} and even the environmental impact \cite{Wendl2023, Mohsin2021, Corbet2020} of cryptocurrencies. On the other hand, \cite{Georgoula2015} studied how Twitter, Wikipedia search queries, hash rates, USD/EUR\footnote{United States Dollar to Euro} exchange rate, number of coins in circulation, S\&P500 index (state of the global economy) affected the price of Bitcoin.
 
-I will have to apply a window onto the function followed by a sampling function. This will be done via \hyperref[convolution]{convolution theorem}.
+One way that financial data can be analysed is via time-series analysis. This method has been used to analyse the stock market - \cite{cao1992nonlinear, naik2013does, parray2020time}, as well as cryptocurrencies - \cite{Georgoula2015, Catania2017, Hagemann2018, Maleki2023, Vaz2020, Toyoda2018}. With an appropriate time scale, some observations between cryptocurrency pairs, crypto-stock pairings, crypto-query (search query) pairings can be done.\footnote{\cite{Pal2017} is a good resource on basic practical time-series methods.}
 
-The questions that I will answer in the following sections are:
+In this project, the questions that I will explore and answer in the following sections are:
 \begin{enumerate}
     \item Is there any correlation between the time series? To what degree are they correlated? %correlation
-    \item Is there any observable lag between them? %autocorrelation
+    \item Is there any observable lag between them? %correlation
     \item Is the correlation/lag visible if a periodic and non-periodic data gap is introduced? %if there is, i don't think so
-    \item Does it make sense to predict the trend of cryptocurrency pairs? If so, what is the suitable time frame? %obviously no
+    \item What about the stock market? What is the correlation between these cryptocurrencies, i.e. BTC against the S\&P 500 (SPX), or BTC against gold spot\footnote{Gold spot prices are typically quoted as USD per troy ounce, about $0.03kg$} prices (XAU)?
+    \item Does the popularity (based on Google search trends) of BTC influence the price of BTC, or is it the other way round?
 \end{enumerate}
 
-The following sections will go through the methodology, where I explain in detail the methods used in obtaining correlation, time-lag, 
+In the upcoming sections, I will describe the methodology used to answer the questions in detail. Then, I will present the results that answer the questions above and provide a thorough analysis of them. Finally, I will offer a brief conclusion on the findings of this project and discuss future work.
+
 \section{Methodology}
-The time-series data of cryptocurrency/USD pairs are obtained and I will perform an FFT onto the data. A window will be chosen along with a sampling frequency. 
+One of the main tools used in time-series analysis is correlation. Correlation is the relationship between two sets of data. In this project, I will be using the Spearman correlation coefficient  Methods are taken from \cite{Pal2017}
+\subsection{Processing Data}
+The time scales of the data are from the beginning of 2021 to 2023. The historical price data of the cryptocurrencies are downloaded from \url{https://www.cryptodatadownload.com/data/bitstamp/}, and historical stock prices are downloaded from \url{nasdaq.com}, where the daily closing prices of the assets are taken. Search popularity data is taken from \url{https://trends.google.co.uk/trends/explore?date=today\%205-y&q=\%2Fm\%2F05p0rrx&hl=en}. EUR-USD exchange rate data is from \url{www.macrotrends.net}.
+
+\subsection{Pearson Correlation Coefficient}\label{Pearson}
+The Pearson correlation coefficient measures the monotonic\footnote{"monotonic" carries a similar relationship to the word "linear", but it is not the same. It means that the behaviour of data moves in a direction that is constantly increasing/decreasing but does not follow the linear equation $y = mx + b$.} relationship between two variables, ranging from $-1$ to $1$. $-1$ indicates perfect negative linear relationship, $1$ indicates perfect linear relationship, and $0$ represents no  linear relationship \cite{Dowdy1983}. The correlation coefficient, $\rho_{p}$, for two vectors $x$ and $y$ is:
+\begin{equation}
+    \rho_{p} = \frac{\sum(x-m_x)(y-m_y)}{\sqrt{\sum(x-m_x)^2\sum(y-m_y)^2}}
+\end{equation}
+Where $m_x$ and $m_y$ are means of the vectors $x$ and $y$. A positive correlation means that if $x$ increases, $y$ increases, and vice versa.
+
+\subsection{Spearman's (Rank) Correlation Coefficient}
+Similar in purpose to the Pearson Correlation Coefficient (Section \ref{Pearson}), the difference in the Spearman coefficient is that it measures the \textbf{monotonic} relationship between 2 sets of data instead of the linear relationship. By converting the raw data of the two samples, $X_i$ and $Y_i$ into ranks\footnote{"ranking" data here means arranging the data points from smallest to largest, and then ranking the datapoints relative to the rest, where the rank of 1 corresponds to the smallest data point. If two values are the same, the rank of the numbers are the average rank of where they would fall if they were different.} $R(X_i)$ and $R_(Y_i)$, the Spearman coefficient, $\rho_s$ can be obtained with:
+\begin{equation}
+    \rho_s = \rho_{p(R(X), R(Y))} = \frac{cov(R(X), R(Y)}{\sigma_{R(X)}\sigma_{R(Y)}}
+\end{equation}
+
+where $\rho$ is the Pearson coefficient applied to the rank variables, $cov(R(X), R(Y))$ is the covariance of the rank variables, and $\sigma_{R(X)}$ and $\sigma_{R(Y)}$ are the standard deviations of the rank variables. Between two datasets X and Y, a positive value of the Spearman correlation coefficient means that there is an increasing monotonic relationship (with 1 being perfectly increasing monotonic relationship), and a negative value indicates a decreasing monotonic relationship (with -1 being perfectly decreasing monotonic relationship), whereas 0 means there is no monotonic relationship between the two datasets. 
+ 
+\subsection{Cross-correlation}
+Cross-correlation is a measure of similarity between two signals as a function of the relative shift of one signal to another. It measures the degree to which two signals resemble each other as one signal is shifted in time relative to another. The time series data is presented as arrays. If the correlation between 2 time series, $x$ and $y$ (with length $||x||$ and $||y||$ respectively) is the array $z$, with ${k}^{th}$ element $z[{k}]$, the correlation can be written as: 
+\begin{equation}
+    z[{k}] = (x * y)(k - N + 1) = \sum_{l=0}^{||x||-1}x_{l}y^{*}_{l-k+N-1}
+\end{equation}
+for $k = 0, 1,..., ||x||+||y||-2$, $N = max(||x||, ||y||)$, $y_m = 0$ if $m > ||y||$\footnote{Source: \url{https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.correlate.html}}
+
+\subsection{Error Handling}
+According to \cite{Misra2018}, the traditional method to obtain the error on cross-correlation (or the time-lag), the signal is divided into equal segments and the cross-correlation is found for each segment. The net cross-correlation is the average of the cross-correlation of the segments, and the variance is the error. However, \cite{Misra2018} also considers data size to be "small" at $\sim1000$ data points, stating that dividing the data into segments is less practical. Therefore, I decided to do a sampling (with replacement) of the datasets, where the sample size is large\footnote{In this case, it will be the same length of the original dataset.} such that a relationship between the two datasets can be drawn \cite{Kose2023} and the standard deviation can be calculated. The standard deviation on the time lag, $\sigma_\tau$ is the standard deviation of the time lags that correspond to the maximum cross-correlation value for each cross-correlation of the sample. The standard deviation on the cross correlation at time lag $\tau$, $\sigma_{corr}(\tau)$ is the standard deviation of the cross-correlation value for each sample at time lag $\tau$. The average standard deviation of the cross-correlation is calculated by taking the average of all $\sigma_{corr}(\tau)$ at every time $\tau$.
 
 \section{Results}
-\\qweqwe
+The relationship between cryptocurrencies will be investigated from the year January 1st, 2021 to December 31st, 2023, to determine if the trend of the relationships between cryptocurrency pairs or cryptocurrency stock pairs has changed, building upon the work of \cite{Sifat2019} (BTC-ETH pairs), and \cite{Georgoula2015} (BTC-SPX, BTC-XAU), and comparing analysis to \cite{Corbet2020contagion}. The pairs investigated are BTC-ETH, BTC-LTC, BTC-SOL and BTC-USDT. It is expected that BTC-ETH to show 0 time-lag, and a positive monotonic relationship - I hypothesise this will be the case for most "popular" coins. The only cryptocurrency pair that would likely show no monotonic relationship will be the BTC-USDT pair, since the value of USDT is based off the USD, so there would be not much of a fluctuation in price relative to BTC. The two main graphs that I will show are: scatter plots which show the relationship (monotonic/non-monotonic) of the pairs of data analysed, and the cross-correlation against time-lag for all the BTC-X coin pairings. The Pearson and Spearman correlation coefficients,  will be calculated and quoted.
+
+\subsection{Correlation and time-lag (cross-correlation) between cryptocurrencies}
+The scatter plots of the BTC-X pairings are shown below:
+The most popular pair is the BTC-ETH pairing. This was expected to have a monotonic relationship.
+\begin{figure}
+    \centering
+    \includegraphics[width = \columnwidth]{scatter plot btc-eth}
+    \caption{Scatter Plot for BTC and ETH prices from Jan 2021 to Dec 2022.}
+    \label{btc-eth}
+\end{figure}
+The calculated values for $\rho_p$ and $\rho_s$ are:\\
+\begin{centering}
+    $\rho_p$\\ 
+    $\rho_s$\\ 
+\end{centering}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = \columnwidth]{scatter plot btc-sol}
+    \caption{Scatter Plot for BTC and SOL prices from Jan 2021 to Dec 2022.}
+    \label{btc-sol}
+\end{figure}
+The calculated values for $\rho_p$ and $\rho_s$ are:\\
+\begin{centering}
+    $\rho_p$\\ 
+    $\rho_s$\\ 
+\end{centering}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = \columnwidth]{scatter plot btc-ltc}
+    \caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+The calculated values for $\rho_p$ and $\rho_s$ are:\\
+\begin{centering}
+    $\rho_p$\\ 
+    $\rho_s$\\ 
+\end{centering}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = \columnwidth]{scatter plot btc-usdt}
+    \caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+The calculated values for $\rho_p$ and $\rho_s$ are:\\
+\begin{centering}
+    $\rho_p$\\ 
+    $\rho_s$\\ 
+\end{centering}
+
+The cross-correlation plot is shown below:
+\begin{figure}
+    \centering
+    \includegraphics[width = \columnwidth]{cross corr}
+    \caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+The final values of the time-lag are:
+\begin{itemize}
+    \item BTC-ETH:$\pm$
+    \item BTC-SOL:$\pm$
+    \item BTC-LTC:$\pm$
+    \item BTC-USDT:$\pm$
+\end{itemize}
+
+\subsection{Introduction of periodic/non-periodic time gap}
+The periodic time gaps were introduced as a square wave, of values 1 and 0.
+The non-peropdic time gaps were introduced as a random walk.
+
+\subsection{Correlation and time-lag of BTC and other things}
+Some interesting data to work with are the effects on BTC based on factors that are not cryptocurrency. Things that I will consider are:
+\begin{itemize}
+    \item The relationship between the popularity of "Bitcoin" as a search engine term and the price of BTC
+    \item The relationship between BTC pricing the S\&P500 index (which is an indicator of global economy)
+    \item The relationship between BTC and the price of gold
+    \item The relationship between BTC and the value of the dollar, based off the USD-EUR exchange rate (\cite{Georgoula2015})
+\end{itemize}
+
+The relationship of BTC and search popularity was investigated. The search popularity is a relative measurement, where 100 is the peak popularity of the search term. The scatter plot and time-lag plot are plotted below.
+
+The same were done with the price of the S\%P500 index.
+
+
+
 \section{Analysis}
+In \cite{Sifat2019}, it was concluded that there was no lead-lag relationship between BTC and ETH. From my findings, indeed there is
+
+According to \cite{Georgoula2015}, 
+%what are the limitations of time-series analysis?
 \\qweqwe
 \section{Conclusion}
 \\qweqwe
@@ -178,7 +290,6 @@ RK method is practical for real-world scenarios as it is good at solving non-lin
 \end{equation}
 In \cite{Asri2021}, the Rubella vaccine's effect was analysed using RK-4 and RK-5 method in solving the SEIRS (Suspectible, Exposed, Infected, Recovered, Suspected) Model, showing that RK-5 method was better than RK-5 in predicting the rate of the Rubella disease spread. 
 \\
-
 \subsection{Fourier Transform} %COMPLETE
 Fourier transforms, not to be confused with a Fourier series (where a function is written in terms of sums of exponential or sine and cosine functions) allows the time domain of a signal, periodic or otherwise to be expressed in the frequency domain (along with another phase component), and vice versa. Fast Fourier transforms (FFT) are used in most situations, i.e. in computing due to the number of operations needed. FFTs took $N\log{N}$ operations, compared to $N^2$ operations that the old FT algorithms took \cite{Cooley1969}.
 \\
@@ -186,7 +297,7 @@ Fourier transforms, not to be confused with a Fourier series (where a function i
 FFTs, along with convolution theory can be used by home security devices in smart homes to analyse the audio recorded, shown in \cite{Vadeiadis2020}, which shows the potential of intruder detection by smart home systems. In \cite{Hu1992}, 3-D random rough surfaces are simulated by using a 2-D digital filter, by introducing a method using spectrum analysis to calculate filter coefficients while employing the FFT for efficient filter implementation, similarly, FTs are used in describing the overall shape and ruggedness of particles in \cite{Wettimuny2004}. \cite{Orzechowski2019} explored the FT as an extension of the Black-Scholes-Merton Model in the context of pricing options.
 \\
 \subsubsection{Outside of Academia} %COMPLETE
-In audio engineering, when taking acoustic measurements of audio devices, a FFT is applied onto the signal captured by a measurement microphone, which shows measurement graphs that tell the sonic characteristics of the drivers\footnote{Example:\url{https://crinacle.com/graphs/headphones/sennheiser-hd800s/}}. FFT is also used in music production with the same idea, by allowing the mixing engineer to visualise a waveform in the form of frequency spectrum and amplitude. In the same realm of audio engineering, FFTs are used to calculate the HRTF (Head Related Transfer Functions)\footnote{HRTFs characterise how an individual perceives sound. Due to the different physical properties of each individual, having a personalised HRTF is beneficial in immersive audio \cite{Oehler2023}.}, for example, to allow real-time spatial representation of moving sound sources in \cite{Tsakostas2007}.  In \cite{Nogata2012}, Fourier analysis is used to detect and visualise heart sounds using an FFT image and wavelet image that allows physicians to detect any abnormal heart sounds, showing that this could be used to develop an automatic detection system. 
+In audio engineering, when taking acoustic measurements of audio devices, a FFT is applied onto the signal captured by a measurement microphone, which shows measurement graphs that tell the sonic characteristics of the drivers\footnote{Example: \url{https://crinacle.com/graphs/headphones/sennheiser-hd800s/}}. FFT is also used in music production with the same idea, by allowing the mixing engineer to visualise a waveform in the form of frequency spectrum and amplitude. In the same realm of audio engineering, FFTs are used to calculate the HRTF (Head Related Transfer Functions)\footnote{HRTFs characterise how an individual perceives sound. Due to the different physical properties of each individual, having a personalised HRTF is beneficial in immersive audio \cite{Oehler2023}.}, for example, to allow real-time spatial representation of moving sound sources in \cite{Tsakostas2007}.  In \cite{Nogata2012}, Fourier analysis is used to detect and visualise heart sounds using an FFT image and wavelet image that allows physicians to detect any abnormal heart sounds, showing that this could be used to develop an automatic detection system. 
 
 
 \newpage
@@ -198,7 +309,11 @@ The abbreviations below are used in this manuscript:
 \begin{itemize}
     \item BTC - Bitcoin
     \item ETH - Ethereum
+    \item SOL - Solana
+    \item USDT - Theter USDt
     \item USD - United States Dollar
+    \item SPX - S\&P 500 Index symbol
+    \item XAU - Gold spot price symbol, in USD per troy ounce
     \item FT - Fourier Transform
     \item DFT - Discrete Fourier Transform
     \item FFT - Fast Fourier Transform
@@ -211,11 +326,4 @@ The abbreviations below are used in the Addendum (Section \ref{addendum}):
     \item FFT - Fast Fourier Transform
     \item HRTF - Head Related Transfer Function
 \end{itemize}
-
-\section{Appendix}
-\subsection{Fast Fourier Transform and Convolution Theorem}
-\subsubsection{Convolution Theorem}{\label{convolution}}
-\subsubsection{Nyquist Frequency}
-\subsection{Testing the algoritm}
-To know if the algorithm works, it makes sense to use generated data for testing.
 \end{document}
