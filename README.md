@@ -1,5 +1,5 @@
 # PHYS 6017 - Computer Techniques in Physics
-Here you will find my work done during the 2 hour lab sessions hosted twice a week for the module.
+Here you will find my work done during the 2 hour lab sessions hosted twice a week for the module in Semester 2 of the academic year of Oct 2023 - May 2024.
 
 ## Labs
 - Lab 1: Plotting graphs, estimating integrals
@@ -18,3 +18,5 @@ Which can be written as a system of equations in the form $\vec{Y'} = A\vec{Y} -
 By solving the ODEs with the Runge–Kutta–Fehlberg (RK4(5)) method, the behaviour of the pendulum can be investigated.
 
 ### Project 2: Cryptocurrency Time Series Analysis
+
+Using simple time series analysis methods, such as Pearson's (and Spearman's) Correlation Coefficient, Cross-correlation and Q-Q plots, we analyse various BTC-X parings and see if there is any time-lag or correlation between them.
